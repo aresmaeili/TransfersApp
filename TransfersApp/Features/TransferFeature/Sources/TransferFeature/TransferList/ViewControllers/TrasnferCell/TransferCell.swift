@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Shared
 
 class TransferCell: UITableViewCell {
 
@@ -14,14 +15,16 @@ class TransferCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+//        TODO: check this
+        Task { @MainActor in
+            setupCell()
+        }
     }
     
+    func setupCell() {
+        nameLabel.textColor = .appPrimary
+
+    }
     func configCell(name: String) {
         nameLabel.text = name
     }
