@@ -18,6 +18,11 @@ final class TransferListViewModel {
             filterAndSearch()
         }
     }
+    
+    var favoritesTranfersReversed: [Transfer] {
+        favoritesTranfers.reversed()
+    }
+    
     var sortOption: SortOption = .nameAscending {
         didSet {
             filterAndSearch()
@@ -30,17 +35,42 @@ final class TransferListViewModel {
         }
     }
     
-    var filteredTransfers: [Transfer]?  {
+    var filteredTransfers: [Transfer] = []  {
         didSet {
             delegate?.didGetTransfers()
         }
     }
     
+    var numberOfSections: Int {
+        return 2
+    }
+
     init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDelegate?) {
         self.transfersUseCase = transfersUseCase
         self.delegate = delegate
     }
     
+    func sectionCount(section: Int) -> Int {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return filteredTransfers.count
+        default:
+            return 0
+        }
+    }
+    
+    func getSectionTitle(section: Int) -> String {
+        switch section {
+        case 0:
+            return "Favorites:"
+        case 1:
+            return "Transfers:"
+        default:
+            return ""
+        }
+    }
     
     func loadTransfers() {
         Task {
@@ -54,21 +84,22 @@ final class TransferListViewModel {
     }
     
     func filterAndSearch() {
-        
         guard !textSearch.isEmpty else {
             if filteredTransfers != transfers {
                 filteredTransfers = transfers
-                filteredTransfers = sortTransfers(filteredTransfers ?? [], by: sortOption)
+                filteredTransfers = sortTransfers(filteredTransfers, by: sortOption)
             }
             return
         }
         filteredTransfers = transfers.filter {
             $0.name.hasPrefix(textSearch)
         }
-        filteredTransfers = sortTransfers(filteredTransfers ?? [], by: sortOption)
+        filteredTransfers = sortTransfers(filteredTransfers, by: sortOption)
     }
     
-    
+    func addTransfersToFavorite(transfer: Transfer) {
+        favoritesTranfers.append(transfer)
+    }
     
     func sortTransfers(_ filteredTransfers: [Transfer] ,by option: SortOption) -> [Transfer] {
         switch option {
@@ -85,6 +116,10 @@ final class TransferListViewModel {
         case .amountDescending:
             return filteredTransfers.sorted { $0.amount > $1.amount }
         }
+    }
+    
+    func getTransfer(at index: Int) -> Transfer? {
+        return filteredTransfers[safe: index]
     }
 }
 
@@ -107,7 +142,7 @@ enum SortOption: String {
 struct UserDefaultTransfers {
     private let key = "savedTransfers"
     private let userDefaults = UserDefaults.standard
-
+    
     var wrappedValue: [Transfer] {
         get {
             guard let data = userDefaults.data(forKey: key) else { return [] }
