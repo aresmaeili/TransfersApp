@@ -8,26 +8,22 @@
 // MARK: - HTTP Method
 public enum HTTPMethod: String {
     case get     = "GET"
-    case post    = "POST"
-    case put     = "PUT"
-    case patch   = "PATCH"
-    case delete  = "DELETE"
 }
 
 // MARK: - Headers & Query
 public typealias HTTPHeaders = [String: String]
-public typealias QueryItems = [String: Any]
+//public typealias QueryItems = [String: Any]
 
-// MARK: - Request Options
-public struct RequestOptions {
-    var headers: HTTPHeaders
-    var query: QueryItems?
-
-    public init(
-        headers: HTTPHeaders = ["Accept": "application/json"],
-        query: QueryItems? = nil,
-    ) {
-        self.headers = headers
-        self.query = query
-    }
-}
+//// MARK: - Request Options
+//public struct RequestOptions {
+//    var headers: HTTPHeaders
+//    var query: QueryItems?
+//
+//    public init(
+//        headers: HTTPHeaders = ["Accept": "application/json"],
+//        query: QueryItems? = nil,
+//    ) {
+//        self.headers = headers
+//        self.query = query
+//    }
+//}

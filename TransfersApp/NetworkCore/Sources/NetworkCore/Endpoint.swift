@@ -11,7 +11,7 @@ public protocol Endpoint {
     var host: String { get }
     var path: String { get }
     var method: HTTPMethod { get }
-    var options: RequestOptions { get }
+//    var options: RequestOptions { get }
 }
 
 public extension Endpoint {
@@ -23,5 +23,5 @@ public struct TransferListEndpoint: Endpoint {
     public var host: String {  "https://2f2e3046-0d87-4cb0-a44e-11eec03cf0fd.mock.pstmn.io" }
     public var path: String { "/transfer-list?page=1" }
     public var method: HTTPMethod { .get }
-    public var options: RequestOptions { .init() }
+//    public var options: RequestOptions { .init() }
 }

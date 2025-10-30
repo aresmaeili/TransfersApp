@@ -10,13 +10,10 @@ import Foundation
 public actor NetworkClient {
     public static let shared = NetworkClient()
 
-    public func get<T: Decodable>(
-        urlString: String,
-        decoder: JSONDecoder = JSONDecoder()
-    ) async throws -> T {
+    public func get<T: Decodable>(endPoint: Endpoint, decoder: JSONDecoder = JSONDecoder()) async throws -> T {
         
         // Validate URL
-        guard let url = URL(string: urlString) else {
+        guard let url = URL(string: endPoint.fullPath) else {
             throw URLError(.badURL)
         }
 
