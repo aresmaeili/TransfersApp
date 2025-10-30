@@ -23,7 +23,8 @@ class TransferCell: UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var avatarParentView: UIView!
     @IBOutlet weak var avatarImageView: UIImageView!
-
+    @IBOutlet weak var starImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 //        TODO: check this
@@ -34,6 +35,7 @@ class TransferCell: UITableViewCell {
     func setupCell() {
         nameLabel.textColor = .appOperator2
         avatarImageView.tintColor = .appOperator2
+        avatarImageView.contentMode = .scaleAspectFill
         avatarParentView.layer.cornerRadius = avatarParentView.bounds.height / 4
         avatarParentView.clipsToBounds = true
         parentView.layer.cornerRadius = parentView.bounds.height / 4
@@ -42,7 +44,8 @@ class TransferCell: UITableViewCell {
         parentView.layer.borderColor = UIColor.appOperator2.cgColor
         avatarParentView.layer.borderWidth = 1
         avatarParentView.layer.borderColor = UIColor.appOperator2.cgColor
-     
+        starImageView.image = UIImage(systemName: "star.circle")
+        starImageView.tintColor = .appOperator2
     }
     
     func configCell(data: TransferCellShowable) {

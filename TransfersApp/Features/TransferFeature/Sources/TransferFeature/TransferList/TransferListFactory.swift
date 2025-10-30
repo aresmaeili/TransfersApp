@@ -16,7 +16,7 @@ struct TransferListFactory: VCFactoryProtocol {
             assertionFailure("TransferListViewController not found in TransferList.storyboard")
             return UIViewController()
         }
-        let api = TransferAPI()
+        let api = TransferMockData()
         let repository = TransferRepositoryImpl(api: api)
         let useCase = DefaultFetchTransfersUseCase(repository: repository)
         let viewModel = TransferListViewModel(transfersUseCase: useCase, delegate: vc)

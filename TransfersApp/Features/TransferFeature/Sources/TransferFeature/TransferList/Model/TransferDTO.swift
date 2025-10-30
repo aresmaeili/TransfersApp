@@ -39,7 +39,7 @@ extension Transfer: TransferCellShowable {
     }
     
     var amount: String {
-        ""
+        moreInfo?.totalTransfer?.description ?? "-"
     }
     
     

@@ -62,18 +62,27 @@
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLR-sc-Gnc">
-                                        <rect key="frame" x="309.66666666666669" y="0.0" width="41.333333333333314" height="81"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLR-sc-Gnc">
+                                        <rect key="frame" x="343.33333333333331" y="0.0" width="7.6666666666666856" height="81"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oi3-6R-aEh">
+                                <rect key="frame" x="8" y="8" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="6g0-du-Z3y"/>
+                                    <constraint firstAttribute="height" constant="24" id="ibh-ql-gqV"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="oi3-6R-aEh" firstAttribute="leading" secondItem="MfS-pu-Ws2" secondAttribute="leading" constant="8" id="6WO-1r-GXt"/>
                             <constraint firstItem="9hO-2z-hd8" firstAttribute="leading" secondItem="MfS-pu-Ws2" secondAttribute="leading" constant="10" id="ReO-J0-q5u"/>
+                            <constraint firstItem="oi3-6R-aEh" firstAttribute="top" secondItem="MfS-pu-Ws2" secondAttribute="top" constant="8" id="gjw-rm-xNU"/>
                             <constraint firstAttribute="bottom" secondItem="9hO-2z-hd8" secondAttribute="bottom" constant="10" id="iWe-QB-naJ"/>
                             <constraint firstAttribute="trailing" secondItem="9hO-2z-hd8" secondAttribute="trailing" constant="10" id="vDS-oG-CLP"/>
                             <constraint firstItem="9hO-2z-hd8" firstAttribute="top" secondItem="MfS-pu-Ws2" secondAttribute="top" constant="10" id="yOe-ti-jzc"/>
@@ -91,10 +100,11 @@
             <connections>
                 <outlet property="amountLabel" destination="ZLR-sc-Gnc" id="xri-Fs-vkI"/>
                 <outlet property="avatarImageView" destination="Cpw-sr-FCq" id="kVf-T3-P0u"/>
-                <outlet property="avatarParentView" destination="Cpw-sr-FCq" id="Alc-Cu-RBC"/>
+                <outlet property="avatarParentView" destination="lUa-py-Jjr" id="544-Iv-ZfC"/>
                 <outlet property="dateLabel" destination="MST-j0-uaZ" id="Sc6-Mr-YyF"/>
                 <outlet property="nameLabel" destination="Dlq-r6-Bp6" id="A4U-HS-tjV"/>
                 <outlet property="parentView" destination="MfS-pu-Ws2" id="sgq-A4-Qgc"/>
+                <outlet property="starImageView" destination="oi3-6R-aEh" id="pm9-RV-7iP"/>
             </connections>
             <point key="canvasLocation" x="75.572519083969468" y="153.87323943661971"/>
         </tableViewCell>

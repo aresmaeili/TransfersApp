@@ -84,5 +84,51 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "05342EAE-E656-4066-A6D3-D859E8A1C049"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Views/FavoriteContactsView/FavoriteContactsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "configure(with:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "05342EAE-E656-4066-A6D3-D859E8A1C049 - 142fe40a0d5904c4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in TransferFeature.FavoriteContactsView.configure(with: Swift.Array&lt;TransferFeature.Transfer&gt;) -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Views/FavoriteContactsView/FavoriteContactsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41">
+               </Location>
+               <Location
+                  uuid = "05342EAE-E656-4066-A6D3-D859E8A1C049 - f1e3eb8eff43e685"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for closure #1 () async -&gt; () in TransferFeature.FavoriteContactsView.configure(with: Swift.Array&lt;TransferFeature.Transfer&gt;) -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Views/FavoriteContactsView/FavoriteContactsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
