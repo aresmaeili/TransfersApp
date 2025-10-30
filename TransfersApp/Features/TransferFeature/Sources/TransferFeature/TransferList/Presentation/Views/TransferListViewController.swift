@@ -161,7 +161,7 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteTableViewCell", for: indexPath) as? FavoriteTableViewCell else {
                 return UITableViewCell()
             }
-            cell.configure(with: [])
+            cell.configure(with: viewModel?.favoritesTranfers.reversed() ?? [] )
             return cell
         } else {
             guard
@@ -189,6 +189,8 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
         guard indexPath.section == 1, let transfer = viewModel?.filteredTransfers?[safe: indexPath.row] else { return }
         // Example navigation: router?.route(to: .transferDetail(transfer))
         print("Selected transfer: \(transfer.name)")
+        viewModel?.favoritesTranfers.append(transfer)
+        tableView.reloadSections([0], with: .none)
     }
 }
 

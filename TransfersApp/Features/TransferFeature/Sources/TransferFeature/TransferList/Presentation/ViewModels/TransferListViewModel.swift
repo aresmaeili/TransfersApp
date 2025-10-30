@@ -11,6 +11,8 @@ final class TransferListViewModel {
     
     private let transfersUseCase: FetchTransfersUseCase
     weak var delegate: TransferListDelegate?
+    
+    @UserDefaultTransfers var favoritesTranfers: [Transfer]
     var textSearch: String = "" {
         didSet {
             filterAndSearch()
@@ -99,4 +101,25 @@ enum SortOption: String {
     case dateDescending = "Date Desc"
     case amountAscending = "Amount Asc"
     case amountDescending = "Amount Desc"
+}
+
+@propertyWrapper
+struct UserDefaultTransfers {
+    private let key = "savedTransfers"
+    private let userDefaults = UserDefaults.standard
+
+    var wrappedValue: [Transfer] {
+        get {
+            guard let data = userDefaults.data(forKey: key) else { return [] }
+            let transfers: [Transfer] = (try? JSONDecoder().decode([Transfer].self, from: data)) ?? []
+            return transfers
+        }
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                userDefaults.set(data, forKey: key)
+            } else {
+                userDefaults.removeObject(forKey: key)
+            }
+        }
+    }
 }

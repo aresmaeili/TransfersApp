@@ -36,11 +36,8 @@ class FavoriteTableViewCell: UITableViewCell {
     
 //TODO: fix this
     func configure(with transfers: [Transfer]) {
-        Task {
-            let transfers = try? await TransferMockData().fetchTransfers()
-            self.transfers = transfers ?? []
+            self.transfers = transfers
             collectionView.reloadData()
-        }
     }
 }
 
