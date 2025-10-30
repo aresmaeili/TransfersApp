@@ -9,7 +9,6 @@ import UIKit
 
 class FavoriteTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var FavoriteTitleLabel: UILabel!
     @IBOutlet private weak var collectionView: UICollectionView!
     var transfers: [Transfer] = []
 

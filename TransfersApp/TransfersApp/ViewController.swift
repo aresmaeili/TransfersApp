@@ -7,6 +7,7 @@
 
 import UIKit
 import TransferFeature
+import Shared
 
 class ViewController: UIViewController {
 

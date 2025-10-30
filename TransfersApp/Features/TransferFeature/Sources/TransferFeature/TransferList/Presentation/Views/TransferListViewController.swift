@@ -8,6 +8,7 @@
 import UIKit
 import NetworkCore
 import RouterCore
+import Shared
 
 public final class TransferListViewController: UIViewController, UISearchResultsUpdating {
 
@@ -27,10 +28,11 @@ public final class TransferListViewController: UIViewController, UISearchResults
         setupSearchController()
         viewModel?.loadTransfers()
     }
+}
 
-    // MARK: - Private Methods
-
-    private func setupSearchController() {
+// MARK: - Private Setup Methods
+private extension TransferListViewController {
+    func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -39,22 +41,23 @@ public final class TransferListViewController: UIViewController, UISearchResults
         definesPresentationContext = true
     }
 
-    private func setupTableView() {
-        transferTableView.registerCell(TransferCell.self)
-        transferTableView.registerCell(FavoriteTableViewCell.self)
+    func setupTableView() {
+        transferTableView.registerCell(TransferCell.self, module: .module)
+        transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
         transferTableView.dataSource = self
         transferTableView.delegate = self
     }
+}
 
- 
-    // MARK: - UISearchResultsUpdating
+// MARK: - UISearchResultsUpdating
+extension TransferListViewController {
     public func updateSearchResults(for searchController: UISearchController) {
         let text = searchController.searchBar.text ?? ""
         viewModel?.textSearch = text
     }
 }
 
-// MARK: - UITableViewDataSource & UITableViewDelegate
+// MARK: - UITableViewDataSource
 extension TransferListViewController: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel?.numberOfSections ?? 0
@@ -66,7 +69,7 @@ extension TransferListViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return viewModel?.sectionCount(section: section) ?? 0
+        return viewModel?.sectionCount(section: section) ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,7 +79,34 @@ extension TransferListViewController: UITableViewDataSource {
             return createListCell(tableView: tableView, indexPath: indexPath)
         }
     }
+}
+
+// MARK: - UITableViewDelegate
+extension TransferListViewController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        getHeightForRow(at: indexPath)
+    }
     
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
+        // Example navigation: router?.route(to: .transferDetail(transfer))
+        viewModel?.addTransfersToFavorite(transfer: transfer)
+        tableView.reloadSections([0], with: .none)
+    }
+    
+    func getHeightForRow(at indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 150
+        default:
+            return 80
+        }
+    }
+}
+
+// MARK: - Private Cell Creation Helpers
+private extension TransferListViewController {
     func createFavoriteCell(tableView: UITableView) -> UITableViewCell {
         guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self) else { return UITableViewCell() }
         cell.configure(with: viewModel?.favoritesTranfersReversed ?? [])
@@ -88,9 +118,11 @@ extension TransferListViewController: UITableViewDataSource {
         cell.configCell(data: transfer)
         return cell
     }
-    
-    // Helper to create section header views with optional sort button
-    private func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
+}
+
+// MARK: - Private Section Header Builder
+private extension TransferListViewController {
+    func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
         let headerView = UIView()
         headerView.backgroundColor = .systemBackground
 
@@ -129,31 +161,9 @@ extension TransferListViewController: UITableViewDataSource {
     }
 }
 
-extension TransferListViewController: UITableViewDelegate {
-    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        getHeightForRow(at: indexPath)
-    }
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        // Example navigation: router?.route(to: .transferDetail(transfer))
-        viewModel?.addTransfersToFavorite(transfer: transfer)
-        tableView.reloadSections([0], with: .none)
-    }
-    
-    func getHeightForRow(at indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 150
-        default:
-            return 80
-        }
-    }
-}
-
-extension TransferListViewController {
-    @objc private func sortButtonTapped() {
+// MARK: - Private Sort Handler
+private extension TransferListViewController {
+    @objc func sortButtonTapped() {
         let alert = UIAlertController(
             title: "Sort Transfers",
             message: "Choose a sorting option",
@@ -189,60 +199,10 @@ extension TransferListViewController: TransferListDelegate {
     }
 
     func getTransfersError(_ message: String) {
-      showErrorAlert(title: "Error", message: message)
+        showErrorAlert(title: "Error", message: message)
     }
 }
 
 
 
 
-
-extension UIViewController {
-    func showErrorAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-}
-
-// TODO: Move safe array access helper and Bundle extension to separate files for better organization
-extension Array {
-    subscript(safe index: Int) -> Element? {
-        indices.contains(index) ? self[index] : nil
-    }
-}
-
-public extension Bundle {
-    static var transferFeature: Bundle {
-        return .module
-    }
-}
-
-import UIKit
-
-extension UITableView {
-    func registerCell<T: UITableViewCell>(_ cell: T.Type) {
-        self.register(UINib(nibName: String(describing: cell), bundle: .module), forCellReuseIdentifier: String(describing: cell))
-    }
-}
-
-extension UITableView {
-    func dequeueCell<T: UITableViewCell>(_ cell: T.Type) -> T? {
-        guard let cell = self.dequeueReusableCell(withIdentifier: String(describing: cell)) as? T else { return nil }
-        cell.selectionStyle = .none
-        return cell
-    }
-}
-
-extension UICollectionView {
-    func registerCell<T: UICollectionViewCell>(_ cell: T.Type) {
-        self.register(UINib(nibName: String(describing: cell), bundle: .module), forCellWithReuseIdentifier: String(describing: cell))
-    }
-}
-
-extension UICollectionView {
-    func dequeueCell<T: UICollectionViewCell>(_ cell: T.Type, indexPath: IndexPath) -> T {
-        let cell = self.dequeueReusableCell(withReuseIdentifier: String(describing: cell), for: indexPath) as! T
-        return cell
-    }
-}
