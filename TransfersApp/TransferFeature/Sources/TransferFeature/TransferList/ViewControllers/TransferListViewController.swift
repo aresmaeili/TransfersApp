@@ -57,7 +57,7 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
 extension TransferListViewController {
     func execute() async throws -> [Transfer] {
         let endpoint = TransferListEndpoint()
-        let result: [Transfer] = try await NetworkClient.shared.get(urlString: endpoint)
+        let result: [Transfer] = try await NetworkClient.shared.get(endPoint: endpoint)
         return result
     }
 }
