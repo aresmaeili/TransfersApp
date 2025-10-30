@@ -9,10 +9,11 @@ import UIKit
 import NetworkCore
 import RouterCore
 
-public final class TransferListViewController: UIViewController {
+public final class TransferListViewController: UIViewController, UISearchResultsUpdating {
 
     // MARK: - Outlets
     @IBOutlet private weak var transferTableView: UITableView!
+    private let searchController = UISearchController(searchResultsController: nil)
 
     // MARK: - Properties
     var viewModel: TransferListViewModel?
@@ -24,8 +25,24 @@ public final class TransferListViewController: UIViewController {
         title = NSLocalizedString("Transfers List", comment: "Title for the transfers list screen")
         setupTableView()
         viewModel?.loadTransfers()
-    }
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
 
+        // Keep search bar collapsed (not expanded)
+        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.searchController = searchController
+
+    }
+    
+    public func updateSearchResults(for searchController: UISearchController) {
+            let text = searchController.searchBar.text ?? ""
+            viewModel?.search(text)
+        }
+    
     // MARK: - Private Methods
     private func setupTableView() {
         transferTableView.register(UINib(nibName: "TransferCell", bundle: .module), forCellReuseIdentifier: "TransferCell")
@@ -66,7 +83,7 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
             case 0: return 1
-            case 1: return viewModel?.transfers.count ?? 0
+        case 1: return viewModel?.filteredTransfers?.count ?? 0
             default: return 0
         }
     }
@@ -79,7 +96,7 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
                 return cell
             default:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "TransferCell", for: indexPath) as? TransferCell,
-                      let transfer = viewModel?.transfers[safe: indexPath.row] else { return UITableViewCell() }
+                      let transfer = viewModel?.filteredTransfers?[safe: indexPath.row] else { return UITableViewCell() }
                 cell.configCell(data: transfer)
                 return cell
         }
@@ -94,7 +111,7 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.section == 1, let transfer = viewModel?.transfers[safe: indexPath.row] else { return }
+        guard indexPath.section == 1, let transfer = viewModel?.filteredTransfers?[safe: indexPath.row] else { return }
         // Example navigation: router?.route(to: .transferDetail(transfer))
         print("Selected transfer: \(transfer.name)")
     }

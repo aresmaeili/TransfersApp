@@ -79,7 +79,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Alice Johnson",
+                    fullName: "Emma Thompson",
                     email: "alice.johnson@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676534970-2Q1WYKZGJ571C2N50WWY/Sammy-19.jpg?format=1500w"
                 ),
@@ -96,7 +96,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Bob Martinez",
+                    fullName: "Noah Brown",
                     email: "bob.martinez@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676395992-9OIQSDIHPL3PQS14IVC6/RC?format=1500w"
                 ),
@@ -113,7 +113,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Clara Lee",
+                    fullName: "Olivia Davis",
                     email: "clara.lee@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676352637-1K6JK547ZU2L928STUKM/Maria-21-Edit.jpg?format=1500w"
                 ),
@@ -129,7 +129,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "David Chen",
+                    fullName: "Ethan Wilson",
                     email: "david.chen@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676793533-RHPWC0VZL03GZVOY9WPI/Lou-22-Edit.jpg?format=1500w"
                 ),
@@ -146,7 +146,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Alice Johnson",
+                    fullName: "Sophia Garcia",
                     email: "alice.johnson@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676534970-2Q1WYKZGJ571C2N50WWY/Sammy-19.jpg?format=1500w"
                 ),
@@ -163,7 +163,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Bob Martinez",
+                    fullName: "Liam Anderson",
                     email: "bob.martinez@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676395992-9OIQSDIHPL3PQS14IVC6/RC?format=1500w"
                 ),
@@ -180,7 +180,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "Clara Lee",
+                    fullName: "Ava Martinez",
                     email: "clara.lee@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676352637-1K6JK547ZU2L928STUKM/Maria-21-Edit.jpg?format=1500w"
                 ),
@@ -196,7 +196,7 @@ final class TransferMockData: TransferDataSource {
             ),
             Transfer(
                 person: Person(
-                    fullName: "David Chen",
+                    fullName: "James Robinson",
                     email: "david.chen@example.com",
                     avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676793533-RHPWC0VZL03GZVOY9WPI/Lou-22-Edit.jpg?format=1500w"
                 ),
