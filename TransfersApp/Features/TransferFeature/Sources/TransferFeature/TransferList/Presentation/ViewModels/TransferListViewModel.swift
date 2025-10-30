@@ -6,9 +6,18 @@
 //
 import Foundation
 
+// MARK: - TransferListDelegate
+@MainActor
+protocol TransferListDelegate: AnyObject {
+    func didGetTransfers()
+    func getTransfersError(_ message: String)
+}
+
+// MARK: - TransferListViewModel
 @MainActor
 final class TransferListViewModel {
     
+    // MARK: - Properties
     private let transfersUseCase: FetchTransfersUseCase
     weak var delegate: TransferListDelegate?
     
@@ -44,10 +53,31 @@ final class TransferListViewModel {
     var numberOfSections: Int {
         return 2
     }
-
+    
+    // MARK: - Initialization
     init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDelegate?) {
         self.transfersUseCase = transfersUseCase
         self.delegate = delegate
+    }
+    
+    // MARK: - Public Interface
+    func loadTransfers() {
+        Task {
+            do {
+                transfers = try await transfersUseCase.execute()
+                filteredTransfers = sortTransfers(transfers, by: sortOption)
+            } catch {
+                delegate?.getTransfersError(error.localizedDescription)
+            }
+        }
+    }
+    
+    func addTransfersToFavorite(transfer: Transfer) {
+        favoritesTranfers.append(transfer)
+    }
+    
+    func getTransfer(at index: Int) -> Transfer? {
+        return filteredTransfers[safe: index]
     }
     
     func sectionCount(section: Int) -> Int {
@@ -72,17 +102,7 @@ final class TransferListViewModel {
         }
     }
     
-    func loadTransfers() {
-        Task {
-            do {
-                transfers = try await transfersUseCase.execute()
-                filteredTransfers = sortTransfers(transfers, by: sortOption)
-            } catch {
-                delegate?.getTransfersError(error.localizedDescription)
-            }
-        }
-    }
-    
+    // MARK: - Private Helpers
     func filterAndSearch() {
         guard !textSearch.isEmpty else {
             if filteredTransfers != transfers {
@@ -97,11 +117,7 @@ final class TransferListViewModel {
         filteredTransfers = sortTransfers(filteredTransfers, by: sortOption)
     }
     
-    func addTransfersToFavorite(transfer: Transfer) {
-        favoritesTranfers.append(transfer)
-    }
-    
-    func sortTransfers(_ filteredTransfers: [Transfer] ,by option: SortOption) -> [Transfer] {
+    func sortTransfers(_ filteredTransfers: [Transfer], by option: SortOption) -> [Transfer] {
         switch option {
         case .nameAscending:
             return filteredTransfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
@@ -115,46 +131,6 @@ final class TransferListViewModel {
             return filteredTransfers.sorted { $0.amount < $1.amount }
         case .amountDescending:
             return filteredTransfers.sorted { $0.amount > $1.amount }
-        }
-    }
-    
-    func getTransfer(at index: Int) -> Transfer? {
-        return filteredTransfers[safe: index]
-    }
-}
-
-@MainActor
-protocol TransferListDelegate: AnyObject {
-    func didGetTransfers()
-    func getTransfersError(_ message: String)
-}
-
-enum SortOption: String {
-    case nameAscending = "Name Asc"
-    case nameDescending = "Name Desc"
-    case dateAscending = "Date Asc"
-    case dateDescending = "Date Desc"
-    case amountAscending = "Amount Asc"
-    case amountDescending = "Amount Desc"
-}
-
-@propertyWrapper
-struct UserDefaultTransfers {
-    private let key = "savedTransfers"
-    private let userDefaults = UserDefaults.standard
-    
-    var wrappedValue: [Transfer] {
-        get {
-            guard let data = userDefaults.data(forKey: key) else { return [] }
-            let transfers: [Transfer] = (try? JSONDecoder().decode([Transfer].self, from: data)) ?? []
-            return transfers
-        }
-        set {
-            if let data = try? JSONEncoder().encode(newValue) {
-                userDefaults.set(data, forKey: key)
-            } else {
-                userDefaults.removeObject(forKey: key)
-            }
         }
     }
 }
