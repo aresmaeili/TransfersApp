@@ -14,17 +14,19 @@ let package = Package(
         ),
     ],
     dependencies: [
-            .package(path: "../../NetworkCore")
-        ],
-        targets: [
-            .target(
-                name: "TransferFeature",
-                dependencies: [
-                    "NetworkCore"
-                ],
-//                path: "Sources/TransferFeature",
-//                exclude: ["include"],
-//                resources: [.process(".")]
-            )
-        ]
-    )
+        .package(path: "../../NetworkCore"),
+        .package(path: "../../RouterCore")
+    ],
+    targets: [
+        .target(
+            name: "TransferFeature",
+            dependencies: [
+                "NetworkCore",
+                "RouterCore"
+            ],
+            //                path: "Sources/TransferFeature",
+            //                exclude: ["include"],
+            //                resources: [.process(".")]
+        )
+    ]
+)
