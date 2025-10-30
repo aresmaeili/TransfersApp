@@ -29,7 +29,7 @@ final class TransferListViewModel {
             do {
                 transfers = try await transfersUseCase.execute()
             } catch {
-                print(error.localizedDescription)
+                delegate?.getTransfersError(error.localizedDescription)
             }
         }
     }
@@ -38,4 +38,5 @@ final class TransferListViewModel {
 @MainActor
 protocol TransferListDelegate: AnyObject {
     func didGetTransfers()
+    func getTransfersError(_ message: String)
 }
