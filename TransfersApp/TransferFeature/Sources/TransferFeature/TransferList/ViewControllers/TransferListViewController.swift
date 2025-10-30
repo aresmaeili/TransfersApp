@@ -48,12 +48,16 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         100
     }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
 }
 
 extension TransferListViewController {
     func execute() async throws -> [Transfer] {
         let endpoint = TransferListEndpoint()
-        let result: [Transfer] = try await NetworkClient.shared.get(urlString: endpoint.fullPath)
+        let result: [Transfer] = try await NetworkClient.shared.get(urlString: endpoint)
         return result
     }
 }
