@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "TransferFeature",
+    platforms: [.iOS(.v14)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -12,12 +13,18 @@ let package = Package(
             targets: ["TransferFeature"]
         ),
     ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "TransferFeature"
-        ),
-
-    ]
-)
+    dependencies: [
+            .package(path: "../../NetworkCore")
+        ],
+        targets: [
+            .target(
+                name: "TransferFeature",
+                dependencies: [
+                    "NetworkCore"
+                ],
+//                path: "Sources/TransferFeature",
+//                exclude: ["include"],
+//                resources: [.process(".")]
+            )
+        ]
+    )

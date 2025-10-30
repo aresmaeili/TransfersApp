@@ -9,6 +9,8 @@ import UIKit
 
 class TransferCell: UITableViewCell {
 
+    @IBOutlet weak var nameLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,4 +22,7 @@ class TransferCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    func configCell(name: String) {
+        nameLabel.text = name
+    }
 }
