@@ -7,6 +7,10 @@
 
 import UIKit
 import Shared
+protocol TransferCellShowable {
+    var name: String { get }
+    
+}
 
 class TransferCell: UITableViewCell {
 
@@ -22,7 +26,7 @@ class TransferCell: UITableViewCell {
     }
     
     func setupCell() {
-        nameLabel.textColor = .appOperator1
+        nameLabel.textColor = .appOperator2
 
     }
     func configCell(name: String) {

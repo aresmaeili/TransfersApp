@@ -7,41 +7,34 @@
 
 import UIKit
 import NetworkCore
+import RouterCore
 
 public class TransferListViewController: UIViewController {
     
     @IBOutlet private weak var transfeTableView: UITableView!
 
-    var transfers: [Transfer] = [] {
-        didSet {
-            transfeTableView.reloadData()
-        }
-    }
+    var viewModel: TransferListViewModel?
+    var router: Coordinator?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+         title = "Transfers list"
         transfeTableView.register(UINib(nibName: "TransferCell", bundle: .module), forCellReuseIdentifier: "TransferCell")
         transfeTableView.dataSource = self
         transfeTableView.delegate = self
-        Task {
-            do {
-                transfers = try await execute()
-            } catch {
-                print("Errorrrr: \(error.localizedDescription)")
-            }
-        }
+        viewModel?.loadTransfers()
+
     }
 }
 
 extension TransferListViewController: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        transfers.count
+        viewModel?.transfers.count ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TransferCell", for: indexPath) as! TransferCell
-        cell.configCell(name: transfers[indexPath.row].person?.fullName ?? "")
+        cell.configCell(name: viewModel?.transfers[indexPath.row].person?.fullName ?? "")
         return cell
     }
     
@@ -50,16 +43,22 @@ extension TransferListViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Tapped on row: \(viewModel?.transfers[indexPath.row].person?.fullName ?? "-")")
         
     }
 }
 
-extension TransferListViewController {
-    func execute() async throws -> [Transfer] {
-        let endpoint = TransferListEndpoint()
-        let result: [Transfer] = try await NetworkClient.shared.get(endPoint: endpoint)
-        return result
+extension TransferListViewController: TransferListDelegate {
+    func didGetTransfers() {
+        transfeTableView.reloadData()
     }
+
+    func getTransfersError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
 }
 
 //TODO: Change loc this
@@ -70,4 +69,3 @@ public extension Bundle {
         return .module
     }
 }
-

@@ -1,11 +1,10 @@
 //
-//  Transfer.swift
+//  TransferDTO.swift
 //  TransferFeature
 //
 //  Created by AREM on 10/30/25.
 //
 
-// MARK: - Transfer
 struct Transfer: Codable {
     let person: Person?
     let card: Card?
@@ -52,3 +51,18 @@ struct Person: Codable {
         case email, avatar
     }
 }
+
+struct TransferDTO: Decodable {
+    let id: String
+    let name: String
+    let date: String
+    let amount: Double
+    let isFavorite: Bool
+    let imageURL: String?
+}
+
+//extension TransferDTO {
+//    func toDomain() -> TransferDTO {
+//        TransferDTO(
+//    }
+//}
