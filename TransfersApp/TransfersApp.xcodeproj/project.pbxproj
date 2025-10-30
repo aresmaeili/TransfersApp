@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		342D324B2EB34F4600CF12D6 /* RouterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 348883BF2EB34C3C006490BE /* RouterCore */; };
 		34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 34348F792EB32E4E0007AC16 /* TransferFeature */; };
 		34348FE32EB33AC00007AC16 /* NetworkCore in Frameworks */ = {isa = PBXBuildFile; productRef = 34348FE22EB33AC00007AC16 /* NetworkCore */; };
-		348883C02EB34C3C006490BE /* RouterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 348883BF2EB34C3C006490BE /* RouterCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		342D325F2EB34F8200CF12D6 /* RouterCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RouterCore; sourceTree = "<group>"; };
 		34348F162EB3164C0007AC16 /* TransfersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransfersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34348F782EB32E0B0007AC16 /* TransferFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransferFeature; sourceTree = "<group>"; };
 		34348FE12EB339E30007AC16 /* NetworkCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NetworkCore; sourceTree = "<group>"; };
-		348883BE2EB34B36006490BE /* RouterCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RouterCore; path = ../RouterCore; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,9 +45,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				342D324B2EB34F4600CF12D6 /* RouterCore in Frameworks */,
 				34348FE32EB33AC00007AC16 /* NetworkCore in Frameworks */,
 				34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */,
-				348883C02EB34C3C006490BE /* RouterCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,7 +57,7 @@
 		34348F0D2EB3164C0007AC16 = {
 			isa = PBXGroup;
 			children = (
-				348883BE2EB34B36006490BE /* RouterCore */,
+				342D325F2EB34F8200CF12D6 /* RouterCore */,
 				34348FE12EB339E30007AC16 /* NetworkCore */,
 				34348F782EB32E0B0007AC16 /* TransferFeature */,
 				34348F182EB3164C0007AC16 /* TransfersApp */,
