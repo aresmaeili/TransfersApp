@@ -15,14 +15,16 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../NetworkCore"),
-        .package(path: "../../RouterCore")
+        .package(path: "../../RouterCore"),
+        .package(path: "../../Shared")
     ],
     targets: [
         .target(
             name: "TransferFeature",
             dependencies: [
                 "NetworkCore",
-                "RouterCore"
+                "RouterCore",
+                "Shared"
             ],
             //                path: "Sources/TransferFeature",
             //                exclude: ["include"],

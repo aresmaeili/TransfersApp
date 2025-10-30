@@ -8,15 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		342D324B2EB34F4600CF12D6 /* RouterCore in Frameworks */ = {isa = PBXBuildFile; productRef = 348883BF2EB34C3C006490BE /* RouterCore */; };
+		342D32A62EB3579200CF12D6 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 342D32A52EB3579200CF12D6 /* Shared */; };
 		34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 34348F792EB32E4E0007AC16 /* TransferFeature */; };
 		34348FE32EB33AC00007AC16 /* NetworkCore in Frameworks */ = {isa = PBXBuildFile; productRef = 34348FE22EB33AC00007AC16 /* NetworkCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		342D325F2EB34F8200CF12D6 /* RouterCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RouterCore; sourceTree = "<group>"; };
+		342D32A82EB3598B00CF12D6 /* Shared */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Shared; path = /Users/arem/Desktop/Shared; sourceTree = "<absolute>"; };
 		34348F162EB3164C0007AC16 /* TransfersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransfersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		34348F782EB32E0B0007AC16 /* TransferFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransferFeature; sourceTree = "<group>"; };
-		34348FE12EB339E30007AC16 /* NetworkCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NetworkCore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -30,6 +29,16 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		342D32602EB3563A00CF12D6 /* Core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Core;
+			sourceTree = "<group>";
+		};
+		342D32612EB3564000CF12D6 /* Features */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Features;
+			sourceTree = "<group>";
+		};
 		34348F182EB3164C0007AC16 /* TransfersApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -46,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				342D324B2EB34F4600CF12D6 /* RouterCore in Frameworks */,
+				342D32A62EB3579200CF12D6 /* Shared in Frameworks */,
 				34348FE32EB33AC00007AC16 /* NetworkCore in Frameworks */,
 				34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */,
 			);
@@ -54,12 +64,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		342D32622EB3564E00CF12D6 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				342D32A82EB3598B00CF12D6 /* Shared */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		34348F0D2EB3164C0007AC16 = {
 			isa = PBXGroup;
 			children = (
-				342D325F2EB34F8200CF12D6 /* RouterCore */,
-				34348FE12EB339E30007AC16 /* NetworkCore */,
-				34348F782EB32E0B0007AC16 /* TransferFeature */,
+				342D32622EB3564E00CF12D6 /* Shared */,
+				342D32602EB3563A00CF12D6 /* Core */,
+				342D32612EB3564000CF12D6 /* Features */,
 				34348F182EB3164C0007AC16 /* TransfersApp */,
 				34348F632EB31A8D0007AC16 /* Frameworks */,
 				34348F172EB3164C0007AC16 /* Products */,
@@ -104,6 +122,7 @@
 				34348F792EB32E4E0007AC16 /* TransferFeature */,
 				34348FE22EB33AC00007AC16 /* NetworkCore */,
 				348883BF2EB34C3C006490BE /* RouterCore */,
+				342D32A52EB3579200CF12D6 /* Shared */,
 			);
 			productName = TransfersApp;
 			productReference = 34348F162EB3164C0007AC16 /* TransfersApp.app */;
@@ -373,6 +392,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		342D32A52EB3579200CF12D6 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
 		34348F792EB32E4E0007AC16 /* TransferFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TransferFeature;
