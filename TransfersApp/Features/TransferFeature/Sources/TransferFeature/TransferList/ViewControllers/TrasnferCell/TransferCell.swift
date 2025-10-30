@@ -22,7 +22,7 @@ class TransferCell: UITableViewCell {
     }
     
     func setupCell() {
-        nameLabel.textColor = .appPrimary
+        nameLabel.textColor = .appOperator1
 
     }
     func configCell(name: String) {
