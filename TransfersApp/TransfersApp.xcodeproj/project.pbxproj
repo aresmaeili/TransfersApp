@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 34348F792EB32E4E0007AC16 /* TransferFeature */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		34348F162EB3164C0007AC16 /* TransfersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransfersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34348F782EB32E0B0007AC16 /* TransferFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransferFeature; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34348F7A2EB32E4E0007AC16 /* TransferFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +51,9 @@
 		34348F0D2EB3164C0007AC16 = {
 			isa = PBXGroup;
 			children = (
+				34348F782EB32E0B0007AC16 /* TransferFeature */,
 				34348F182EB3164C0007AC16 /* TransfersApp */,
+				34348F632EB31A8D0007AC16 /* Frameworks */,
 				34348F172EB3164C0007AC16 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +64,13 @@
 				34348F162EB3164C0007AC16 /* TransfersApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		34348F632EB31A8D0007AC16 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +93,7 @@
 			);
 			name = TransfersApp;
 			packageProductDependencies = (
+				34348F792EB32E4E0007AC16 /* TransferFeature */,
 			);
 			productName = TransfersApp;
 			productReference = 34348F162EB3164C0007AC16 /* TransfersApp.app */;
@@ -345,6 +361,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		34348F792EB32E4E0007AC16 /* TransferFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TransferFeature;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 34348F0E2EB3164C0007AC16 /* Project object */;
 }
