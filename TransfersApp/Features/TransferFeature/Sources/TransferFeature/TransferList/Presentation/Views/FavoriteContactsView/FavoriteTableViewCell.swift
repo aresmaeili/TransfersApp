@@ -32,7 +32,6 @@ class FavoriteTableViewCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
-
     }
     
 //TODO: fix this
@@ -55,7 +54,7 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.bounds.height
-              return CGSize(width: 100, height: height)
+              return CGSize(width: 130, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

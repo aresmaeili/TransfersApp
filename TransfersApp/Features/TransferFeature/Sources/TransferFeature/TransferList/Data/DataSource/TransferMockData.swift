@@ -20,8 +20,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 4321",
                     cardType: "Visa"
                 ),
-                note: "Monthly rent payment",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Monthly rent payment",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 12,
                     totalTransfer: 12000
@@ -37,8 +37,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 9876",
                     cardType: "MasterCard"
                 ),
-                note: "Dinner reimbursement",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Dinner reimbursement",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 5,
                     totalTransfer: 450
@@ -53,8 +53,8 @@ final class TransferMockData: TransferDataSource {
                 card: Card(
                     cardNumber: "**** **** **** 1122",
                     cardType: "Amex"
-                ), note: "Project expense split",
-                lastTransfer: "2022-08-31T15:24:16Z",
+                ), lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Project expense split",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 8,
                     totalTransfer: 2200
@@ -70,8 +70,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 3344",
                     cardType: "Discover"
                 ),
-                note: "Gift transfer",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Gift transfer",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 3,
                     totalTransfer: 300
@@ -87,8 +87,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 4321",
                     cardType: "Visa"
                 ),
-                note: "Monthly rent payment",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Monthly rent payment",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 12,
                     totalTransfer: 12000
@@ -104,8 +104,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 9876",
                     cardType: "MasterCard"
                 ),
-                note: "Dinner reimbursement",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Dinner reimbursement",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 5,
                     totalTransfer: 450
@@ -120,8 +120,8 @@ final class TransferMockData: TransferDataSource {
                 card: Card(
                     cardNumber: "**** **** **** 1122",
                     cardType: "Amex"
-                ), note: "Project expense split",
-                lastTransfer: "2022-08-31T15:24:16Z",
+                ), lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Project expense split",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 8,
                     totalTransfer: 2200
@@ -137,8 +137,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 3344",
                     cardType: "Discover"
                 ),
-                note: "Gift transfer",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Gift transfer",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 3,
                     totalTransfer: 300
@@ -154,8 +154,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 4321",
                     cardType: "Visa"
                 ),
-                note: "Monthly rent payment",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Monthly rent payment",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 12,
                     totalTransfer: 12000
@@ -171,8 +171,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 9876",
                     cardType: "MasterCard"
                 ),
-                note: "Dinner reimbursement",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Dinner reimbursement",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 5,
                     totalTransfer: 450
@@ -187,8 +187,8 @@ final class TransferMockData: TransferDataSource {
                 card: Card(
                     cardNumber: "**** **** **** 1122",
                     cardType: "Amex"
-                ), note: "Project expense split",
-                lastTransfer: "2022-08-31T15:24:16Z",
+                ), lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Project expense split",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 8,
                     totalTransfer: 2200
@@ -204,8 +204,8 @@ final class TransferMockData: TransferDataSource {
                     cardNumber: "**** **** **** 3344",
                     cardType: "Discover"
                 ),
-                note: "Gift transfer",
                 lastTransfer: "2022-08-31T15:24:16Z",
+                note: "Gift transfer",
                 moreInfo: MoreInfo(
                     numberOfTransfers: 3,
                     totalTransfer: 300

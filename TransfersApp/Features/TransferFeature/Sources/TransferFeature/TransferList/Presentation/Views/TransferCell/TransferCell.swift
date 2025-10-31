@@ -42,7 +42,7 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
         parentView.layer.cornerRadius = 16
         parentView.layer.masksToBounds = true
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.appBorder1.cgColor
+        parentView.layer.borderColor = UIColor.appBorder2.cgColor
         
         // Name Label
         nameLabel.textColor = .appText1
@@ -50,7 +50,7 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
 
         // Date Label
         dateLabel.textColor = .appText8
-        dateLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        dateLabel.font = .systemFont(ofSize: 10, weight: .semibold)
         
         // Avatar Parent View (Container)
         avatarParentView.clipsToBounds = true

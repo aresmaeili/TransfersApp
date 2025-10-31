@@ -9,19 +9,18 @@ import Foundation
 
 // MARK: - Remote Models (mirror the API payload exactly)
 struct Transfer: Codable, Equatable, Sendable, Identifiable {
-    let person: Person?
-    let card: Card?
-    let note: String?
-    let lastTransfer: String?
-    let moreInfo: MoreInfo?
+      let person: Person?
+      let card: Card?
+      let lastTransfer: String?
+      let note: String?
+      let moreInfo: MoreInfo?
 
-    private enum CodingKeys: String, CodingKey {
-        case person
-        case card
-        case note
-        case lastTransfer = "last_transfer"
-        case moreInfo = "more_info"
-    }
+      enum CodingKeys: String, CodingKey {
+          case person, card
+          case lastTransfer = "last_transfer"
+          case note
+          case moreInfo = "more_info"
+      }
 }
 
 extension Transfer: TransferCellShowable {
@@ -65,15 +64,15 @@ extension Transfer: TransferCellShowable {
     
     
 }
-struct Card: Codable, Equatable, Sendable {
-    let cardNumber: String?
-    let cardType: String?
 
-    private enum CodingKeys: String, CodingKey {
+// MARK: - Card
+struct Card: Codable, Equatable, Sendable {
+        let cardNumber, cardType: String?
+
+    enum CodingKeys: String, CodingKey {
         case cardNumber = "card_number"
         case cardType = "card_type"
     }
-
     /// Returns the card number Masked(e.g., **** 1234).
     var maskedNumber: String? {
         guard let number = cardNumber?.trimmingCharacters(in: .whitespacesAndNewlines), number.count >= 4 else { return nil }
@@ -82,39 +81,24 @@ struct Card: Codable, Equatable, Sendable {
 }
 
 struct MoreInfo: Codable, Equatable, Sendable {
-    let numberOfTransfers: Int?
-    let totalTransfer: Int?
-    private enum CodingKeys: String, CodingKey {
-        case numberOfTransfers = "number_Of_Transfers"
+    let numberOfTransfers, totalTransfer: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case numberOfTransfers = "number_of_transfers"
         case totalTransfer = "total_transfer"
     }
 }
 
 struct Person: Codable, Equatable, Sendable {
     let fullName: String?
-    let email: String?
-    let avatar: String?
-    private enum CodingKeys: String, CodingKey {
-        case fullName = "full_name"
-        case email
-        case avatar
-    }
-}
+     let email: String?
+     let avatar: String?
 
-struct TransferDTO: Decodable {
-    let id: String
-    let name: String
-    let date: String
-    let amount: Double
-    let isFavorite: Bool
-    let imageURL: String?
+     enum CodingKeys: String, CodingKey {
+         case fullName = "full_name"
+         case email, avatar
+     }
 }
-
-//extension TransferDTO {
-//    func toDomain() -> TransferDTO {
-//        TransferDTO(
-//    }
-//}
 
 import UIKit
 
