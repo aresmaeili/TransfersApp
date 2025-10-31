@@ -23,8 +23,14 @@ final class TransferDetailsViewController: UIViewController {
     }
     
     private func setupUI() {
+        let profileView = ProfileView()
+        stackView.addArrangedSubview(profileView)
+        
       let cardView = CardView()
         stackView.addArrangedSubview(cardView)
+        
+        let itemView = ItemView()
+        stackView.addArrangedSubview(itemView)
     }
 
  
