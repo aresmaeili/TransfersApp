@@ -18,7 +18,7 @@ protocol TransferListDisplay: AnyObject {
 final class TransferListViewModel {
     // MARK: - Dependencies (Use Cases Injected)
     private let transfersUseCase: FetchTransfersUseCase
-    private let toggleFavoriteUseCase: ToggleFavoriteTransferUseCaseProtocol
+    private let favoriteUseCase: FavoriteTransferUseCase
     
     // MARK: - Properties
     weak var delegate: TransferListDisplay?
@@ -27,7 +27,7 @@ final class TransferListViewModel {
 
 //    @UserDefaultTransfers var favoritesTranfers: [Transfer]
     private var favorites: [Transfer] {
-        return toggleFavoriteUseCase.getFavorites()
+        return favoriteUseCase.getFavorites()
     }
     
     var textSearch: String = "" {
@@ -60,9 +60,9 @@ final class TransferListViewModel {
     }
     
     // MARK: - Initialization
-    init(transfersUseCase: FetchTransfersUseCase, toggleFavoriteUseCase: ToggleFavoriteTransferUseCaseProtocol, delegate: TransferListDisplay?) {
+    init(transfersUseCase: FetchTransfersUseCase, favoriteUseCase: FavoriteTransferUseCase, delegate: TransferListDisplay?) {
         self.transfersUseCase = transfersUseCase
-        self.toggleFavoriteUseCase = toggleFavoriteUseCase
+        self.favoriteUseCase = favoriteUseCase
         self.delegate = delegate
     }
     
@@ -83,7 +83,7 @@ final class TransferListViewModel {
     }
     
     func addTransfersToFavorite(transfer: Transfer) {
-        toggleFavoriteUseCase.execute(transfer: transfer, shouldBeFavorite: true)
+        favoriteUseCase.execute(transfer: transfer, shouldBeFavorite: true)
     }
     
     func getTransfer(at index: Int) -> Transfer? {

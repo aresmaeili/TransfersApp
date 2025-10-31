@@ -9,12 +9,12 @@
 import Foundation
 
 /// Defines the interface for adding or removing a transfer from favorites.
-protocol ToggleFavoriteTransferUseCaseProtocol {
+protocol FavoriteTransferUseCaseProtocol {
     func getFavorites() -> [Transfer]
     func execute(transfer: Transfer, shouldBeFavorite: Bool)
 }
 
-final class ToggleFavoriteTransferUseCase: ToggleFavoriteTransferUseCaseProtocol {
+final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
 
     private let favoritesRepository: FavoriteTransferRepositoryProtocol
     
