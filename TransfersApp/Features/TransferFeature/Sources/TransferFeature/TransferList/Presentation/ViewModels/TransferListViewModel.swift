@@ -68,14 +68,23 @@ final class TransferListViewModel {
     
     // MARK: - Public Interface
     private func loadTransfers(page: Int) {
-//        TODO: check this
-        Task { @MainActor in
+        Task {
             guard !isGettingData else { return }
             isGettingData = true
             defer { isGettingData = false }
             do {
-                transfers = try await transfersUseCase.execute(page: currentPage)
-                currentPage += 1
+                let newTransfers = try await transfersUseCase.execute(page: page)
+                if page == 1 {
+                    // Refresh
+                    transfers = newTransfers
+                } else {
+                    // Pagination: merge new data if not duplicate
+                    let existingIDs = Set(transfers.map { $0.id })
+                    let uniqueNew = newTransfers.filter { !existingIDs.contains($0.id) }
+                    transfers.append(contentsOf: uniqueNew)
+                }
+                currentPage = page
+                print("Page: \(page) -> \(transfers.count) transfers loaded - > \(transfers.last?.name ?? "Unknown")")
             } catch {
                 delegate?.displayError(error.localizedDescription)
             }
@@ -95,13 +104,11 @@ final class TransferListViewModel {
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
-        Task {
-            refreshTransfers()
-            
-            let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
-            if filteredTransfers.firstIndex(where: { $0.id == currentItem?.id }) == thresholdIndex {
-                loadTransfers(page: currentPage)
-            }
+        guard !isGettingData, let currentItem else { return }
+
+        let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
+        if filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) == thresholdIndex {
+            loadTransfers(page: currentPage + 1)
         }
      }
     

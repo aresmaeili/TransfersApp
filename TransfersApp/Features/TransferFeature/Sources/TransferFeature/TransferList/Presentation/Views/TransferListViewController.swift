@@ -18,6 +18,7 @@ public final class TransferListViewController: UIViewController {
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
+    private let refreshControl = UIRefreshControl()
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
@@ -36,13 +37,14 @@ public final class TransferListViewController: UIViewController {
         setupTableView()
         setupSearchController()
         // Initial data load
-        viewModel?.loadNextPageIfNeeded(currentItem: nil)
+        viewModel?.refreshTransfers()
     }
 }
 
 // MARK: - TransferListDisplay (ViewModel Communication)
 extension TransferListViewController: TransferListDisplay {
     func didUpdateTransfers() {
+        self.refreshControl.endRefreshing()
         self.transferTableView.reloadSections([1], with: .automatic)
     }
 
@@ -56,6 +58,8 @@ private extension TransferListViewController {
     func configureView() {
         title = "Transfers List"
         viewModel?.delegate = self
+        transferTableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
     }
 
     /// Configures the UITableView.
@@ -71,6 +75,11 @@ private extension TransferListViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         definesPresentationContext = true
+    }
+    
+    @objc func handleRefresh() {
+        // Ask ViewModel to refresh first page. Implement this method in ViewModel accordingly.
+        viewModel?.refreshTransfers()
     }
 }
 
@@ -137,6 +146,11 @@ extension TransferListViewController: UITableViewDelegate {
         let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
         viewModel?.addTransfersToFavorite(transfer: transfer)
         tableView.reloadSections([0], with: .automatic)
+    }
+    
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard indexPath.section == 1, let currentItem = viewModel?.getTransfer(at: indexPath.row) else { return }
+        viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
     func sectionTitle(section: Int) -> String {
