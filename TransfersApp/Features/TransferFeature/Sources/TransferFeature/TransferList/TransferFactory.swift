@@ -9,6 +9,12 @@ import UIKit
 import RouterCore
 import Shared
 
+@MainActor
+protocol TransferFactoryProtocol {
+    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
+    func makeTransferDetailsModule(transfer: Transfer,coordinator: TransferCoordinator) -> UIViewController
+}
+
 struct TransferFactory: TransferFactoryProtocol {
     
     func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController {
@@ -30,11 +36,5 @@ struct TransferFactory: TransferFactoryProtocol {
         vc.viewModel = viewModel
         return vc
     }
-    
 }
 
-@MainActor
-protocol TransferFactoryProtocol {
-    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
-    func makeTransferDetailsModule(transfer: Transfer,coordinator: TransferCoordinator) -> UIViewController
-}

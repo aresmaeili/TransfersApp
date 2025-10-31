@@ -5,8 +5,6 @@
 //  Created by AREM on 10/30/25.
 //
 
-
-
 final class TransferMockData: TransferDataSource {
     func fetchTransfers(page: Int) async throws -> [Transfer] {
         let transfers: [Transfer] = [
