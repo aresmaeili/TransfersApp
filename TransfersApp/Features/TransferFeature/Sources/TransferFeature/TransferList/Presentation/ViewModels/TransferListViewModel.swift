@@ -16,14 +16,20 @@ protocol TransferListDisplay: AnyObject {
 // MARK: - TransferListViewModel
 @MainActor
 final class TransferListViewModel {
+    // MARK: - Dependencies (Use Cases Injected)
+    private let transfersUseCase: FetchTransfersUseCase
+    private let toggleFavoriteUseCase: ToggleFavoriteTransferUseCaseProtocol
     
     // MARK: - Properties
-    private let transfersUseCase: FetchTransfersUseCase
     weak var delegate: TransferListDisplay?
-    
+
     private var currentPage = 1
 
-    @UserDefaultTransfers var favoritesTranfers: [Transfer]
+//    @UserDefaultTransfers var favoritesTranfers: [Transfer]
+    private var favorites: [Transfer] {
+        return toggleFavoriteUseCase.getFavorites()
+    }
+    
     var textSearch: String = "" {
         didSet {
             delegate?.didUpdateTransfers()
@@ -54,8 +60,9 @@ final class TransferListViewModel {
     }
     
     // MARK: - Initialization
-    init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDisplay?) {
+    init(transfersUseCase: FetchTransfersUseCase, toggleFavoriteUseCase: ToggleFavoriteTransferUseCaseProtocol, delegate: TransferListDisplay?) {
         self.transfersUseCase = transfersUseCase
+        self.toggleFavoriteUseCase = toggleFavoriteUseCase
         self.delegate = delegate
     }
     
@@ -76,11 +83,15 @@ final class TransferListViewModel {
     }
     
     func addTransfersToFavorite(transfer: Transfer) {
-        favoritesTranfers.append(transfer)
+        toggleFavoriteUseCase.execute(transfer: transfer, shouldBeFavorite: true)
     }
     
     func getTransfer(at index: Int) -> Transfer? {
         return filteredTransfers[safe: index]
+    }
+    
+    func getFavorites() -> [Transfer]? {
+        return favorites
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {

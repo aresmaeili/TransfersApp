@@ -19,7 +19,9 @@ struct TransferListFactory: VCFactoryProtocol {
         let api = TransferMockData()
         let repository = TransferRepositoryImpl(api: api)
         let useCase = DefaultFetchTransfersUseCase(repository: repository)
-        let viewModel = TransferListViewModel(transfersUseCase: useCase, delegate: vc)
+        let favoriteRepository = FavoriteRepositoryImpl()
+        let favoriteUseCase = ToggleFavoriteTransferUseCase(favoritesRepository: favoriteRepository)
+        let viewModel = TransferListViewModel(transfersUseCase: useCase, toggleFavoriteUseCase: favoriteUseCase, delegate: vc)
         vc.viewModel = viewModel
         return vc
     }

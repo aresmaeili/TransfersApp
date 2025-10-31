@@ -135,11 +135,11 @@ extension TransferListViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         
         guard indexPath.section == 1,
         let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
         viewModel?.addTransfersToFavorite(transfer: transfer)
+        tableView.reloadSections([0], with: .automatic)
     }
     
     func sectionTitle(section: Int) -> String {
@@ -158,12 +158,12 @@ extension TransferListViewController: UITableViewDelegate {
 private extension TransferListViewController {
     
     func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self) else {
+        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let favorites = viewModel?.getFavorites() else {
             assertionFailure("Could not dequeue FavoriteTableViewCell")
             return UITableViewCell()
         }
         
-        cell.configure(with: viewModel?.favoritesTranfers ?? [])
+        cell.configure(with: favorites)
         return cell
     }
     

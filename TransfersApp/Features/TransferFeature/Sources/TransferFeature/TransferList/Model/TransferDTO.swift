@@ -10,7 +10,6 @@ import Foundation
 // MARK: - Remote Models (mirror the API payload exactly)
 
 struct Transfer: Codable, Equatable, Sendable, Identifiable {
-    let id: UUID = UUID()
     let person: Person?
     let card: Card?
     let note: String?
@@ -27,6 +26,15 @@ struct Transfer: Codable, Equatable, Sendable, Identifiable {
 }
 
 extension Transfer: TransferCellShowable {
+    
+    var id: String {
+        return (name + cardNo)
+    }
+    
+    var cardNo: String {
+        card?.cardNumber ?? "-"
+    }
+    
     var avatar: String? {
         person?.avatar
     }
