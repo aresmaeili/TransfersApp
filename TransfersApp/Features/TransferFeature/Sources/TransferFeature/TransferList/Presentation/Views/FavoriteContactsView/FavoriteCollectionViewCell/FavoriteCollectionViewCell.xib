@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -63,10 +64,35 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="gHc-iX-qCL">
+                                <rect key="frame" x="4" y="4" width="169" height="32"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hfq-Nc-onW">
+                                        <rect key="frame" x="0.0" y="0.66666666666666607" width="32" height="30.666666666666671"/>
+                                        <color key="tintColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="3rd-D1-kVz"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="S6b-4n-Jaf">
+                                        <rect key="frame" x="137" y="0.0" width="32" height="32"/>
+                                        <color key="tintColor" name="Border 6"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="mTJ-GZ-lTw"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="V9r-oM-ToG"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="gHc-iX-qCL" firstAttribute="leading" secondItem="Woz-Ti-BIc" secondAttribute="leading" constant="4" id="Uwp-fr-9ti"/>
+                            <constraint firstAttribute="trailing" secondItem="gHc-iX-qCL" secondAttribute="trailing" constant="4" id="bFM-8s-Upv"/>
                             <constraint firstItem="GXB-oL-tOJ" firstAttribute="leading" secondItem="Woz-Ti-BIc" secondAttribute="leading" id="ePb-Ic-oZI"/>
+                            <constraint firstItem="gHc-iX-qCL" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" constant="4" id="k5w-gY-TsF"/>
                             <constraint firstAttribute="trailing" secondItem="GXB-oL-tOJ" secondAttribute="trailing" id="n59-jn-IkS"/>
                             <constraint firstAttribute="bottom" secondItem="GXB-oL-tOJ" secondAttribute="bottom" constant="12" id="q7M-58-gHO"/>
                             <constraint firstItem="GXB-oL-tOJ" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" id="xzP-dt-bBw"/>
@@ -75,6 +101,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" name="Background 3"/>
             <constraints>
                 <constraint firstItem="Woz-Ti-BIc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="4xU-JU-J2M"/>
                 <constraint firstAttribute="bottom" secondItem="Woz-Ti-BIc" secondAttribute="bottom" id="W3Q-iN-JNh"/>
@@ -93,6 +120,13 @@
     </objects>
     <resources>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="star.circle" catalog="system" width="128" height="123"/>
+        <namedColor name="Background 3">
+            <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Border 6">
+            <color red="0.89803921568627454" green="0.27450980392156865" blue="0.37647058823529411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

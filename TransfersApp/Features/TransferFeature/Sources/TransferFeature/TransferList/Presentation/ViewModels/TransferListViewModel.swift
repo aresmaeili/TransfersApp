@@ -30,13 +30,17 @@ final class TransferListViewModel {
         return favoriteUseCase.getFavorites()
     }
     
+    var hasFavoriteRow: Bool {
+        return !favorites.isEmpty
+    }
+    
     var textSearch: String = "" {
         didSet {
             delegate?.didUpdateTransfers()
         }
     }
 
-    var sortOption: SortOption = .nameAscending {
+    var sortOption: SortOption = .serverSort {
         didSet {
             delegate?.didUpdateTransfers()
         }
@@ -56,7 +60,7 @@ final class TransferListViewModel {
             result = result.filter { $0.name.contains(textSearch) }
         }
         // 2. Sort
-        return sortTransfers(result, by: sortOption).reversed()
+        return sortTransfers(result, by: sortOption)
     }
     
     // MARK: - Initialization
@@ -84,7 +88,7 @@ final class TransferListViewModel {
                     transfers.append(contentsOf: uniqueNew)
                 }
                 currentPage = page
-                print("Page: \(page) -> \(transfers.count) transfers loaded - > \(transfers.last?.name ?? "Unknown")")
+                print("Page: \(page) -> \(transfers.count) transfers loaded -> \(transfers.last?.name ?? "Unknown")")
             } catch {
                 delegate?.displayError(error.localizedDescription)
             }
@@ -146,6 +150,8 @@ final class TransferListViewModel {
             return filteredTransfers.sorted { $0.amount < $1.amount }
         case .amountDescending:
             return filteredTransfers.sorted { $0.amount > $1.amount }
+        case .serverSort:
+            return filteredTransfers
         }
     }
 }

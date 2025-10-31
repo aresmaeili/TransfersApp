@@ -8,63 +8,98 @@
 import UIKit
 import Shared
 
+// MARK: - Protocol
 protocol TransferCellShowable {
     var name: String { get }
     var date: Date { get }
-    var amount: String { get }
-    var avatar: String? { get }
+    var amount: Int { get }
+    var amountString: String { get }
+    var avatarURLString: String? { get }
 }
 
-class TransferCell: UITableViewCell {
+// MARK: - TransferCell
+final class TransferCell: UITableViewCell { // Use 'final' for performance
     
-    @IBOutlet weak var parentView: UIView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var amountLabel: UILabel!
-    @IBOutlet weak var avatarParentView: UIView!
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var starImageView: UIImageView!
+    // MARK: Outlets
+    @IBOutlet private weak var parentView: UIView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var amountLabel: UILabel!
+    @IBOutlet private weak var avatarParentView: UIView!
+    @IBOutlet private weak var avatarImageView: UIImageView!
+    @IBOutlet private weak var starImageView: UIImageView!
     
+    // MARK: Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-//        TODO: check this
-        MainActor.assumeIsolated {
-            setupCell()
-        }
+        setupUI()
     }
     
-    func setupCell() {
-        nameLabel.textColor = .appOperator2
-        avatarImageView.tintColor = .appOperator2
-        avatarImageView.contentMode = .scaleAspectFill
-        avatarParentView.layer.cornerRadius = avatarParentView.bounds.height / 4
-        avatarParentView.clipsToBounds = true
-        parentView.layer.cornerRadius = parentView.bounds.height / 4
+    // MARK: Setup
+    private func setupUI() {
+        // Parent View Styling
+        parentView.backgroundColor = .appBackground1
+        parentView.layer.cornerRadius = 16
         parentView.layer.masksToBounds = true
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.appOperator2.cgColor
+        parentView.layer.borderColor = UIColor.appBorder1.cgColor
+        
+        // Name Label
+        nameLabel.textColor = .appText1
+        nameLabel.font = .systemFont(ofSize: 18, weight: .bold)
+
+        // Date Label
+        dateLabel.textColor = .appText8
+        dateLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        
+        // Avatar Parent View (Container)
+        avatarParentView.clipsToBounds = true
+        avatarParentView.layer.cornerRadius = 15
         avatarParentView.layer.borderWidth = 1
-        avatarParentView.layer.borderColor = UIColor.appOperator2.cgColor
+        avatarParentView.layer.borderColor = UIColor.appBackground1.cgColor
+        
+        // Avatar Image View
+        avatarImageView.tintColor = .appBackground3
+        avatarImageView.contentMode = .scaleAspectFill
+        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        
+        // Star Image View
         starImageView.image = UIImage(systemName: "star.circle")
         starImageView.tintColor = .appOperator2
     }
     
+    // MARK: Configuration
     func configCell(data: TransferCellShowable) {
         nameLabel.text = data.name
-        dateLabel.text = DateFormatter.localizedString(from: data.date, dateStyle: .full, timeStyle: .none)
-        amountLabel.text = data.amount
-        avatarImageView.image = UIImage(systemName: "person.circle.fill")
+        dateLabel.text = "Last Transfer: \(data.date.toDateString(timeStyle: .none))"
+        amountLabel.text = data.amountString
+        loadAvatar(from: data.avatarURLString)
+    }
+    
+    // MARK: Private Helpers
+    private func loadAvatar(from urlString: String?) {
+        guard let urlString = urlString else { return }
         
+        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
+            avatarImageView.image = cachedImage
+            return
+        }
+
         Task { [weak self] in
             guard let self else { return }
+            
             do {
-                let image = try await UIImage(url: data.avatar ?? "")
+                guard let image = try await UIImage(url: urlString) else { return }
+                
+                ImageCache.shared.setImage(image, forKey: urlString)
+                
                 await MainActor.run {
-                    self.avatarImageView.image = image
+                        self.avatarImageView.image = image
                 }
             } catch {
-                return
+                print("Error loading image for \(urlString): \(error)")
             }
         }
     }
+
 }

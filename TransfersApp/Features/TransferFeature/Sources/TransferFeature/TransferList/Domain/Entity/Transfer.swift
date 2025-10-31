@@ -25,6 +25,10 @@ struct Transfer: Codable, Equatable, Sendable, Identifiable {
 }
 
 extension Transfer: TransferCellShowable {
+    var avatarURLString: String? {
+        person?.avatar ?? ""
+    }
+    
     var id: String {
         return (name + cardNo)
     }
@@ -42,11 +46,21 @@ extension Transfer: TransferCellShowable {
     }
 
     var date: Date {
-        Date()
+        lastTransfer?.toISODate() ?? Date(timeIntervalSince1970: 0)
     }
     
-    var amount: String {
-        moreInfo?.totalTransfer?.description ?? "-"
+    var amount: Int {
+        moreInfo?.totalTransfer ?? 0
+    }
+    
+    var amountString: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+
+        if let formattedMoney = formatter.string(from: NSNumber(value: moreInfo?.totalTransfer ?? 0)) {
+            return "$\(formattedMoney)"
+        }
+        return "-"
     }
     
     
@@ -70,6 +84,10 @@ struct Card: Codable, Equatable, Sendable {
 struct MoreInfo: Codable, Equatable, Sendable {
     let numberOfTransfers: Int?
     let totalTransfer: Int?
+    private enum CodingKeys: String, CodingKey {
+        case numberOfTransfers = "number_Of_Transfers"
+        case totalTransfer = "total_transfer"
+    }
 }
 
 struct Person: Codable, Equatable, Sendable {
@@ -118,5 +136,30 @@ extension UIImage {
         }
         
         self.init(cgImage: image.cgImage!)
+    }
+}
+
+import Foundation
+
+extension String {
+    /// Converts an ISO8601 string (e.g. "2022-08-31T15:24:16Z") to a Date.
+    func toISODate() -> Date? {
+        let formatter = ISO8601DateFormatter()
+        return formatter.date(from: self)
+    }
+    
+
+}
+
+extension Date {
+    /// Converts a Date to a human-readable string (localized)
+    func toDateString(dateStyle: DateFormatter.Style = .short,
+                          timeStyle: DateFormatter.Style = .short) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = dateStyle
+        formatter.timeStyle = timeStyle
+        formatter.locale = .current
+        formatter.timeZone = .current
+        return formatter.string(from: self)
     }
 }

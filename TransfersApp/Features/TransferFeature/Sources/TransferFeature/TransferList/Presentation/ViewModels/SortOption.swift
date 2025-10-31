@@ -8,6 +8,7 @@
 
 // MARK: - SortOption
 enum SortOption: String{
+    case serverSort = "None"
     case nameAscending = "Name Asc"
     case nameDescending = "Name Desc"
     case dateAscending = "Date Asc"
