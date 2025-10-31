@@ -8,9 +8,9 @@ import Foundation
 
 // MARK: - TransferListDelegate
 @MainActor
-protocol TransferListDelegate: AnyObject {
-    func didGetTransfers()
-    func getTransfersError(_ message: String)
+protocol TransferListDisplay: AnyObject {
+    func didUpdateTransfers()
+    func displayError(_ message: String)
 }
 
 // MARK: - TransferListViewModel
@@ -19,20 +19,20 @@ final class TransferListViewModel {
     
     // MARK: - Properties
     private let transfersUseCase: FetchTransfersUseCase
-    weak var delegate: TransferListDelegate?
+    weak var delegate: TransferListDisplay?
     
     private var currentPage = 1
 
     @UserDefaultTransfers var favoritesTranfers: [Transfer]
     var textSearch: String = "" {
         didSet {
-            delegate?.didGetTransfers()
+            delegate?.didUpdateTransfers()
         }
     }
 
     var sortOption: SortOption = .nameAscending {
         didSet {
-            delegate?.didGetTransfers()
+            delegate?.didUpdateTransfers()
         }
     }
     
@@ -54,7 +54,7 @@ final class TransferListViewModel {
     }
     
     // MARK: - Initialization
-    init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDelegate?) {
+    init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDisplay?) {
         self.transfersUseCase = transfersUseCase
         self.delegate = delegate
     }
@@ -68,9 +68,9 @@ final class TransferListViewModel {
             do {
                 transfers = try await transfersUseCase.execute(page: currentPage)
                 currentPage += 1
-                delegate?.didGetTransfers()
+//                delegate?.didUpdateTransfers()
             } catch {
-                delegate?.getTransfersError(error.localizedDescription)
+                delegate?.displayError(error.localizedDescription)
             }
         }
     }
@@ -102,7 +102,7 @@ final class TransferListViewModel {
         loadTransfers(page: currentPage)
     }
     
-    func sectionCount(section: Int) -> Int {
+    func numberOfRows(section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -113,7 +113,7 @@ final class TransferListViewModel {
         }
     }
     
-    func getSectionTitle(section: Int) -> String {
+    func sectionTitle(section: Int) -> String {
         switch section {
         case 0:
             return "Favorites:"

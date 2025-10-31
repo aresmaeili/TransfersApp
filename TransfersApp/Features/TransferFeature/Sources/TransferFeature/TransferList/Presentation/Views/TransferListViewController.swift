@@ -1,8 +1,8 @@
 //
-//  TransferListViewController.swift
-//  TransfersApp
+//  TransferListViewController.swift
+//  TransfersApp
 //
-//  Created by AREM on 10/30/25.
+//  Created by AREM on 10/30/25.
 //
 
 import UIKit
@@ -10,122 +10,179 @@ import NetworkCore
 import RouterCore
 import Shared
 
-public final class TransferListViewController: UIViewController, UISearchResultsUpdating {
+// MARK: - Protocol: TransferListDisplay
+/// Defines the methods the ViewController uses to communicate with the ViewModel.
 
-    // MARK: - Outlets
-    @IBOutlet private weak var transferTableView: UITableView!
-    private let searchController = UISearchController(searchResultsController: nil)
+public final class TransferListViewController: UIViewController {
 
     // MARK: - Properties
+    
+    // Dependencies
     var viewModel: TransferListViewModel?
-    var router: Coordinator?
-
+    weak var router: Coordinator?
+    
+    // UI Components
+    @IBOutlet private weak var transferTableView: UITableView!
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchResultsUpdater = self
+        controller.obscuresBackgroundDuringPresentation = false
+        controller.hidesNavigationBarDuringPresentation = false
+        return controller
+    }()
+    
     // MARK: - Lifecycle
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Transfers List"
+        
+        // Setup methods
+        configureView()
         setupTableView()
         setupSearchController()
+        
+        // Initial data load
         viewModel?.loadNextPageIfNeeded(currentItem: nil)
     }
 }
 
-// MARK: - Private Setup Methods
+// MARK: - TransferListDisplay (ViewModel Communication)
+extension TransferListViewController: TransferListDisplay {
+    func didUpdateTransfers() {
+            self.transferTableView.reloadData()
+        
+    }
+
+    func displayError(_ message: String) {
+            self.showErrorAlert(title: "Error", message: message)
+    }
+}
+
+// MARK: - Configuration
 private extension TransferListViewController {
+    
+    /// Sets up basic ViewController properties.
+    func configureView() {
+        title = "Transfers List"
+        viewModel?.delegate = self
+    }
+
+    /// Configures the UITableView.
+    func setupTableView() {
+        transferTableView.registerCell(TransferCell.self, module: .module)
+        transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
+        
+        // Adhere to protocol conformance within an extension
+        transferTableView.dataSource = self
+        transferTableView.delegate = self
+    }
+    
+    /// Configures the UISearchController.
     func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         definesPresentationContext = true
     }
-
-    func setupTableView() {
-        transferTableView.registerCell(TransferCell.self, module: .module)
-        transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
-        transferTableView.dataSource = self
-        transferTableView.delegate = self
-    }
 }
 
 // MARK: - UISearchResultsUpdating
-extension TransferListViewController {
+extension TransferListViewController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
-        let text = searchController.searchBar.text ?? ""
-        viewModel?.textSearch = text
+        let searchText = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        viewModel?.textSearch = searchText
     }
 }
 
 // MARK: - UITableViewDataSource
 extension TransferListViewController: UITableViewDataSource {
+    
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel?.numberOfSections ?? 0
+        viewModel?.numberOfSections ?? 0
     }
-
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let title = viewModel?.getSectionTitle(section: section) ?? ""
-        return makeSectionHeader(title: title, hasSortButton: false)
-    }
-
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.sectionCount(section: section) ?? 0
+        viewModel?.numberOfRows(section: section) ?? 0
     }
-
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            return createFavoriteCell(tableView: tableView)
-        } else {
-            return createListCell(tableView: tableView, indexPath: indexPath)
+        switch indexPath.section {
+        case 0:
+            return createFavoriteCell(for: tableView)
+        case 1:
+            return createTransferCell(for: tableView, at: indexPath)
+        default:
+            return UITableViewCell()
         }
     }
 }
 
 // MARK: - UITableViewDelegate
 extension TransferListViewController: UITableViewDelegate {
+    
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        getHeightForRow(at: indexPath)
-    }
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        // Example navigation: router?.route(to: .transferDetail(transfer))
-        viewModel?.addTransfersToFavorite(transfer: transfer)
-        tableView.reloadSections([0], with: .none)
-    }
-    
-    func getHeightForRow(at indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
             return 150
-        default:
+        case 1:
             return 80
+        default:
+            return 0
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let title = viewModel?.sectionTitle(section: section) ?? ""
+        // Only show sort button for the main transfer list section (e.g., section 1)
+        let hasSortButton = section == 1
+        return makeSectionHeader(title: title, hasSortButton: hasSortButton)
+    }
+
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard indexPath.section == 1,
+        let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
+        viewModel?.addTransfersToFavorite(transfer: transfer)
+        
+        // Reload section 0 (Favorites) to reflect the change
+        if viewModel?.numberOfSections ?? 0 > 0 {
+            tableView.reloadSections([0], with: .fade)
         }
     }
 }
 
-// MARK: - Private Cell Creation Helpers
+// MARK: - Cell Creation & Configuration Helpers
 private extension TransferListViewController {
-    func createFavoriteCell(tableView: UITableView) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self) else { return UITableViewCell() }
-        cell.configure(with: viewModel?.filteredTransfers ?? [])
+    
+    func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
+        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self) else {
+            assertionFailure("Could not dequeue FavoriteTableViewCell")
+            return UITableViewCell()
+        }
+        
+        cell.configure(with: viewModel?.favoritesTranfers ?? [])
         return cell
     }
     
-    func createListCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(TransferCell.self), let transfer = viewModel?.getTransfer(at: indexPath.row) else { return UITableViewCell() }
+    func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueCell(TransferCell.self),
+              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
+            assertionFailure("Could not dequeue TransferCell or get transfer data")
+            return UITableViewCell()
+        }
         cell.configCell(data: transfer)
         return cell
     }
 }
 
-// MARK: - Private Section Header Builder
+// MARK: - Section Header & Sort Logic
 private extension TransferListViewController {
+    
     func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
         let headerView = UIView()
         headerView.backgroundColor = .systemBackground
-
+        
+        // --- Label Setup ---
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .headline)
@@ -133,17 +190,18 @@ private extension TransferListViewController {
         label.textAlignment = .left
         label.text = title
         headerView.addSubview(label)
-
+        
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
             label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
             label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
         ])
-
+        
+        // --- Sort Button Setup (Conditional) ---
         if hasSortButton {
             let sortButton = UIButton(type: .system)
             sortButton.translatesAutoresizingMaskIntoConstraints = false
-            sortButton.setTitle("Sort: \(viewModel?.sortOption.rawValue ?? "")", for: .normal)
+            sortButton.setTitle("Sort: \(viewModel?.sortOption.rawValue ?? "-")", for: .normal)
             sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
             headerView.addSubview(sortButton)
 
@@ -159,11 +217,10 @@ private extension TransferListViewController {
         }
         return headerView
     }
-}
 
-// MARK: - Private Sort Handler
-private extension TransferListViewController {
     @objc func sortButtonTapped() {
+        guard let _ = viewModel?.sortOption else { return }
+
         let alert = UIAlertController(
             title: "Sort Transfers",
             message: "Choose a sorting option",
@@ -191,18 +248,3 @@ private extension TransferListViewController {
         present(alert, animated: true)
     }
 }
-
-// MARK: - TransferListDelegate
-extension TransferListViewController: TransferListDelegate {
-    func didGetTransfers() {
-        transferTableView.reloadData()
-    }
-
-    func getTransfersError(_ message: String) {
-        showErrorAlert(title: "Error", message: message)
-    }
-}
-
-
-
-

@@ -7,7 +7,7 @@
 
 
 // MARK: - SortOption
-enum SortOption: String {
+enum SortOption: String{
     case nameAscending = "Name Asc"
     case nameDescending = "Name Desc"
     case dateAscending = "Date Asc"
