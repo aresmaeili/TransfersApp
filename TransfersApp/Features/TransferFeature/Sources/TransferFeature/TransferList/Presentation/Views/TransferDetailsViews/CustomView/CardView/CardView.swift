@@ -14,6 +14,7 @@ class CardView: UIView, ViewConnectable {
     @IBOutlet weak var maskedNumberLabel: UILabel!
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var toggleFavoriteButton: UIButton!
     
     var isFavorite: Bool = false
@@ -62,21 +63,25 @@ class CardView: UIView, ViewConnectable {
         dueDateLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         dueDateLabel.textColor = .appText11
         
+        countLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        countLabel.textColor = .appText11
+        
         amountLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         amountLabel.textColor = .appText11
         
-        toggleFavoriteButton.layer.cornerRadius = 10
-        toggleFavoriteButton.backgroundColor = .appText8
-        toggleFavoriteButton.setTitle(isFavorite ? "Unfavorite" : "Favorite", for: .normal)
-        toggleFavoriteButton.setImage( UIImage(named: isFavorite ? "star.fill" : "star"), for: .normal)
+        toggleFavoriteButton.layer.cornerRadius = 4
+        toggleFavoriteButton.clipsToBounds = true
+        toggleFavoriteButton.backgroundColor = .appText11
+        toggleFavoriteButton.setTitle("", for: .normal)
+        toggleFavoriteButton.setImage( UIImage(systemName: isFavorite ? "star.fill" : "star"), for: .normal)
+        toggleFavoriteButton.tintColor = .appOperator2
         toggleFavoriteButton.setTitleColor(.appText1, for: .normal)
         toggleFavoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
     }
     
     @objc func toggleFavorite() {
         isFavorite.toggle()
-        toggleFavoriteButton.setTitle(isFavorite ? "Unfavorite" : "Favorite", for: .normal)
-        toggleFavoriteButton.setImage( UIImage(named: isFavorite ? "star.fill" : "star"), for: .normal)
+        toggleFavoriteButton.setImage( UIImage(systemName: isFavorite ? "star.fill" : "star"), for: .normal)
     }
     
     func configure(cardNumber: String, dueDate: String, amount: String) {
