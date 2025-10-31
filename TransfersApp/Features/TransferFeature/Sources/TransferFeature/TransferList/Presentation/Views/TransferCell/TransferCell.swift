@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import NetworkCore
 
 // MARK: - Protocol
 protocol TransferCellShowable {
@@ -85,21 +86,19 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
             return
         }
 
-        Task { [weak self] in
-            guard let self else { return }
-            
-            do {
-                guard let image = try await UIImage(url: urlString) else { return }
-                
-                ImageCache.shared.setImage(image, forKey: urlString)
-                
-                await MainActor.run {
-                        self.avatarImageView.image = image
+        //        Todo: Change this loc
+                Task { [weak self] in
+                    guard let self else { return }
+                    do {
+                        guard let image = try await ImageDownloader.shared.downloadImage(from: urlString)  else { return }
+                        ImageCache.shared.setImage(image, forKey: urlString)
+                        await MainActor.run {
+                            self.avatarImageView.image = image
+                        }
+                    } catch {
+                        print("Error: \(error)")
+                    }
                 }
-            } catch {
-                print("Error loading image for \(urlString): \(error)")
-            }
-        }
     }
 
 }
