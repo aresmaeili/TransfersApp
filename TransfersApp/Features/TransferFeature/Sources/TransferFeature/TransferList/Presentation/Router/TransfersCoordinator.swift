@@ -15,9 +15,8 @@ public final class TransferCoordinator: BaseCoordinator {
     }
 
     private func showTransfersList() {
-        let factory = TransferListFactory()
-        let vc = factory.makeModule(navigation: navigationController)
+        let factory = TransferFactory()
+        let vc = factory.makeTransferListModule(navigation: navigationController)
         navigationController.pushViewController(vc, animated: true)
     }
 }
-
