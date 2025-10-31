@@ -37,13 +37,17 @@ final class TransferListViewModel {
     }
     
     private(set) var isGettingData = false
-    private(set) var transfers: [Transfer] = []
+    private(set) var transfers: [Transfer] = [] {
+        didSet {
+            delegate?.didUpdateTransfers()
+        }
+    }
 
     var filteredTransfers: [Transfer] {
         var result = transfers
         // 1. Search
         if !textSearch.isEmpty {
-            result = result.filter { $0.name.hasPrefix(textSearch) }
+            result = result.filter { $0.name.contains(textSearch) }
         }
         // 2. Sort
         return sortTransfers(result, by: sortOption).reversed()

@@ -4,15 +4,12 @@
 //
 //  Created by AREM on 10/30/25.
 //
-
 import UIKit
 import NetworkCore
 import RouterCore
 import Shared
 
 // MARK: - Protocol: TransferListDisplay
-/// Defines the methods the ViewController uses to communicate with the ViewModel.
-
 public final class TransferListViewController: UIViewController {
 
     // MARK: - Properties
@@ -49,8 +46,7 @@ public final class TransferListViewController: UIViewController {
 // MARK: - TransferListDisplay (ViewModel Communication)
 extension TransferListViewController: TransferListDisplay {
     func didUpdateTransfers() {
-            self.transferTableView.reloadData()
-        
+        self.transferTableView.reloadSections([1], with: .automatic)
     }
 
     func displayError(_ message: String) {
@@ -60,8 +56,6 @@ extension TransferListViewController: TransferListDisplay {
 
 // MARK: - Configuration
 private extension TransferListViewController {
-    
-    /// Sets up basic ViewController properties.
     func configureView() {
         title = "Transfers List"
         viewModel?.delegate = self
@@ -71,8 +65,6 @@ private extension TransferListViewController {
     func setupTableView() {
         transferTableView.registerCell(TransferCell.self, module: .module)
         transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
-        
-        // Adhere to protocol conformance within an extension
         transferTableView.dataSource = self
         transferTableView.delegate = self
     }
@@ -89,7 +81,9 @@ private extension TransferListViewController {
 extension TransferListViewController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        viewModel?.textSearch = searchText
+        if searchText != viewModel?.textSearch {
+            viewModel?.textSearch = searchText
+        }
     }
 }
 
