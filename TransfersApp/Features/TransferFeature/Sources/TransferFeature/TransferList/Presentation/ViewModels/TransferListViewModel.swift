@@ -49,10 +49,6 @@ final class TransferListViewModel {
         return sortTransfers(result, by: sortOption).reversed()
     }
     
-    var numberOfSections: Int {
-        return 2
-    }
-    
     // MARK: - Initialization
     init(transfersUseCase: FetchTransfersUseCase, delegate: TransferListDisplay?) {
         self.transfersUseCase = transfersUseCase
@@ -110,17 +106,6 @@ final class TransferListViewModel {
             return filteredTransfers.count
         default:
             return 0
-        }
-    }
-    
-    func sectionTitle(section: Int) -> String {
-        switch section {
-        case 0:
-            return "Favorites:"
-        case 1:
-            return "Transfers:"
-        default:
-            return ""
         }
     }
     

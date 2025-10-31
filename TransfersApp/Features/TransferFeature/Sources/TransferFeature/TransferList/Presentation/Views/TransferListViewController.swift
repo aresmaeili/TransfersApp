@@ -97,7 +97,7 @@ extension TransferListViewController: UISearchResultsUpdating {
 extension TransferListViewController: UITableViewDataSource {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel?.numberOfSections ?? 0
+        numberOfSections
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -118,6 +118,9 @@ extension TransferListViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension TransferListViewController: UITableViewDelegate {
+    var numberOfSections: Int {
+        return 2
+    }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -131,7 +134,7 @@ extension TransferListViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let title = viewModel?.sectionTitle(section: section) ?? ""
+        let title = sectionTitle(section: section)
         // Only show sort button for the main transfer list section (e.g., section 1)
         let hasSortButton = section == 1
         return makeSectionHeader(title: title, hasSortButton: hasSortButton)
@@ -143,10 +146,16 @@ extension TransferListViewController: UITableViewDelegate {
         guard indexPath.section == 1,
         let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
         viewModel?.addTransfersToFavorite(transfer: transfer)
-        
-        // Reload section 0 (Favorites) to reflect the change
-        if viewModel?.numberOfSections ?? 0 > 0 {
-            tableView.reloadSections([0], with: .fade)
+    }
+    
+    func sectionTitle(section: Int) -> String {
+        switch section {
+        case 0:
+            return "Favorites:"
+        case 1:
+            return "Transfers:"
+        default:
+            return ""
         }
     }
 }
