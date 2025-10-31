@@ -6,7 +6,8 @@
 //
 
 import UIKit
-
+import NetworkCore
+import Shared
 
 class FavoriteCollectionViewCell: UICollectionViewCell {
     
@@ -55,10 +56,11 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
             return
         }
         
+//        Todo: Change this loc
         Task { [weak self] in
             guard let self else { return }
             do {
-                guard let image = try await UIImage(url: urlString) else { return }
+                guard let image = try await ImageDownloader.shared.downloadImage(from: urlString)  else { return }
                 ImageCache.shared.setImage(image, forKey: urlString)
                 await MainActor.run {
                     self.avatarImageView.image = image
@@ -67,19 +69,5 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
                 print("Error: \(error)")
             }
         }
-    }
-}
-
-final class ImageCache {
-    @MainActor static let shared = ImageCache()
-    private let cache = NSCache<NSString, UIImage>()
-    private init() {}
-    
-    func image(forKey key: String) -> UIImage? {
-        return cache.object(forKey: key as NSString)
-    }
-    
-    func setImage(_ image: UIImage, forKey key: String) {
-        cache.setObject(image, forKey: key as NSString)
     }
 }

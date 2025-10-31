@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 // MARK: - Remote Models (mirror the API payload exactly)
 struct Transfer: Codable, Equatable, Sendable, Identifiable {
@@ -100,50 +101,6 @@ struct Person: Codable, Equatable, Sendable {
      }
 }
 
-import UIKit
 
-extension UIImage {
-    convenience init?(url urlString: String) async throws {
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            return nil
-        }
-        
-        guard let image = UIImage(data: data) else {
-            return nil
-        }
-        
-        self.init(cgImage: image.cgImage!)
-    }
-}
 
-import Foundation
 
-extension String {
-    /// Converts an ISO8601 string (e.g. "2022-08-31T15:24:16Z") to a Date.
-    func toISODate() -> Date? {
-        let formatter = ISO8601DateFormatter()
-        return formatter.date(from: self)
-    }
-    
-
-}
-
-extension Date {
-    /// Converts a Date to a human-readable string (localized)
-    func toDateString(dateStyle: DateFormatter.Style = .short,
-                          timeStyle: DateFormatter.Style = .short) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = dateStyle
-        formatter.timeStyle = timeStyle
-        formatter.locale = .current
-        formatter.timeZone = .current
-        return formatter.string(from: self)
-    }
-}
