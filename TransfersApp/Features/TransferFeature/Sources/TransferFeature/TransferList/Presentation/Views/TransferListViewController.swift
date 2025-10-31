@@ -26,7 +26,7 @@ public final class TransferListViewController: UIViewController, UISearchResults
         title = "Transfers List"
         setupTableView()
         setupSearchController()
-        viewModel?.loadTransfers()
+        viewModel?.loadNextPageIfNeeded(currentItem: nil)
     }
 }
 
@@ -109,7 +109,7 @@ extension TransferListViewController: UITableViewDelegate {
 private extension TransferListViewController {
     func createFavoriteCell(tableView: UITableView) -> UITableViewCell {
         guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self) else { return UITableViewCell() }
-        cell.configure(with: viewModel?.favoritesTranfersReversed ?? [])
+        cell.configure(with: viewModel?.filteredTransfers ?? [])
         return cell
     }
     

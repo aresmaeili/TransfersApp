@@ -9,7 +9,8 @@ import Foundation
 
 // MARK: - Remote Models (mirror the API payload exactly)
 
-struct Transfer: Codable, Equatable, Sendable {
+struct Transfer: Codable, Equatable, Sendable, Identifiable {
+    let id: UUID = UUID()
     let person: Person?
     let card: Card?
     let note: String?

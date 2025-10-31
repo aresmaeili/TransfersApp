@@ -21,33 +21,32 @@ final class TransferListViewModel {
     private let transfersUseCase: FetchTransfersUseCase
     weak var delegate: TransferListDelegate?
     
+    private var currentPage = 1
+
     @UserDefaultTransfers var favoritesTranfers: [Transfer]
     var textSearch: String = "" {
         didSet {
-            filterAndSearch()
+            delegate?.didGetTransfers()
         }
     }
-    
-    var favoritesTranfersReversed: [Transfer] {
-        favoritesTranfers.reversed()
-    }
-    
+
     var sortOption: SortOption = .nameAscending {
         didSet {
-            filterAndSearch()
-        }
-    }
-    
-    private(set) var transfers: [Transfer] = [] {
-        didSet {
             delegate?.didGetTransfers()
         }
     }
     
-    var filteredTransfers: [Transfer] = []  {
-        didSet {
-            delegate?.didGetTransfers()
+    private(set) var isGettingData = false
+    private(set) var transfers: [Transfer] = []
+
+    var filteredTransfers: [Transfer] {
+        var result = transfers
+        // 1. Search
+        if !textSearch.isEmpty {
+            result = result.filter { $0.name.hasPrefix(textSearch) }
         }
+        // 2. Sort
+        return sortTransfers(result, by: sortOption).reversed()
     }
     
     var numberOfSections: Int {
@@ -61,11 +60,15 @@ final class TransferListViewModel {
     }
     
     // MARK: - Public Interface
-    func loadTransfers() {
-        Task {
+    private func loadTransfers(page: Int) {
+        Task { @MainActor in
+            guard !isGettingData else { return }
+            isGettingData = true
+            defer { isGettingData = false }
             do {
-                transfers = try await transfersUseCase.execute(page: 1)
-                filteredTransfers = sortTransfers(transfers, by: sortOption)
+                transfers = try await transfersUseCase.execute(page: currentPage)
+                currentPage += 1
+                delegate?.didGetTransfers()
             } catch {
                 delegate?.getTransfersError(error.localizedDescription)
             }
@@ -78,6 +81,25 @@ final class TransferListViewModel {
     
     func getTransfer(at index: Int) -> Transfer? {
         return filteredTransfers[safe: index]
+    }
+    
+    func loadNextPageIfNeeded(currentItem: Transfer?) {
+        Task {
+            refreshTransfers()
+            
+            let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
+            if filteredTransfers.firstIndex(where: { $0.id == currentItem?.id }) == thresholdIndex {
+                loadTransfers(page: currentPage)
+            }
+        }
+     }
+    
+    func refreshTransfers() {
+        // 1. Reset state
+        currentPage = 1
+        transfers = []
+        // 2. Start fetch
+        loadTransfers(page: currentPage)
     }
     
     func sectionCount(section: Int) -> Int {
@@ -103,20 +125,6 @@ final class TransferListViewModel {
     }
     
     // MARK: - Private Helpers
-    func filterAndSearch() {
-        guard !textSearch.isEmpty else {
-            if filteredTransfers != transfers {
-                filteredTransfers = transfers
-                filteredTransfers = sortTransfers(filteredTransfers, by: sortOption)
-            }
-            return
-        }
-        filteredTransfers = transfers.filter {
-            $0.name.hasPrefix(textSearch)
-        }
-        filteredTransfers = sortTransfers(filteredTransfers, by: sortOption)
-    }
-    
     func sortTransfers(_ filteredTransfers: [Transfer], by option: SortOption) -> [Transfer] {
         switch option {
         case .nameAscending:
