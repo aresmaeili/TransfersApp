@@ -9,6 +9,9 @@ import RouterCore
 
 final class TransferDetailsViewController: UIViewController {
     
+    // @IBOutlet
+    @IBOutlet weak private var stackView: UIStackView!
+    
     // Dependencies
     weak var viewModel: TransferDetailsViewModel?
     weak var router: Coordinator?
@@ -17,18 +20,12 @@ final class TransferDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        bindViewModel()
     }
     
     private func setupUI() {
-        self.title = "Transfer Details"
-        // ... set up labels, etc.
+      let cardView = CardView()
+        stackView.addArrangedSubview(cardView)
     }
 
-    private func bindViewModel() {
-        // Example: Update a label
-        // titleLabel.text = viewModel.title
-        // amountLabel.text = viewModel.amountText
-        // dateLabel.text = viewModel.dateText
-    }
+ 
 }
