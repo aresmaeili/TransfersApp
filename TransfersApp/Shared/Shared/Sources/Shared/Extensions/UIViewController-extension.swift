@@ -14,3 +14,22 @@ public extension UIViewController {
     }
 }
 
+public extension UIViewController {
+    static func instantiate(from storyboardName: String, bundle: Bundle = .main) -> Self {
+        UIStoryboard.instantiate(self, from: storyboardName, bundle: bundle)
+    }
+}
+
+public extension UIStoryboard {
+    static func instantiate<T: UIViewController>(
+        _ type: T.Type,
+        from name: String,
+        bundle: Bundle = .main
+    ) -> T {
+        let storyboard = UIStoryboard(name: name, bundle: bundle)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: String(describing: type)) as? T else {
+            preconditionFailure("❌ \(type) not found in \(name).storyboard")
+        }
+        return vc
+    }
+}

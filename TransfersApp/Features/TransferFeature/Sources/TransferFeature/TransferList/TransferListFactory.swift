@@ -7,14 +7,11 @@
 
 import UIKit
 import RouterCore
+import Shared
 
 struct TransferListFactory: VCFactoryProtocol {
     func makeModule(navigation: UINavigationController) -> UIViewController {
-        let storyboard = UIStoryboard(name: "TransferList", bundle: .module)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "TransferListViewController") as? TransferListViewController else {
-            assertionFailure("TransferListViewController not found in TransferList.storyboard")
-            return UIViewController()
-        }
+        let vc = TransferListViewController.instantiate(from: "TransferList", bundle: .module)
         let api = TransferMockData()
         let repository = TransferRepositoryImpl(api: api)
         let useCase = DefaultFetchTransfersUseCase(repository: repository)
