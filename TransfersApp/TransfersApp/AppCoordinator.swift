@@ -15,19 +15,14 @@ final class AppCoordinator: BaseCoordinator {
     }
     
     override func start() {
-        guard isTesting else { return showTestPage() }
         showTransferFeature()
-        
     }
+    
     
       private func showTransferFeature() {
           let transferCoordinator = TransferCoordinator(navigationController: navigationController)
           add(child: transferCoordinator)
           transferCoordinator.start()
       }
-    
-    private func showTestPage() {
-        let testVC = TransferListViewController()
-        navigationController.pushViewController(testVC, animated: true)
-    }
+
 }

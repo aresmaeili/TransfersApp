@@ -10,7 +10,7 @@ import RouterCore
 final class TransferDetailsViewController: UIViewController {
     
     // Dependencies
-    var viewModel: TransferDetailsViewModel?
+    weak var viewModel: TransferDetailsViewModel?
     weak var router: Coordinator?
     
     // MARK: - View Lifecycle

@@ -14,7 +14,7 @@ public final class TransferListViewController: UIViewController {
     
     // Dependencies
     var viewModel: TransferListViewModel?
-    weak var router: Coordinator?
+    var router: TransferCoordinator?
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
@@ -145,8 +145,9 @@ extension TransferListViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        viewModel?.addTransfersToFavorite(transfer: transfer)
-        tableView.reloadSections([0], with: .automatic)
+//        viewModel?.addTransfersToFavorite(transfer: transfer)
+//        tableView.reloadSections([0], with: .automatic)
+        router?.showTransfersDetails(transfer: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

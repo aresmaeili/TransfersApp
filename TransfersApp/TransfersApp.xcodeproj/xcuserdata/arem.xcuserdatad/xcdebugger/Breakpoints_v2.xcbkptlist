@@ -199,64 +199,108 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E50D6EEB-FDC9-4966-9A74-ABD992A7CF2F"
+            uuid = "6701D9D4-DB5C-497A-8E2F-129A0BC07F0E"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/TransferFactory.swift"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "makeTransferDetailsModule(transfer:navigation:)"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "showTransfersDetails(transfer:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6701D9D4-DB5C-497A-8E2F-129A0BC07F0E - 3defbe071d0ef54f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TransferFeature.TransferCoordinator.showTransfersDetails() -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26">
+               </Location>
+               <Location
+                  uuid = "6701D9D4-DB5C-497A-8E2F-129A0BC07F0E - cf366998e736df7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TransferFeature.TransferCoordinator.showTransfersDetails(transfer: TransferFeature.Transfer) -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "958ECB54-DD7E-474C-B034-978FF85FBEB4"
+            uuid = "E5829D7E-436E-4371-AB4E-BDEBD431EAAD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/TransferFactory.swift"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "makeTransferDetailsModule(transfer:navigation:)"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "showTransfersDetails(transfer:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E5829D7E-436E-4371-AB4E-BDEBD431EAAD - 3defbe071d0ef54f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TransferFeature.TransferCoordinator.showTransfersDetails() -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "26"
+                  endingLineNumber = "26">
+               </Location>
+               <Location
+                  uuid = "E5829D7E-436E-4371-AB4E-BDEBD431EAAD - cf366998e736df7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TransferFeature.TransferCoordinator.showTransfersDetails(transfer: TransferFeature.Transfer) -&gt; ()"
+                  moduleName = "TransfersApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/SetareYek/TransfersApp/TransfersApp/Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Router/TransfersCoordinator.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BAD8E07F-20D4-4DBD-B6B3-BB45969619EE"
+            uuid = "C5F27608-E63E-4613-9A00-9A2F49D64039"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/TransferFactory.swift"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/Presentation/Views/TransferListViews/TransferListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "makeTransferDetailsModule(transfer:navigation:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "07528229-2454-41B9-8DAD-64E3AF97C390"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Features/TransferFeature/Sources/TransferFeature/TransferList/TransferFactory.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "makeTransferDetailsModule(transfer:navigation:)"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

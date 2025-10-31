@@ -10,13 +10,20 @@ import UIKit
 
 public final class TransferCoordinator: BaseCoordinator {
     
+    let factory = TransferFactory()
+
     public override func start() {
         showTransfersList()
     }
 
     private func showTransfersList() {
-        let factory = TransferFactory()
-        let vc = factory.makeTransferListModule(navigation: navigationController)
+        let vc = factory.makeTransferListModule(coordinator: self)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showTransfersDetails(transfer: Transfer) {
+        let vc = factory.makeTransferDetailsModule(transfer: transfer, coordinator: self)
         navigationController.pushViewController(vc, animated: true)
     }
 }
+
