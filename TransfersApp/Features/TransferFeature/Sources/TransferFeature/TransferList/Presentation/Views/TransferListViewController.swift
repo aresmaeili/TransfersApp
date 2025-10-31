@@ -9,9 +9,7 @@ import NetworkCore
 import RouterCore
 import Shared
 
-// MARK: - Protocol: TransferListDisplay
 public final class TransferListViewController: UIViewController {
-
     // MARK: - Properties
     
     // Dependencies
@@ -37,7 +35,6 @@ public final class TransferListViewController: UIViewController {
         configureView()
         setupTableView()
         setupSearchController()
-        
         // Initial data load
         viewModel?.loadNextPageIfNeeded(currentItem: nil)
     }

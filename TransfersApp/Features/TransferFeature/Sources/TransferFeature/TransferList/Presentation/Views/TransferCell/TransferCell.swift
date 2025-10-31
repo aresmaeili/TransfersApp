@@ -28,8 +28,9 @@ class TransferCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        TODO: check this
-        setupCell()
-        
+        MainActor.assumeIsolated {
+            setupCell()
+        }
     }
     
     func setupCell() {

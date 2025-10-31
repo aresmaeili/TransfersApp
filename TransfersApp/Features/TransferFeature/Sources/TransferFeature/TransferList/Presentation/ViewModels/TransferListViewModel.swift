@@ -68,6 +68,7 @@ final class TransferListViewModel {
     
     // MARK: - Public Interface
     private func loadTransfers(page: Int) {
+//        TODO: check this
         Task { @MainActor in
             guard !isGettingData else { return }
             isGettingData = true
@@ -75,7 +76,6 @@ final class TransferListViewModel {
             do {
                 transfers = try await transfersUseCase.execute(page: currentPage)
                 currentPage += 1
-//                delegate?.didUpdateTransfers()
             } catch {
                 delegate?.displayError(error.localizedDescription)
             }
@@ -91,7 +91,7 @@ final class TransferListViewModel {
     }
     
     func getFavorites() -> [Transfer]? {
-        return favorites
+        return favorites.reversed()
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {

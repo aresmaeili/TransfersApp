@@ -8,7 +8,6 @@
 import UIKit
 import RouterCore
 
-@MainActor
 struct TransferListFactory: VCFactoryProtocol {
     func makeModule(navigation: UINavigationController) -> UIViewController {
         let storyboard = UIStoryboard(name: "TransferList", bundle: .module)

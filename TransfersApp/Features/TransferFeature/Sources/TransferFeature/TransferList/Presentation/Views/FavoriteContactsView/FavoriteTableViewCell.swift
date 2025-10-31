@@ -15,7 +15,9 @@ class FavoriteTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        TODO: check this
-        setupCollectionView()
+        MainActor.assumeIsolated {
+            setupCollectionView()
+        }
     }
 
     private func setupCollectionView() {

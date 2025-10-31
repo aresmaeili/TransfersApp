@@ -26,7 +26,6 @@ struct Transfer: Codable, Equatable, Sendable, Identifiable {
 }
 
 extension Transfer: TransferCellShowable {
-    
     var id: String {
         return (name + cardNo)
     }
