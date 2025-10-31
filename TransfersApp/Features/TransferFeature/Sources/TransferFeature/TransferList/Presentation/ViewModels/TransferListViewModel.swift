@@ -64,7 +64,7 @@ final class TransferListViewModel {
     func loadTransfers() {
         Task {
             do {
-                transfers = try await transfersUseCase.execute()
+                transfers = try await transfersUseCase.execute(page: 1)
                 filteredTransfers = sortTransfers(transfers, by: sortOption)
             } catch {
                 delegate?.getTransfersError(error.localizedDescription)

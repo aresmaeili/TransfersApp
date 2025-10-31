@@ -9,7 +9,7 @@
 import Foundation
 
 protocol FetchTransfersUseCase: Sendable {
-    func execute() async throws -> [Transfer]
+    func execute(page: Int) async throws -> [Transfer]
 }
 
 final class DefaultFetchTransfersUseCase: FetchTransfersUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchTransfersUseCase: FetchTransfersUseCase {
         self.repository = repository
     }
 
-    func execute() async throws -> [Transfer] {
-        try await repository.fetchTransfers()
+    func execute(page: Int) async throws -> [Transfer] {
+        try await repository.fetchTransfers(page: page)
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol TransferRepository: Sendable {
-    func fetchTransfers() async throws -> [Transfer]
+    func fetchTransfers(page: Int) async throws -> [Transfer]
 }
 
 final class TransferRepositoryImpl: TransferRepository {
@@ -19,8 +19,8 @@ final class TransferRepositoryImpl: TransferRepository {
         self.api = api
     }
 
-    func fetchTransfers() async throws -> [Transfer] {
-        let dtos = try await api.fetchTransfers()
+    func fetchTransfers(page: Int) async throws -> [Transfer] {
+        let dtos = try await api.fetchTransfers(page: page)
         return dtos.map { $0 }
     }
 }

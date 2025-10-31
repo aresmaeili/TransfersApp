@@ -8,7 +8,7 @@
 
 
 final class TransferMockData: TransferDataSource {
-    func fetchTransfers() async throws -> [Transfer] {
+    func fetchTransfers(page: Int) async throws -> [Transfer] {
         let transfers: [Transfer] = [
             Transfer(
                 person: Person(
