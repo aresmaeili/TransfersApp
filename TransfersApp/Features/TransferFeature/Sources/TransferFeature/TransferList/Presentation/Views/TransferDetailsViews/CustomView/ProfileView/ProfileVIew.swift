@@ -16,32 +16,53 @@ protocol TransferDetailsProfileProtocol {
 //    var note: String? { get }
 }
 
+@MainActor
+protocol profileViewDelegate: AnyObject {
+    func didSelectStarButton(transfer: Transfer, shouldBeFavorite: Bool)
+}
+
 class ProfileView: UIView, ViewConnectable {
     
     @IBOutlet weak var parentView: UIView!
     @IBOutlet weak var avatarParentView: UIView!
     @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var starImageView: UIImageView!
+    @IBOutlet weak var starbutton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var mailLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
 
-    required init() {
+    @IBAction func starButtonAction(_ sender: Any) {
+        guard let transfer, let delegate, let isFavorite else { return }
+        self.isFavorite?.toggle()
+        delegate.didSelectStarButton(transfer: transfer, shouldBeFavorite: isFavorite)
+        setupStarButton(isFavorite: isFavorite)
+    }
+    
+    weak var delegate: profileViewDelegate?
+    var transfer: Transfer?
+    var isFavorite: Bool?
+    
+    required init(data: Transfer, delegate: profileViewDelegate, isFavorite: Bool) {
         
         super.init(frame: .zero)
         
-        initialize()
+        self.delegate = delegate
+        self.transfer = data
+        self.isFavorite = isFavorite
+        
+        initialize(with: data, isFavorite: isFavorite)
+     
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initialize() {
+    private func initialize(with data: any TransferDetailsProfileProtocol, isFavorite: Bool) {
         connectView(bundle: .module)
         setupView()
+        configure(with: data, isFavorite: isFavorite)
     }
-    
     
     private func setupView() {
         parentView.backgroundColor = .appBackground1
@@ -66,15 +87,21 @@ class ProfileView: UIView, ViewConnectable {
         totalLabel.font = .systemFont(ofSize: 48, weight: .bold)
         totalLabel.textColor = .appText6
         
-        starImageView.image = UIImage.shared(named: "StarFill")
     }
     
     
-    func configure(with data: TransferDetailsProfileProtocol) {
+    func configure(with data: TransferDetailsProfileProtocol, isFavorite: Bool) {
         nameLabel.text = data.name
         mailLabel.text = data.mail
         totalLabel.text = data.totalAmount
+        self.isFavorite = isFavorite
         loadAvatar(from: data.avatarUser)
+        setupStarButton(isFavorite: isFavorite)
+    }
+    
+    func setupStarButton(isFavorite: Bool) {
+        let image = isFavorite ? UIImage.shared(named: "StarFill") : UIImage.shared(named: "Star")
+        starbutton.setImage(image, for: .normal)
     }
     
     // MARK: Private Helpers

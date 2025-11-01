@@ -14,6 +14,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var parentView: UIView!
     @IBOutlet private weak var circleView: UIView!
     @IBOutlet private weak var avatarImageView: UIImageView!
+    @IBOutlet private weak var starImageView: UIImageView!
     @IBOutlet private weak var nameLabel: UILabel!
 
     override func awakeFromNib() {
@@ -45,6 +46,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         avatarImageView.layer.borderColor = UIColor.appBorder2.cgColor
         avatarImageView.layer.borderWidth = 1
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        starImageView.image = UIImage.shared(named: "StarFill")
     }
     
     func configure(with transfer: Transfer) {

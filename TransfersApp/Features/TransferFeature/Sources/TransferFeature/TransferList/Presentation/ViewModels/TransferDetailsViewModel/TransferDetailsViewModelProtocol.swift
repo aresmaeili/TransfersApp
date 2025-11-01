@@ -18,10 +18,17 @@ fileprivate struct TransferDetailsItem: TransferDetailsItemProtocol {
 }
 
 final class TransferDetailsViewModel {
-    let transfer: TransferDetailsViewModelProtocol
+    
+    let transfer: Transfer
+    var isFavorite: Bool {
+        favoriteUseCase.checkIsFavorite(transfer: transfer)
+    }
+    
+    private let favoriteUseCase: FavoriteTransferUseCase
 
-    init(transfer: TransferDetailsViewModelProtocol) {
+    init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCase) {
         self.transfer = transfer
+        self.favoriteUseCase = favoriteUseCase
     }
     
     var items: [any TransferDetailsItemProtocol] {
@@ -35,4 +42,7 @@ final class TransferDetailsViewModel {
         return items
     }
     
+    func addTransfersToFavorite(transfer: Transfer, shouldBeFavorite: Bool) {
+        favoriteUseCase.execute(transfer: transfer, shouldBeFavorite: shouldBeFavorite)
+    }
 }

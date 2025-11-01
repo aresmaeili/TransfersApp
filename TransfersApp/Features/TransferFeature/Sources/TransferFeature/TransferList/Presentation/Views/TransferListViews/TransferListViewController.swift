@@ -40,6 +40,10 @@ public final class TransferListViewController: UIViewController {
         viewModel?.refreshTransfers()
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        transferTableView.reloadData()
+    }
+    
     deinit {
         print("TransferLIst deinit" )
     }
@@ -190,7 +194,8 @@ private extension TransferListViewController {
             assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
-        cell.configCell(data: transfer)
+        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
+        cell.configCell(data: transfer, isFavorite: isFavorite)
         return cell
     }
 }

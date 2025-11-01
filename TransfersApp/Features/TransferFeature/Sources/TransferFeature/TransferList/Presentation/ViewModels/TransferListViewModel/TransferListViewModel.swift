@@ -107,6 +107,10 @@ final class TransferListViewModel {
         return favorites.reversed()
     }
     
+    func checkIfTransferIsFavorite(transfer: Transfer) -> Bool {
+        return favorites.contains(where: { $0.id == transfer.id })
+    }
+    
     func loadNextPageIfNeeded(currentItem: Transfer?) {
         guard !isGettingData, let currentItem else { return }
 

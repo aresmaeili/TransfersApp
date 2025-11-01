@@ -17,12 +17,12 @@
                 <outlet property="mailLabel" destination="ryf-gI-oB2" id="LNv-ra-9pO"/>
                 <outlet property="nameLabel" destination="oRf-1f-BE9" id="vPG-tf-6Ld"/>
                 <outlet property="parentView" destination="GNp-q3-n09" id="NBi-bm-APo"/>
-                <outlet property="starImageView" destination="BQ7-Af-ufK" id="bYJ-xi-r9B"/>
+                <outlet property="starbutton" destination="nrn-Op-Fng" id="gvT-Ki-9LU"/>
                 <outlet property="totalLabel" destination="5hE-T3-af4" id="3Vv-XM-RqQ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" ambiguous="YES" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="404" height="220"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -78,11 +78,11 @@
                                         </view>
                                     </subviews>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="uLH-qk-ReW">
-                                    <rect key="frame" x="0.0" y="82" width="356" height="70"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="uLH-qk-ReW">
+                                    <rect key="frame" x="0.0" y="80" width="356" height="72"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nyi-fG-CqL">
-                                            <rect key="frame" x="0.0" y="0.0" width="115" height="70"/>
+                                            <rect key="frame" x="0.0" y="2" width="115" height="70"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Transfers:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvg-Ff-iED">
                                                     <rect key="frame" x="0.0" y="0.0" width="115" height="20"/>
@@ -105,20 +105,23 @@
                                             </subviews>
                                         </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="f1W-b4-dSI">
-                                            <rect key="frame" x="302" y="0.0" width="54" height="70"/>
+                                            <rect key="frame" x="290" y="0.0" width="66" height="72"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BQ7-Af-ufK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="BQ7-Af-ufK" secondAttribute="height" id="Wwn-nF-10v"/>
-                                                    </constraints>
-                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nrn-Op-Fng">
+                                                    <rect key="frame" x="0.0" y="0.0" width="66" height="56"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="StarFill"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="StarFill"/>
+                                                    <connections>
+                                                        <action selector="starButtonAction:" destination="-1" eventType="touchUpInside" id="MXj-yL-i2i"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorite" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CMV-Si-D3k">
-                                                    <rect key="frame" x="0.0" y="54" width="54" height="16"/>
+                                                    <rect key="frame" x="0.0" y="56" width="66" height="16"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="16" id="atr-gX-o6O"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                                                     <color key="textColor" name="Text 1"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -152,6 +155,7 @@
         </view>
     </objects>
     <resources>
+        <image name="StarFill" width="42" height="42"/>
         <image name="person.and.background.dotted" catalog="system" width="128" height="101"/>
         <namedColor name="Background 3">
             <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

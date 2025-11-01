@@ -29,8 +29,7 @@ final class TransferDetailsViewController: UIViewController {
         cardView.configure(with: transfer)
         stackView.addArrangedSubview(cardView)
         
-        let profileView = ProfileView()
-        profileView.configure(with: transfer)
+        let profileView = ProfileView(data: transfer, delegate: self, isFavorite: viewModel?.isFavorite ?? false)
         stackView.addArrangedSubview(profileView)
         
         guard let items = viewModel?.items else { return }
@@ -49,5 +48,11 @@ final class TransferDetailsViewController: UIViewController {
     
     deinit {
         print("TransferDetailsViewController deinit")
+    }
+}
+
+extension TransferDetailsViewController: profileViewDelegate {
+    func didSelectStarButton(transfer: Transfer, shouldBeFavorite: Bool) {
+        viewModel?.addTransfersToFavorite(transfer: transfer, shouldBeFavorite: shouldBeFavorite)
     }
 }

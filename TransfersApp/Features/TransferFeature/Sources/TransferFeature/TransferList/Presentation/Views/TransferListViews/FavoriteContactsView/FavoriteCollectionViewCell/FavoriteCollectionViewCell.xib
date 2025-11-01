@@ -72,8 +72,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="gHc-iX-qCL">
                                 <rect key="frame" x="16" y="16" width="145" height="32"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hfq-Nc-onW">
-                                        <rect key="frame" x="0.0" y="0.66666666666666607" width="32" height="30.666666666666671"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StarFill" translatesAutoresizingMaskIntoConstraints="NO" id="hfq-Nc-onW">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                                         <color key="tintColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="32" id="3rd-D1-kVz"/>
@@ -119,13 +119,14 @@
                 <outlet property="circleView" destination="ufy-OQ-6eS" id="aEu-zp-C3Q"/>
                 <outlet property="nameLabel" destination="3Sz-8O-Kh7" id="cYN-I2-ofp"/>
                 <outlet property="parentView" destination="Woz-Ti-BIc" id="v1c-Mo-94Y"/>
+                <outlet property="starImageView" destination="hfq-Nc-onW" id="ay0-LH-rRh"/>
             </connections>
             <point key="canvasLocation" x="231" y="151"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="StarFill" width="42" height="42"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="star.circle" catalog="system" width="128" height="123"/>
         <namedColor name="Background 3">
             <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
