@@ -34,8 +34,14 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
     // MARK: Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-//        TODO: Chec
+//        TODO: Check
         setupUI()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        avatarTask?.cancel()
+        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
     }
     
     // MARK: Setup
@@ -80,28 +86,18 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
         starImageView.isHidden = !isFavorite
     }
     
-    // MARK: Private Helpers
-    private func loadAvatar(from urlString: String?) {
-        guard let urlString = urlString else { return }
-        
-        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
-            avatarImageView.image = cachedImage
-            return
-        }
+    private var avatarTask: Task<Void, Never>?
 
-        //        Todo: Change this loc
-                Task { [weak self] in
-                    guard let self else { return }
-                    do {
-                        guard let image = try await ImageDownloader.shared.downloadImage(from: urlString)  else { return }
-                        ImageCache.shared.setImage(image, forKey: urlString)
-                        await MainActor.run {
-                            self.avatarImageView.image = image
-                        }
-                    } catch {
-                        print("Error: \(error)")
-                    }
+    func loadAvatar(from urlString: String?) {
+        avatarTask?.cancel()
+        avatarTask = Task {
+            guard let urlString else { return }
+            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+                await MainActor.run {
+                    self.avatarImageView.image = image
                 }
+            }
+        }
     }
 
 }

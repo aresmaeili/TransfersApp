@@ -10,10 +10,12 @@ import Foundation
 
 public final class TransferCoordinator: BaseCoordinator {
     
+    
     public override init(navigationController: UINavigationController) {
         super.init(navigationController: navigationController)
     }
     
+//    let factory = TransferFactory(service: TransferMockData())
     let factory = TransferFactory(service: TransferAPI())
 
     public override func start() {
@@ -26,7 +28,7 @@ public final class TransferCoordinator: BaseCoordinator {
     }
     
     func showTransfersDetails(transfer: Transfer) {
-        let vc = factory.makeTransferDetailsModule(transfer: transfer, coordinator: self)
+        let vc = factory.makeTransferDetailsModule(transfer: transfer)
         navigationController.pushViewController(vc, animated: true)
     }
 }

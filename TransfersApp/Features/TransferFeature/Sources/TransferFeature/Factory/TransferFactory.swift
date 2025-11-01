@@ -12,7 +12,7 @@ import Shared
 @MainActor
 protocol TransferFactoryProtocol {
     func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
-    func makeTransferDetailsModule(transfer: Transfer, coordinator: TransferCoordinator) -> UIViewController
+    func makeTransferDetailsModule(transfer: Transfer) -> UIViewController
 }
 
 struct TransferFactory: TransferFactoryProtocol {
@@ -25,13 +25,12 @@ struct TransferFactory: TransferFactoryProtocol {
         let useCase = DefaultFetchTransfersUseCase(repository: repository)
         let favoriteRepository = FavoriteRepositoryImpl()
         let favoriteUseCase = FavoriteTransferUseCase(favoritesRepository: favoriteRepository)
-        let viewModel = TransferListViewModel(transfersUseCase: useCase, favoriteUseCase: favoriteUseCase)
+        let viewModel = TransferListViewModel(transfersUseCase: useCase, favoriteUseCase: favoriteUseCase, router: coordinator)
         vc.viewModel = viewModel
-        vc.router = coordinator
         return vc
     }
     
-    func makeTransferDetailsModule(transfer: Transfer, coordinator: TransferCoordinator) -> UIViewController {
+    func makeTransferDetailsModule(transfer: Transfer) -> UIViewController {
         let vc = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
         let favoriteRepository = FavoriteRepositoryImpl()
         let favoriteUseCase = FavoriteTransferUseCase(favoritesRepository: favoriteRepository)

@@ -24,7 +24,36 @@ final class TransferDetailsViewController: UIViewController {
     
     private func setupUI() {
         
+        navigationSetup()
         
+        if let transfer = viewModel?.cardViewData {
+            let cardView = CardView(with: transfer)
+            stackView.addArrangedSubview(cardView)
+        }
+        
+        if let viewModel {
+            let profileView = ProfileView(viewModel: viewModel)
+            stackView.addArrangedSubview(profileView)
+        }
+        
+        if let items = viewModel?.items {
+            items.forEach { item in
+                if !item.value.isEmpty {
+                    let itemView = ItemView(with: item)
+                    stackView.addArrangedSubview(itemView)
+                }
+            }
+        }
+        
+        if let note = viewModel?.note, !note.value.isEmpty {
+            let noteView = NoteView(with: note)
+            stackView.addArrangedSubview(noteView)
+        }
+    }
+    
+    func navigationSetup() {
+        title = viewModel?.navigationTitle
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .appBackground3
@@ -33,30 +62,6 @@ final class TransferDetailsViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.tintColor = .white
-        
-        
-        guard let transfer = viewModel?.cardViewData else { return }
-        title = viewModel?.navigationTitle
-        
-        let cardView = CardView()
-        cardView.configure(with: transfer)
-        stackView.addArrangedSubview(cardView)
-        
-        let profileView = ProfileView(viewModel: viewModel)
-        stackView.addArrangedSubview(profileView)
-        
-        guard let items = viewModel?.items else { return }
-        items.forEach { item in
-            if !item.value.isEmpty {
-                let itemView = ItemView()
-                itemView.configure(with: item)
-                stackView.addArrangedSubview(itemView)
-            }
-        }
-        
-        let noteView = NoteView()
-        //        noteView.configure(with: transfer)
-        stackView.addArrangedSubview(noteView)
     }
     
     deinit {

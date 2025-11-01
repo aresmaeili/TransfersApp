@@ -6,7 +6,7 @@
 //
 import Foundation
 
-fileprivate struct TransferDetailsItem: TransferDetailsItemProtocol {
+struct TransferDetailsItem: TransferDetailsItemProtocol {
     var icon: String
     var title: String
     var value: String
@@ -38,9 +38,12 @@ final class TransferDetailsViewModel {
             TransferDetailsItem(icon: "calendar", title: "Last Trasnfer Date:", value: cardViewData.lastTransferDate),
             TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: cardViewData.totalAmount),
             TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: cardViewData.countOfTransfer),
-//            TransferDetailsItem(icon: "text.bubble", title: "Note:", value: transfer.note ?? "-")
             ]
         return items
+    }
+    
+    var note: TransferDetailsItemProtocol {
+        TransferDetailsItem(icon: "text.bubble", title: "Note:", value: cardViewData.note ?? "")
     }
 
     func toggleFavorite() {

@@ -18,9 +18,9 @@ final class TransferListViewModel {
     // MARK: - Dependencies (Use Cases Injected)
     private let transfersUseCase: FetchTransfersUseCase
     private let favoriteUseCase: FavoriteTransferUseCase
-    
+    private let router: TransferCoordinator
+
     // MARK: - State Properties
-    
     private var currentPage = 1
     private var pagesEnded: Bool = false
     
@@ -32,6 +32,10 @@ final class TransferListViewModel {
     
     private var favorites: [Transfer] {
         return favoriteUseCase.getFavorites()
+    }
+    
+    var favoritesCount: Int {
+        return favorites.count
     }
     
     private(set) var transfers: [Transfer] = [] {
@@ -73,9 +77,10 @@ final class TransferListViewModel {
     }
     
     // MARK: - Initialization
-    init(transfersUseCase: FetchTransfersUseCase, favoriteUseCase: FavoriteTransferUseCase) {
+    init(transfersUseCase: FetchTransfersUseCase, favoriteUseCase: FavoriteTransferUseCase, router: TransferCoordinator) {
         self.transfersUseCase = transfersUseCase
         self.favoriteUseCase = favoriteUseCase
+        self.router = router
     }
     
     // MARK: - Public Interface
@@ -128,6 +133,18 @@ final class TransferListViewModel {
         return filteredTransfers[safe: index]
     }
     
+    func getFavorite(index : Int) -> Transfer? {
+        return favorites[safe: index]
+    }
+    
+    func getFavoriteTransfer(index : Int) -> Transfer? {
+        let favorit = favorites[safe: index]
+        let favoriteTransfer = transfers.first { transfer in
+            transfer == favorit
+        }
+        return favoriteTransfer
+    }
+    
     func getFavorites() -> [Transfer] {
         return favorites.reversed()
     }
@@ -165,6 +182,10 @@ final class TransferListViewModel {
         default:
             return 0
         }
+    }
+    
+    func routToDetails(for transfer: Transfer) {
+        router.showTransfersDetails(transfer: transfer)
     }
     
     // MARK: - Private Helpers

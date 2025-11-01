@@ -10,7 +10,7 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    var transfers: [Transfer] = []
+    weak var viewModel: TransferListViewModel?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,20 +35,22 @@ class FavoriteTableViewCell: UITableViewCell {
     }
     
 //TODO: fix this
-    func configure(with transfers: [Transfer]) {
-            self.transfers = transfers
+    func configure(with viewModel: TransferListViewModel) {
+            self.viewModel = viewModel
             collectionView.reloadData()
     }
 }
 
 extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        transfers.count
+        viewModel?.favoritesCount ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionViewCell", for: indexPath) as! FavoriteCollectionViewCell
-        cell.configure(with: transfers[indexPath.item])
+        
+        guard let favorite = viewModel?.getFavorite(index: indexPath.row) else { return cell }
+        cell.configure(with: favorite)
         return cell
     }
 
@@ -58,7 +60,7 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        viewModel?.routToDetails(for: indexPath.row)
     }
 }
 

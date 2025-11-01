@@ -13,7 +13,6 @@ protocol TransferDetailsProfileProtocol {
     var avatarUser: String { get }
     var mail: String { get }
     var totalAmount: String { get }
-//    var note: String? { get }
 }
 
 class ProfileView: UIView, ViewConnectable {
@@ -81,35 +80,28 @@ class ProfileView: UIView, ViewConnectable {
     }
     
     
-    func configure(viewModel: TransferDetailsViewModel?) {
+    private func configure(viewModel: TransferDetailsViewModel?) {
         guard let data = viewModel?.cardViewData, let isFavorite = viewModel?.isFavorite else { return }
         nameLabel.text = data.name
         mailLabel.text = data.mail
         totalLabel.text = data.totalAmount
         let image = isFavorite ? UIImage.shared(named: "StarFill") : UIImage.shared(named: "Star")
         starbutton.setImage(image, for: .normal)
-        Task { @MainActor in
-            avatarImageView.image = await loadAvatar(from: data.avatar)
-        }
+        loadAvatar(from: data.avatar)
+        
     }
     
-    private func loadAvatar(from urlString: String?) async -> UIImage {
-        guard let urlString = urlString else { return UIImage() }
+    private var avatarTask: Task<Void, Never>?
 
-        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
-            return cachedImage
-        }
-
-        do {
-            if let image = try await ImageDownloader.shared.downloadImage(from: urlString) {
-                ImageCache.shared.setImage(image, forKey: urlString)
-                return image
-            } else {
-                return UIImage()
+    private func loadAvatar(from urlString: String?) {
+        avatarTask?.cancel()
+        avatarTask = Task {
+            guard let urlString else { return }
+            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+                await MainActor.run {
+                    self.avatarImageView.image = image
+                }
             }
-        } catch {
-            // Log error if needed
-            return UIImage()
         }
     }
 }

@@ -16,12 +16,18 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var avatarImageView: UIImageView!
     @IBOutlet private weak var starImageView: UIImageView!
     @IBOutlet private weak var nameLabel: UILabel!
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         MainActor.assumeIsolated {
             setupCell()
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        avatarTask?.cancel()
+        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
     }
     
     private func setupCell() {
@@ -52,23 +58,19 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     func configure(with transfer: Transfer) {
         nameLabel.text = transfer.person?.fullName ?? "-"
         guard let urlString = transfer.avatar else { return }
-        
-        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
-            avatarImageView.image = cachedImage
-            return
-        }
-        
-//        Todo: Change this loc
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                guard let image = try await ImageDownloader.shared.downloadImage(from: urlString)  else { return }
-                ImageCache.shared.setImage(image, forKey: urlString)
+        loadAvatar(from: urlString)
+    }
+    
+    private var avatarTask: Task<Void, Never>?
+    
+    func loadAvatar(from urlString: String?) {
+        avatarTask?.cancel()
+        avatarTask = Task {
+            guard let urlString else { return }
+            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
                 await MainActor.run {
                     self.avatarImageView.image = image
                 }
-            } catch {
-                print("Error: \(error)")
             }
         }
     }

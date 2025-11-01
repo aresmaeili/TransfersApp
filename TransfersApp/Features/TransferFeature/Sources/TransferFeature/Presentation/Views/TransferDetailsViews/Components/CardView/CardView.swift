@@ -33,20 +33,21 @@ class CardView: UIView, ViewConnectable {
     
     var isFavorite: Bool = false
 
-    required init() {
+    required init(with data: TransferDetailsCardProtocol) {
         
         super.init(frame: .zero)
         
-        initialize()
+        initialize(with: data)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initialize() {
+    private func initialize(with data: TransferDetailsCardProtocol) {
         connectView(bundle: .module)
         setupView()
+        configure(with: data)
     }
     
     
@@ -72,28 +73,14 @@ class CardView: UIView, ViewConnectable {
         countLabel.textColor = .appText11
         
         starImageView.image = UIImage.shared(named: "StarFill")
+    }
 
-//        toggleFavoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
-    }
     
-    @objc func toggleFavorite() {
-        isFavorite.toggle()
-    }
-    
-    func configure(with data: TransferDetailsCardProtocol) {
+    private func configure(with data: TransferDetailsCardProtocol) {
         maskedNumberLabel.text = data.maskedCardNumber
         dueDateLabel.text = data.lastTransferDate
         countLabel.text = "#" + data.countOfTransfer
         logoLabel.text = data.cardTypeString
         nameLabel.text = data.name
-    }
-}
-
-extension UILabel {
-    func setCharacterSpacing(_ spacing: CGFloat) {
-        guard let text = self.text else { return }
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.kern, value: spacing, range: NSRange(location: 0, length: text.count))
-        self.attributedText = attributedString
     }
 }

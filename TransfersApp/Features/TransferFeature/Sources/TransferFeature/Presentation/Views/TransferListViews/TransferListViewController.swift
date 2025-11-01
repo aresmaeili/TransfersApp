@@ -13,7 +13,6 @@ public final class TransferListViewController: UIViewController {
     
     // Dependencies
     var viewModel: TransferListViewModel?
-    var router: TransferCoordinator?
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
@@ -158,7 +157,7 @@ extension TransferListViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        router?.showTransfersDetails(transfer: transfer)
+        viewModel?.routToDetails(for: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -182,12 +181,12 @@ extension TransferListViewController: UITableViewDelegate {
 private extension TransferListViewController {
     
     func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let favorites = viewModel?.getFavorites() else {
+        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
             assertionFailure("Could not dequeue FavoriteTableViewCell")
             return UITableViewCell()
         }
         
-        cell.configure(with: favorites)
+        cell.configure(with: viewModel)
         return cell
     }
     

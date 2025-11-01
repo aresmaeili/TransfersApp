@@ -15,22 +15,20 @@ class NoteView: UIView, ViewConnectable {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var valueLabel: UILabel!
     
-    required init() {
-        
+    required init(with data: TransferDetailsItemProtocol) {
         super.init(frame: .zero)
-        
-        initialize()
+        initialize(with: data)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initialize() {
+    private func initialize(with data: TransferDetailsItemProtocol) {
         connectView(bundle: .module)
         setupView()
+        configure(with: data)
     }
-    
     
     private func setupView() {
         parentView.backgroundColor = .appBackground1
@@ -53,8 +51,7 @@ class NoteView: UIView, ViewConnectable {
         iconImageView.contentMode = .scaleAspectFit
     }
     
-    
-    func configure(with data: TransferDetailsItemProtocol) {
+    private func configure(with data: TransferDetailsItemProtocol) {
         titleLabel.text = data.title
         valueLabel.text = data.value
         iconImageView.image = UIImage(systemName: data.icon)
