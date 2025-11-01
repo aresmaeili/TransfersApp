@@ -398,8 +398,8 @@
             filePath = "Features/TransferFeature/Sources/TransferFeature/Presentation/Views/TransferListViews/TransferListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "editButtonTapped()"
             landmarkType = "7">
          </BreakpointContent>

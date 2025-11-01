@@ -55,7 +55,6 @@ private extension TransferListViewController {
     
     func configureView() {
         title = "Transfers List"
-        // viewModel?.delegate = self حذف شد
         transferTableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
     }
@@ -65,6 +64,7 @@ private extension TransferListViewController {
         transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
         transferTableView.dataSource = self
         transferTableView.delegate = self
+//        transferTableView.prefetchDataSource = self
     }
     
     func setupSearchController() {
@@ -202,6 +202,31 @@ private extension TransferListViewController {
         return cell
     }
 }
+
+//// MARK: - Cell Creation & Configuration Helpers
+//private extension TransferListViewController {
+//    
+//    func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
+//        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
+//            assertionFailure("Could not dequeue FavoriteTableViewCell")
+//            return UITableViewCell()
+//        }
+//        
+//        cell.configure(with: viewModel)
+//        return cell
+//    }
+//    
+//    func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueCell(TransferCell.self),
+//              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
+//            assertionFailure("Could not dequeue TransferCell or get transfer data")
+//            return UITableViewCell()
+//        }
+//        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
+//        cell.configCell(data: transfer, isFavorite: isFavorite)
+//        return cell
+//    }
+//}
 
 // MARK: - Section Header & Sort Logic
 private extension TransferListViewController {
