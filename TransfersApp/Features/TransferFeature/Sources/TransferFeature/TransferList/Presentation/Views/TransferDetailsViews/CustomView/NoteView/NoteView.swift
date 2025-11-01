@@ -38,10 +38,10 @@ class NoteView: UIView, ViewConnectable {
         parentView.layer.borderColor = UIColor.appBorder1.cgColor
         parentView.layer.borderWidth = 1
         
-        titleLabel.textColor = .appText1
+        titleLabel.textColor = .appText3
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
-        valueLabel.textColor = .appText10
+        valueLabel.textColor = .appText1
         valueLabel.font = .systemFont(ofSize: 12, weight: .bold)
         
         iconParentView.backgroundColor = .appBackground5
