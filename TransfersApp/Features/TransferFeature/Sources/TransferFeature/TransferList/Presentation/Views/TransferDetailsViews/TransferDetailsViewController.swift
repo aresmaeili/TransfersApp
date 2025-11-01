@@ -46,4 +46,8 @@ final class TransferDetailsViewController: UIViewController {
 //        noteView.configure(with: transfer)
         stackView.addArrangedSubview(noteView)
     }
+    
+    deinit {
+        print("TransferDetailsViewController deinit")
+    }
 }

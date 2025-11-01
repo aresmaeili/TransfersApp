@@ -27,7 +27,7 @@ extension Transfer: TransferDetailsCardProtocol {
     var maskedCardNumber: String {
         /// Returns the card number Masked(e.g., **** 1234).
         guard let number = card?.cardNumber?.trimmingCharacters(in: .whitespacesAndNewlines), number.count >= 4 else { return "-"}
-        return "**** " + number.suffix(4)
+        return "**** **** **** " + number.suffix(4)
     }
     
     var lastTransferDate: String {
@@ -53,6 +53,6 @@ extension Transfer: TransferDetailsProfileProtocol {
     }
     
     var mail: String {
-        person?.email ?? ""
+        return "email: \(person?.email ?? "-")"
     }
 }

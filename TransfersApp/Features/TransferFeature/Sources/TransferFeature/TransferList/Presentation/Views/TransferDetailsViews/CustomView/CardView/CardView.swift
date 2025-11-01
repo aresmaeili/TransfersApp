@@ -16,6 +16,7 @@ protocol TransferDetailsCardProtocol {
     var totalAmount: String { get }
     var countOfTransfer: String { get }
     var isFavorite: Bool { get }
+    var name: String { get }
 }
 
 
@@ -23,11 +24,12 @@ class CardView: UIView, ViewConnectable {
     
     @IBOutlet weak var parentView: UIView!
     @IBOutlet weak var logoLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var maskedNumberLabel: UILabel!
     @IBOutlet weak var dueDateLabel: UILabel!
-    @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var countLabel: UILabel!
-    @IBOutlet weak var toggleFavoriteButton: UIButton!
+    @IBOutlet weak var starImageView: UIImageView!
+
     
     var isFavorite: Bool = false
 
@@ -54,11 +56,14 @@ class CardView: UIView, ViewConnectable {
         parentView.layer.borderWidth = 1
         parentView.layer.borderColor = UIColor.appBorder1.cgColor
         
-        logoLabel.font = UIFont.systemFont(ofSize: 14, weight: .black).withTraits(.traitItalic)
+        logoLabel.font = UIFont.systemFont(ofSize: 14, weight: .black)
         logoLabel.textColor = .appText11
         
         maskedNumberLabel.font = UIFont.systemFont(ofSize: 18, weight: .black)
         maskedNumberLabel.textColor = .appText11
+        maskedNumberLabel.setCharacterSpacing(6)
+        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .black)
+        nameLabel.textColor = .appText11
         
         dueDateLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         dueDateLabel.textColor = .appText11
@@ -66,29 +71,29 @@ class CardView: UIView, ViewConnectable {
         countLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         countLabel.textColor = .appText11
         
-        amountLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        amountLabel.textColor = .appText11
-        
-        toggleFavoriteButton.layer.cornerRadius = 4
-        toggleFavoriteButton.clipsToBounds = true
-        toggleFavoriteButton.backgroundColor = .appText11
-        toggleFavoriteButton.setTitle("", for: .normal)
-        toggleFavoriteButton.setImage( UIImage(systemName: isFavorite ? "star.fill" : "star"), for: .normal)
-        toggleFavoriteButton.tintColor = .appOperator2
-        toggleFavoriteButton.setTitleColor(.appText1, for: .normal)
-        toggleFavoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
+        starImageView.image = UIImage.shared(named: "StarFill")
+
+//        toggleFavoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
     }
     
     @objc func toggleFavorite() {
         isFavorite.toggle()
-        toggleFavoriteButton.setImage( UIImage(systemName: isFavorite ? "star.fill" : "star"), for: .normal)
     }
     
     func configure(with data: TransferDetailsCardProtocol) {
         maskedNumberLabel.text = data.maskedCardNumber
         dueDateLabel.text = data.lastTransferDate
-        amountLabel.text = data.totalAmount
-        countLabel.text = data.countOfTransfer
+        countLabel.text = "#" + data.countOfTransfer
         logoLabel.text = data.cardTypeString
+        nameLabel.text = data.name
+    }
+}
+
+extension UILabel {
+    func setCharacterSpacing(_ spacing: CGFloat) {
+        guard let text = self.text else { return }
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(.kern, value: spacing, range: NSRange(location: 0, length: text.count))
+        self.attributedText = attributedString
     }
 }

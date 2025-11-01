@@ -13,7 +13,7 @@ public extension Int {
     }
     
     func asSeperatedString() -> String {
-        return NumberFormatter.moneyString(from: Double(self))
+        return NumberFormatter.seperatedString(from: Double(self))
     }
 }
 

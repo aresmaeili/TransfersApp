@@ -21,6 +21,7 @@ class ProfileView: UIView, ViewConnectable {
     @IBOutlet weak var parentView: UIView!
     @IBOutlet weak var avatarParentView: UIView!
     @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var mailLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
@@ -59,11 +60,13 @@ class ProfileView: UIView, ViewConnectable {
         nameLabel.font = .systemFont(ofSize: 24, weight: .bold)
         nameLabel.textColor = .appText1
 
-        mailLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        mailLabel.font = .systemFont(ofSize: 14, weight: .medium)
         mailLabel.textColor = .appText3
         
         totalLabel.font = .systemFont(ofSize: 48, weight: .bold)
         totalLabel.textColor = .appText6
+        
+        starImageView.image = UIImage.shared(named: "StarFill")
     }
     
     
