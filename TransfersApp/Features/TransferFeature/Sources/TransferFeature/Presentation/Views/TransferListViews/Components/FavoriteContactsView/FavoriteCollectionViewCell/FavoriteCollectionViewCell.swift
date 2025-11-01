@@ -16,7 +16,18 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var avatarImageView: UIImageView!
     @IBOutlet private weak var starImageView: UIImageView!
     @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet weak var removeButton: UIButton!
     
+    @IBAction func removeButtonAction(_ sender: Any) {
+        guard let viewModel, let transfer else { return }
+        viewModel.editTransfersToFavorite(transfer: transfer)
+        onUpdate?()
+    }
+    
+    weak var viewModel: TransferListViewModel?
+    var transfer: Transfer?
+    var onUpdate: (() -> Void)?
+
     override func awakeFromNib() {
         super.awakeFromNib()
         MainActor.assumeIsolated {
@@ -55,10 +66,13 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         starImageView.image = UIImage.shared(named: "StarFill")
     }
     
-    func configure(with transfer: Transfer) {
+    func configure(with transfer: Transfer, viewModel: TransferListViewModel) {
+        self.viewModel = viewModel
+        self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"
         guard let urlString = transfer.avatar else { return }
         loadAvatar(from: urlString)
+        removeButton.isHidden = !viewModel.canEdit
     }
     
     private var avatarTask: Task<Void, Never>?

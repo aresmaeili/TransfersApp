@@ -23,6 +23,7 @@ final class TransferListViewModel {
     // MARK: - State Properties
     private var currentPage = 1
     private var pagesEnded: Bool = false
+    var canEdit: Bool = false
     
     private(set) var isLoading: Bool = false {
         didSet {
@@ -59,9 +60,12 @@ final class TransferListViewModel {
     }
     
     // MARK: - Computed Properties (View Read-Only Data)
-    
     var hasFavoriteRow: Bool {
-        return !favorites.isEmpty
+        let hasFavorite: Bool = !favorites.isEmpty
+        if !hasFavorite {
+            canEdit = false
+        }
+        return hasFavorite
     }
     
     var filteredTransfers: [Transfer] {

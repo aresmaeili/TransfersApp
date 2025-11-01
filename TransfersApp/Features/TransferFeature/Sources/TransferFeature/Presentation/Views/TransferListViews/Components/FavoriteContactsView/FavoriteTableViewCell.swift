@@ -34,10 +34,16 @@ class FavoriteTableViewCell: UITableViewCell {
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
     }
     
-//TODO: fix this
     func configure(with viewModel: TransferListViewModel) {
             self.viewModel = viewModel
             collectionView.reloadData()
+    }
+    
+    private func bindViewModel() {
+        viewModel?.onUpdate = { [weak self] in
+            guard let self = self else { return }
+            self.collectionView.reloadData()
+        }
     }
 }
 
@@ -49,8 +55,8 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionViewCell", for: indexPath) as! FavoriteCollectionViewCell
         
-        guard let favorite = viewModel?.getFavorite(index: indexPath.row) else { return cell }
-        cell.configure(with: favorite)
+        guard let viewModel, let favorite = viewModel.getFavorite(index: indexPath.row) else { return cell }
+        cell.configure(with: favorite, viewModel: viewModel)
         return cell
     }
 

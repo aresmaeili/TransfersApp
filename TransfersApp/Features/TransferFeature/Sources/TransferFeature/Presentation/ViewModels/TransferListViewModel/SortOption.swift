@@ -6,7 +6,7 @@
 //
 
 // MARK: - SortOption
-enum SortOption: String{
+enum SortOption: String, CaseIterable {
     case serverSort = "None"
     case nameAscending = "Name Asc"
     case nameDescending = "Name Desc"

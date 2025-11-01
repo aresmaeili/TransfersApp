@@ -34,7 +34,7 @@ public final class TransferListViewController: UIViewController {
         configureView()
         setupTableView()
         setupSearchController()
-        bindViewModel() 
+        bindViewModel()
         
         // Initial data load
         viewModel?.refreshTransfers()
@@ -147,10 +147,11 @@ extension TransferListViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let hasFavorites = viewModel?.hasFavoriteRow ?? false
+        
         let title = sectionTitle(section: section)
-        let header = makeSectionHeader(title: title, hasSortButton: false)
+        let header = makeSectionHeader(title: title.0, hasSortButton: false)
         guard section == 0 else {
-            return makeSectionHeader(title: title, hasSortButton: true)
+            return makeSectionHeader(title: title.0, hasSortButton: true)
         }
         return hasFavorites ? header : nil
     }
@@ -165,14 +166,14 @@ extension TransferListViewController: UITableViewDelegate {
         viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
-    func sectionTitle(section: Int) -> String {
+    func sectionTitle(section: Int) -> (String, String) {
         switch section {
         case 0:
-            return "Favorites:"
+            return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
         case 1:
-            return "Transfers:"
+            return ("Transfers:", "Sort: \(viewModel?.sortOption.rawValue ?? "-")")
         default:
-            return ""
+            return ("", "")
         }
     }
 }
@@ -237,6 +238,19 @@ private extension TransferListViewController {
                 sortButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
                 label.trailingAnchor.constraint(lessThanOrEqualTo: sortButton.leadingAnchor, constant: -8)
             ])
+        } else {
+            let editButton = UIButton(type: .system)
+            editButton.translatesAutoresizingMaskIntoConstraints = false
+            let title = viewModel?.canEdit == true ? "Done" : "Edit"
+            editButton.setTitle(title, for: .normal)
+            editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+            headerView.addSubview(editButton)
+
+            NSLayoutConstraint.activate([
+                editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+                editButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+                label.trailingAnchor.constraint(lessThanOrEqualTo: editButton.leadingAnchor, constant: -8)
+            ])
         }
         return headerView
     }
@@ -249,26 +263,20 @@ private extension TransferListViewController {
             message: "Choose a sorting option",
             preferredStyle: .actionSheet
         )
-        // تمام گزینه‌های مرتب‌سازی باید به ViewModel پاس داده شوند.
-        alert.addAction(UIAlertAction(title: "Name Ascending", style: .default) { _ in
-            self.viewModel?.sortOption = .nameAscending
-        })
-        alert.addAction(UIAlertAction(title: "Name Descending", style: .default) { _ in
-            self.viewModel?.sortOption = .nameDescending
-        })
-        alert.addAction(UIAlertAction(title: "Date Ascending", style: .default) { _ in
-            self.viewModel?.sortOption = .dateAscending
-        })
-        alert.addAction(UIAlertAction(title: "Date Descending", style: .default) { _ in
-            self.viewModel?.sortOption = .dateDescending
-        })
-        alert.addAction(UIAlertAction(title: "Amount Ascending", style: .default) { _ in
-            self.viewModel?.sortOption = .amountAscending
-        })
-        alert.addAction(UIAlertAction(title: "Amount Descending", style: .default) { _ in
-            self.viewModel?.sortOption = .amountDescending
-        })
+        
+        for sort in SortOption.allCases {
+            alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
+                guard let self else { return }
+                self.viewModel?.sortOption = sort
+            })
+        }
+        
         alert.addAction(UIAlertAction(title:"Cancel", style: .destructive))
         present(alert, animated: true)
+    }
+    
+    @objc func editButtonTapped() {
+        viewModel?.canEdit.toggle()
+        transferTableView.reloadData()
     }
 }

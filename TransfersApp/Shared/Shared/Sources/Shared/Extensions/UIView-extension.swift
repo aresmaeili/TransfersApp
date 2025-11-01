@@ -62,3 +62,43 @@ public extension UIView {
         }
     }
 }
+
+private actor GestureStorage {
+    static let shared = GestureStorage()
+    private var storage: [ObjectIdentifier: [AnyObject]] = [:]
+    
+    func retain(_ handler: AnyObject, for view: UIView) {
+        let id = ObjectIdentifier(view)
+        if storage[id] != nil {
+            storage[id]?.append(handler)
+        } else {
+            storage[id] = [handler]
+        }
+    }
+}
+
+final class TapGestureHandler: NSObject {
+    let action: () -> Void
+    init(action: @escaping () -> Void) {
+        self.action = action
+    }
+
+    @objc func handleTap() {
+        action()
+    }
+}
+
+public extension UIView {
+    func onTap(numberOfTaps: Int = 1, _ action: @escaping () -> Void) {
+        isUserInteractionEnabled = true
+
+        let handler = TapGestureHandler(action: action)
+        let gesture = UITapGestureRecognizer(target: handler, action: #selector(handler.handleTap))
+        gesture.numberOfTapsRequired = numberOfTaps
+        addGestureRecognizer(gesture)
+
+        Task {
+            await GestureStorage.shared.retain(handler, for: self)
+        }
+    }
+}
