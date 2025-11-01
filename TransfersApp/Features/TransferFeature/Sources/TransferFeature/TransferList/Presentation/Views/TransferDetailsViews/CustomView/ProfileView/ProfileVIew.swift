@@ -5,12 +5,14 @@
 //  Created by AREM on 10/31/25.
 //
 import UIKit
+import Shared
 
 protocol TransferDetailsProfileProtocol {
     var name: String { get }
     var avatarUser: String { get }
     var mail: String { get }
     var totalAmount: String { get }
+    var note: String? { get }
 }
 
 class ProfileView: UIView, ViewConnectable {
@@ -47,7 +49,7 @@ class ProfileView: UIView, ViewConnectable {
     }
     
     private func initialize() {
-        connectView()
+        connectView(bundle: .module)
         setupView()
     }
     

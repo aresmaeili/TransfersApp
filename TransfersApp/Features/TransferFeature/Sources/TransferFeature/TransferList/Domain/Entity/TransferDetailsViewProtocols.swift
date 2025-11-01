@@ -5,12 +5,6 @@
 //  Created by AREM on 11/1/25.
 //
 
-struct TransferDetailsItem: TransferDetailsItemProtocol {
-    var icon: String
-    var title: String
-    var value: String
-}
-
 extension Transfer: TransferDetailsViewModelProtocol {
     var title: String {
         "\(name) Details"
@@ -56,18 +50,5 @@ extension Transfer: TransferDetailsProfileProtocol {
     
     var mail: String {
         person?.email ?? ""
-    }
-}
-
-extension Transfer: TransferDetailsItemsProtocol {
-    var items: [any TransferDetailsItemProtocol] {
-        let items: [TransferDetailsItemProtocol] = [
-            TransferDetailsItem(icon: "", title: "Card Numer:", value: cardNo),
-            TransferDetailsItem(icon: "", title: "Last Trasnfer Date:", value: lastTransferDate),
-            TransferDetailsItem(icon: "", title: "Total Transfers:", value: totalAmount),
-            TransferDetailsItem(icon: "", title: "Nmber of Transfers:", value: countOfTransfer),
-            TransferDetailsItem(icon: "", title: "Note:", value: note ?? "")
-            ]
-        return items
     }
 }

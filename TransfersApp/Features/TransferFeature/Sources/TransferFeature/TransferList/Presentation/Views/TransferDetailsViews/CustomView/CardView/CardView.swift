@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Shared
 
 protocol TransferDetailsCardProtocol {
     var cardTypeString: String { get }
@@ -42,7 +43,7 @@ class CardView: UIView, ViewConnectable {
     }
     
     private func initialize() {
-        connectView()
+        connectView(bundle: .module)
         setupView()
     }
     
@@ -87,55 +88,5 @@ class CardView: UIView, ViewConnectable {
         maskedNumberLabel.text = cardNumber
         dueDateLabel.text = "Due Date \(dueDate)"
         amountLabel.text = amount
-    }
-}
-
-extension UIFont {
-    func withTraits(_ traits: UIFontDescriptor.SymbolicTraits) -> UIFont {
-        guard let descriptor = fontDescriptor.withSymbolicTraits(traits) else {
-            return self
-        }
-        return UIFont(descriptor: descriptor, size: pointSize)
-    }
-}
-
-
-import UIKit
-
-@MainActor
-protocol ViewConnectable {
-    func connectView()
-}
-
-extension ViewConnectable where Self: UIView {
-     func connectView() {
-        let name = getName()
-         let nib = UINib(nibName: name, bundle: .module)
-        let views = nib.instantiate(withOwner: self, options: nil)
-        guard let view = views.first as? UIView else { return }
-        addExpletiveSubView(view: view)
-    }
-    
-    // MARK: - ByPass Generic Names
-    private func getName() -> String {
-        var name = String(describing: Self.self)
-        if let genericTypeRange = name.range(of: "<") {
-          name.removeSubrange(genericTypeRange.lowerBound..<name.endIndex)
-        }
-        return name
-    }
-}
-
-extension UIView {
-    public func addExpletiveSubView(view: UIView, height: CGFloat? = nil) {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(view)
-        view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        view.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        view.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        if let height = height, height > 0 {
-            view.heightAnchor.constraint(equalToConstant: height).isActive = true
-        }
     }
 }

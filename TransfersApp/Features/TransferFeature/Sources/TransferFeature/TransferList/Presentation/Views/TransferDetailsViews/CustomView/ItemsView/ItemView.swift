@@ -5,6 +5,7 @@
 //  Created by AREM on 10/31/25.
 //
 import UIKit
+import Shared
 
 protocol TransferDetailsItemsProtocol {
     var items: [TransferDetailsItemProtocol] { get }
@@ -23,17 +24,6 @@ class ItemView: UIView, ViewConnectable {
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var valueLabel: UILabel!
-
-//    // MARK: - Init
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        setupView()
-//    }
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setupView()
-//    }
     
     required init() {
         
@@ -47,7 +37,7 @@ class ItemView: UIView, ViewConnectable {
     }
     
     private func initialize() {
-        connectView()
+        connectView(bundle: .module)
         setupView()
     }
     
