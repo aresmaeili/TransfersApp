@@ -6,13 +6,14 @@
 //
 import UIKit
 import Shared
+import NetworkCore
 
 protocol TransferDetailsProfileProtocol {
     var name: String { get }
     var avatarUser: String { get }
     var mail: String { get }
     var totalAmount: String { get }
-    var note: String? { get }
+//    var note: String? { get }
 }
 
 class ProfileView: UIView, ViewConnectable {
@@ -23,20 +24,7 @@ class ProfileView: UIView, ViewConnectable {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var mailLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
-//    @IBOutlet weak var mailLabel: UILabel!
-//    @IBOutlet weak var mailLabel: UILabel!
 
-//    // MARK: - Init
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        setupView()
-//    }
-//    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setupView()
-//    }
-    
     required init() {
         
         super.init(frame: .zero)
@@ -79,7 +67,34 @@ class ProfileView: UIView, ViewConnectable {
     }
     
     
-    func configure() {
-   
+    func configure(with data: TransferDetailsProfileProtocol) {
+        nameLabel.text = data.name
+        mailLabel.text = data.mail
+        totalLabel.text = data.totalAmount
+        loadAvatar(from: data.avatarUser)
+    }
+    
+    // MARK: Private Helpers
+    private func loadAvatar(from urlString: String?) {
+        guard let urlString = urlString else { return }
+        
+        if let cachedImage = ImageCache.shared.image(forKey: urlString) {
+            avatarImageView.image = cachedImage
+            return
+        }
+
+        //        Todo: Change this loc
+                Task { [weak self] in
+                    guard let self else { return }
+                    do {
+                        guard let image = try await ImageDownloader.shared.downloadImage(from: urlString)  else { return }
+                        ImageCache.shared.setImage(image, forKey: urlString)
+                        await MainActor.run {
+                            self.avatarImageView.image = image
+                        }
+                    } catch {
+                        print("Error: \(error)")
+                    }
+                }
     }
 }

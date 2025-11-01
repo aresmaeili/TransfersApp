@@ -6,6 +6,10 @@
 //
 
 extension Transfer: TransferDetailsViewModelProtocol {
+    var transferNote: String {
+        note ?? "-"
+    }
+    
     var title: String {
         "\(name) Details"
     }

@@ -84,9 +84,11 @@ class CardView: UIView, ViewConnectable {
         toggleFavoriteButton.setImage( UIImage(systemName: isFavorite ? "star.fill" : "star"), for: .normal)
     }
     
-    func configure(cardNumber: String, dueDate: String, amount: String) {
-        maskedNumberLabel.text = cardNumber
-        dueDateLabel.text = "Due Date \(dueDate)"
-        amountLabel.text = amount
+    func configure(with data: TransferDetailsCardProtocol) {
+        maskedNumberLabel.text = data.maskedCardNumber
+        dueDateLabel.text = data.lastTransferDate
+        amountLabel.text = data.totalAmount
+        countLabel.text = data.countOfTransfer
+        logoLabel.text = data.cardTypeString
     }
 }

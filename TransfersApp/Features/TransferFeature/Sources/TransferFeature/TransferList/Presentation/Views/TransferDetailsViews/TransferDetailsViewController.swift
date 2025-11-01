@@ -13,8 +13,8 @@ final class TransferDetailsViewController: UIViewController {
     @IBOutlet weak private var stackView: UIStackView!
     
     // Dependencies
-    weak var viewModel: TransferDetailsViewModel?
-    weak var router: Coordinator?
+    var viewModel: TransferDetailsViewModel?
+    var router: Coordinator?
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -23,15 +23,27 @@ final class TransferDetailsViewController: UIViewController {
     }
     
     private func setupUI() {
+        guard let transfer = viewModel?.transfer else { return }
+        title = transfer.title
         let cardView = CardView()
+        cardView.configure(with: transfer)
         stackView.addArrangedSubview(cardView)
         
         let profileView = ProfileView()
+        profileView.configure(with: transfer)
         stackView.addArrangedSubview(profileView)
         
-        let itemView = ItemView()
-        stackView.addArrangedSubview(itemView)
+        guard let items = viewModel?.items else { return }
+        items.forEach { item in
+            if !item.value.isEmpty {
+                let itemView = ItemView()
+                itemView.configure(with: item)
+                stackView.addArrangedSubview(itemView)
+            }
+        }
+        
+        let noteView = NoteView()
+//        noteView.configure(with: transfer)
+        stackView.addArrangedSubview(noteView)
     }
-
- 
 }

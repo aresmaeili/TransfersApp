@@ -11,7 +11,7 @@ import UIKit
 public final class TransferCoordinator: BaseCoordinator {
     
     var isTestAndOpenDetails: Bool {
-        return true
+        return false
     }
     
     let factory = TransferFactory()

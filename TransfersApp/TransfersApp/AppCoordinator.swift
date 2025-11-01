@@ -9,11 +9,7 @@ import RouterCore
 import TransferFeature
 
 final class AppCoordinator: BaseCoordinator {
-    
-    var isTesting: Bool {
-        return true
-    }
-    
+
     override func start() {
         showTransferFeature()
     }

@@ -8,34 +8,31 @@ import Foundation
 
 protocol TransferDetailsViewModelProtocol: TransferDetailsCardProtocol, TransferDetailsProfileProtocol {
     var title: String { get }
+    var transferNote: String { get }
 }
 
-final class TransferDetailsViewModel {
-    private let transfer: TransferDetailsViewModelProtocol
-
-    // Initializer receives the data directly
-    init(transfer: TransferDetailsViewModelProtocol) {
-        self.transfer = transfer
-    }
-    
-}
-
-
-struct TransferDetailsItem: TransferDetailsItemProtocol {
+fileprivate struct TransferDetailsItem: TransferDetailsItemProtocol {
     var icon: String
     var title: String
     var value: String
 }
 
-extension TransferDetailsViewModel: TransferDetailsItemsProtocol {
+final class TransferDetailsViewModel {
+    let transfer: TransferDetailsViewModelProtocol
+
+    init(transfer: TransferDetailsViewModelProtocol) {
+        self.transfer = transfer
+    }
+    
     var items: [any TransferDetailsItemProtocol] {
         let items: [TransferDetailsItemProtocol] = [
-            TransferDetailsItem(icon: "", title: "Card Numer:", value: transfer.cardNumberString),
-            TransferDetailsItem(icon: "", title: "Last Trasnfer Date:", value: transfer.lastTransferDate),
-            TransferDetailsItem(icon: "", title: "Total Transfers:", value: transfer.totalAmount),
-            TransferDetailsItem(icon: "", title: "Nmber of Transfers:", value: transfer.countOfTransfer),
-            TransferDetailsItem(icon: "", title: "Note:", value: transfer.note ?? "")
+            TransferDetailsItem(icon: "creditcard", title: "Card Number:", value: transfer.cardNumberString),
+            TransferDetailsItem(icon: "calendar", title: "Last Trasnfer Date:", value: transfer.lastTransferDate),
+            TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: transfer.totalAmount),
+            TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: transfer.countOfTransfer),
+//            TransferDetailsItem(icon: "text.bubble", title: "Note:", value: transfer.note ?? "-")
             ]
         return items
     }
+    
 }

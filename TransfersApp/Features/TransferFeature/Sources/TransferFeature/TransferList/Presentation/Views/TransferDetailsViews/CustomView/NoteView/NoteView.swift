@@ -1,19 +1,13 @@
 //
-//  ItemsView.swift
+//  NoteView.swift
 //  TransferFeature
 //
-//  Created by AREM on 10/31/25.
+//  Created by AREM on 11/1/25.
 //
 import UIKit
 import Shared
 
-protocol TransferDetailsItemProtocol {
-    var icon: String { get }
-    var title: String { get }
-    var value: String { get }
-}
-
-class ItemView: UIView, ViewConnectable {
+class NoteView: UIView, ViewConnectable {
     
     @IBOutlet weak var parentView: UIView!
     @IBOutlet weak var iconParentView: UIView!
@@ -48,7 +42,7 @@ class ItemView: UIView, ViewConnectable {
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
         valueLabel.textColor = .appText10
-        valueLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        valueLabel.font = .systemFont(ofSize: 12, weight: .bold)
         
         iconParentView.backgroundColor = .appBackground5
         iconParentView.layer.cornerRadius = 16
@@ -57,8 +51,6 @@ class ItemView: UIView, ViewConnectable {
         iconParentView.clipsToBounds = true
         
         iconImageView.contentMode = .scaleAspectFit
-        
-        
     }
     
     

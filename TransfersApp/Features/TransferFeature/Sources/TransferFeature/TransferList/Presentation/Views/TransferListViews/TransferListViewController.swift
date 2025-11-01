@@ -39,6 +39,10 @@ public final class TransferListViewController: UIViewController {
         // Initial data load
         viewModel?.refreshTransfers()
     }
+    
+    deinit {
+        print("TransferLIst deinit" )
+    }
 }
 
 // MARK: - TransferListDisplay (ViewModel Communication)
