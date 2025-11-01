@@ -13,6 +13,9 @@ class ProfileView: UIView, ViewConnectable {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var mailLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
+//    @IBOutlet weak var mailLabel: UILabel!
+//    @IBOutlet weak var mailLabel: UILabel!
 
 //    // MARK: - Init
 //    required init?(coder aDecoder: NSCoder) {
@@ -43,7 +46,27 @@ class ProfileView: UIView, ViewConnectable {
     
     
     private func setupView() {
+        parentView.backgroundColor = .appBackground1
+        parentView.layer.cornerRadius = 32
+        parentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        parentView.clipsToBounds = true
+        
+        avatarParentView.layer.cornerRadius = 16
+        avatarParentView.backgroundColor = .appBackground3
+        avatarParentView.layer.borderColor = UIColor.appBorder1.cgColor
+        avatarParentView.layer.borderWidth = 1
+        avatarParentView.clipsToBounds = true
+        
+        avatarImageView.contentMode = .scaleAspectFill
+        
+        nameLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        nameLabel.textColor = .appText1
 
+        mailLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        mailLabel.textColor = .appText3
+        
+        totalLabel.font = .systemFont(ofSize: 24, weight: .medium)
+        totalLabel.textColor = .appText6
     }
     
     
