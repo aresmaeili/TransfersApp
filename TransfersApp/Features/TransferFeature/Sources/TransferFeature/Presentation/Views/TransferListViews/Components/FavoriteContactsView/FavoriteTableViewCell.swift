@@ -60,7 +60,8 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel?.routToDetails(for: indexPath.row)
+        guard let favorite = viewModel?.getFavoriteTransfer(index: indexPath.row) else { return }
+        viewModel?.routToDetails(for: favorite)
     }
 }
 

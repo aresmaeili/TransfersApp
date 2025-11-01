@@ -139,8 +139,11 @@ final class TransferListViewModel {
     
     func getFavoriteTransfer(index : Int) -> Transfer? {
         let favorit = favorites[safe: index]
-        let favoriteTransfer = transfers.first { transfer in
+        guard let favoriteTransfer = (transfers.first { transfer in
             transfer == favorit
+        }) else {
+            onErrorOccurred?("User/Transfer not found in transfers list!")
+            return nil
         }
         return favoriteTransfer
     }
