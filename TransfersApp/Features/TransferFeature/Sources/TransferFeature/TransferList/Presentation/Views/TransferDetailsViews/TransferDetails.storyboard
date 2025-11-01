@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,15 +19,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pf2-kv-sB0">
-                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="118" width="393" height="734"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r2o-y0-4WI">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="666"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="734"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-Oc-JAF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                             </stackView>
                                         </subviews>
+                                        <color key="backgroundColor" name="Background 3"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="6xr-Oc-JAF" secondAttribute="bottom" id="EAQ-fR-WFZ"/>
                                             <constraint firstItem="6xr-Oc-JAF" firstAttribute="leading" secondItem="r2o-y0-4WI" secondAttribute="leading" id="sid-7g-1wv"/>
@@ -35,7 +37,7 @@
                                         </constraints>
                                     </scrollView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="Background 3"/>
                                 <constraints>
                                     <constraint firstItem="r2o-y0-4WI" firstAttribute="top" secondItem="Pf2-kv-sB0" secondAttribute="top" id="1UH-vl-qfX"/>
                                     <constraint firstAttribute="trailing" secondItem="r2o-y0-4WI" secondAttribute="trailing" id="GZd-3X-zIk"/>
@@ -48,7 +50,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Pf2-kv-sB0" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="24r-Sr-Qjj"/>
-                            <constraint firstItem="Pf2-kv-sB0" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="4jI-DC-9ae"/>
+                            <constraint firstItem="Pf2-kv-sB0" firstAttribute="bottom" secondItem="5EZ-qb-Rvc" secondAttribute="bottom" id="4jI-DC-9ae"/>
                             <constraint firstItem="Pf2-kv-sB0" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="R0J-9L-lOh"/>
                             <constraint firstItem="6xr-Oc-JAF" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" id="bHV-KV-yyQ"/>
                             <constraint firstItem="Pf2-kv-sB0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="eLw-R2-hbD"/>
@@ -65,6 +67,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="Background 3">
+            <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

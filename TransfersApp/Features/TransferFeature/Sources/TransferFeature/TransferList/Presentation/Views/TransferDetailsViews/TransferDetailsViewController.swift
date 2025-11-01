@@ -23,6 +23,18 @@ final class TransferDetailsViewController: UIViewController {
     }
     
     private func setupUI() {
+        
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .appBackground3
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.tintColor = .white
+        
+        
         guard let transfer = viewModel?.transfer else { return }
         title = transfer.title
         let cardView = CardView()
@@ -42,7 +54,7 @@ final class TransferDetailsViewController: UIViewController {
         }
         
         let noteView = NoteView()
-//        noteView.configure(with: transfer)
+        //        noteView.configure(with: transfer)
         stackView.addArrangedSubview(noteView)
     }
     

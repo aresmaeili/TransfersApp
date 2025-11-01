@@ -24,7 +24,7 @@ final class TransferListViewModel {
     weak var delegate: TransferListDisplay?
     
     private var currentPage = 1
-    
+    private var pagesEnded: Bool = false
     var onLoadingChanged: ((Bool) -> Void)?
 
     //    @UserDefaultTransfers var favoritesTranfers: [Transfer]
@@ -94,6 +94,11 @@ final class TransferListViewModel {
 
             do {
                 let newTransfers = try await transfersUseCase.execute(page: page)
+                guard !newTransfers.isEmpty else {
+                    pagesEnded = true
+                    print("End of data")
+                    return
+                }
                 if page == 1 {
                     // Refresh
                     transfers = newTransfers
@@ -129,7 +134,7 @@ final class TransferListViewModel {
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
-        guard !isGettingData, let currentItem else { return }
+        guard !isGettingData, let currentItem, !pagesEnded else { return }
         
         let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
         if filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) == thresholdIndex {
@@ -141,6 +146,7 @@ final class TransferListViewModel {
         // 1. Reset state
         currentPage = 1
         transfers = []
+        pagesEnded = false
         // 2. Start fetch
         loadTransfers(page: currentPage)
     }

@@ -49,6 +49,10 @@ extension Transfer: TransferCellShowable {
         lastTransfer?.toISODate() ?? Date(timeIntervalSince1970: 0)
     }
     
+    var dateString: String {
+        lastTransfer?.toISODate()?.toDateString(dateStyle: .medium, timeStyle: .none) ??  ""
+    }
+    
     var amount: Int {
         moreInfo?.totalTransfer ?? 0
     }

@@ -9,8 +9,7 @@ import Foundation
 
 public extension Date {
     /// Converts a Date to a human-readable string (localized)
-    func toDateString(dateStyle: DateFormatter.Style = .short,
-                          timeStyle: DateFormatter.Style = .short) -> String {
+    func toDateString(dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style ) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = dateStyle
         formatter.timeStyle = timeStyle

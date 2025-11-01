@@ -13,6 +13,7 @@ import NetworkCore
 protocol TransferCellShowable {
     var name: String { get }
     var date: Date { get }
+    var dateString: String { get }
     var amount: Int { get }
     var amountString: String { get }
     var avatarURLString: String? { get }
@@ -72,7 +73,7 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
     // MARK: Configuration
     func configCell(data: TransferCellShowable, isFavorite: Bool) {
         nameLabel.text = data.name
-        dateLabel.text = "Last Transfer: \(data.date.toDateString(timeStyle: .none))"
+        dateLabel.text = "Last Transfer: \(data.dateString)"
         amountLabel.text = data.amountString
         loadAvatar(from: data.avatarURLString)
         starImageView.isHidden = !isFavorite
