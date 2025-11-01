@@ -17,8 +17,9 @@ protocol FavoriteTransferRepositoryProtocol {
     func remove(transfer: Transfer)
 }
 
+import Foundation
+
 final class FavoriteRepositoryImpl: FavoriteTransferRepositoryProtocol {
-   
 
     @UserDefaultTransfers private var storedFavorites: [Transfer]
 

@@ -36,6 +36,7 @@ public final class TransferListViewController: UIViewController {
         configureView()
         setupTableView()
         setupSearchController()
+        bindViewModelLoading()
         // Initial data load
         viewModel?.refreshTransfers()
     }
@@ -53,7 +54,8 @@ public final class TransferListViewController: UIViewController {
 extension TransferListViewController: TransferListDisplay {
     func didUpdateTransfers() {
         self.refreshControl.endRefreshing()
-        self.transferTableView.reloadSections([1], with: .automatic)
+//        self.transferTableView.reloadSections([1], with: .automatic)
+        self.transferTableView.reloadData()
     }
     
     func displayError(_ message: String) {
@@ -89,6 +91,12 @@ private extension TransferListViewController {
         // Ask ViewModel to refresh first page. Implement this method in ViewModel accordingly.
         viewModel?.refreshTransfers()
     }
+    
+    private func bindViewModelLoading() {
+        viewModel?.onLoadingChanged = { [weak self] isLoading in
+                self?.setLoading(isLoading)
+            }
+        }
 }
 
 // MARK: - UISearchResultsUpdating

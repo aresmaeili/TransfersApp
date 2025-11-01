@@ -22,10 +22,12 @@ final class TransferListViewModel {
     
     // MARK: - Properties
     weak var delegate: TransferListDisplay?
-
+    
     private var currentPage = 1
+    
+    var onLoadingChanged: ((Bool) -> Void)?
 
-//    @UserDefaultTransfers var favoritesTranfers: [Transfer]
+    //    @UserDefaultTransfers var favoritesTranfers: [Transfer]
     private var favorites: [Transfer] {
         return favoriteUseCase.getFavorites()
     }
@@ -39,7 +41,7 @@ final class TransferListViewModel {
             delegate?.didUpdateTransfers()
         }
     }
-
+    
     var sortOption: SortOption = .serverSort {
         didSet {
             delegate?.didUpdateTransfers()
@@ -52,7 +54,7 @@ final class TransferListViewModel {
             delegate?.didUpdateTransfers()
         }
     }
-
+    
     var filteredTransfers: [Transfer] {
         var result = transfers
         // 1. Search
@@ -61,6 +63,14 @@ final class TransferListViewModel {
         }
         // 2. Sort
         return sortTransfers(result, by: sortOption)
+    }
+    
+    var onLoadingStateChange: ((Bool) -> Void)?
+    
+    private(set) var isLoading: Bool = false {
+        didSet {
+            onLoadingStateChange?(isLoading)
+        }
     }
     
     // MARK: - Initialization
@@ -72,10 +82,16 @@ final class TransferListViewModel {
     
     // MARK: - Public Interface
     private func loadTransfers(page: Int) {
+        
         Task {
-            guard !isGettingData else { return }
+            guard !isGettingData else {
+                return
+            }
+            onLoadingChanged?(true)
             isGettingData = true
             defer { isGettingData = false }
+            defer { onLoadingChanged?(false) }
+
             do {
                 let newTransfers = try await transfersUseCase.execute(page: page)
                 if page == 1 {
@@ -93,6 +109,7 @@ final class TransferListViewModel {
                 delegate?.displayError(error.localizedDescription)
             }
         }
+        
     }
     
     func addTransfersToFavorite(transfer: Transfer) {
@@ -113,12 +130,12 @@ final class TransferListViewModel {
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
         guard !isGettingData, let currentItem else { return }
-
+        
         let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
         if filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) == thresholdIndex {
             loadTransfers(page: currentPage + 1)
         }
-     }
+    }
     
     func refreshTransfers() {
         // 1. Reset state

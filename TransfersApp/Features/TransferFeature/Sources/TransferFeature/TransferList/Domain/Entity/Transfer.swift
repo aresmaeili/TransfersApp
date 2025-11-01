@@ -9,7 +9,7 @@ import Foundation
 import Shared
 
 // MARK: - Remote Models (mirror the API payload exactly)
-struct Transfer: Codable, Equatable, Sendable, Identifiable {
+struct Transfer: Codable, Equatable, Sendable, Identifiable, Hashable {
       let person: Person?
       let card: Card?
       let lastTransfer: String?
@@ -59,7 +59,7 @@ extension Transfer: TransferCellShowable {
 }
 
 // MARK: - Card
-struct Card: Codable, Equatable, Sendable {
+struct Card: Codable, Equatable, Sendable, Hashable {
         let cardNumber, cardType: String?
 
     enum CodingKeys: String, CodingKey {
@@ -68,7 +68,7 @@ struct Card: Codable, Equatable, Sendable {
     }
 }
 
-struct MoreInfo: Codable, Equatable, Sendable {
+struct MoreInfo: Codable, Equatable, Sendable, Hashable {
     let numberOfTransfers, totalTransfer: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -77,7 +77,7 @@ struct MoreInfo: Codable, Equatable, Sendable {
     }
 }
 
-struct Person: Codable, Equatable, Sendable {
+struct Person: Codable, Equatable, Sendable, Hashable {
     let fullName: String?
      let email: String?
      let avatar: String?
