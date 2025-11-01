@@ -18,6 +18,5 @@ final class TransferDetailsViewModel {
         self.transfer = transfer
     }
     
-    
 }
 

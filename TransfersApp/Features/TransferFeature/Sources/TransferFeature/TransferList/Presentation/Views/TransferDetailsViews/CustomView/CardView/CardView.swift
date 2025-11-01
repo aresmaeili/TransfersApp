@@ -29,18 +29,7 @@ class CardView: UIView, ViewConnectable {
     @IBOutlet weak var toggleFavoriteButton: UIButton!
     
     var isFavorite: Bool = false
-    
-//    // MARK: - Init
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        setupView()
-//    }
-//    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setupView()
-//    }
-    
+
     required init() {
         
         super.init(frame: .zero)
@@ -55,7 +44,6 @@ class CardView: UIView, ViewConnectable {
     private func initialize() {
         connectView()
         setupView()
-//        setupData(kgText: kgText, bagage: bagage, flightWay: flightWay, flightLine: flightLine, flighttype: flighttype)
     }
     
     

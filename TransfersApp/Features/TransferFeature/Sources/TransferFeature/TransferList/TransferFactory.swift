@@ -12,7 +12,7 @@ import Shared
 @MainActor
 protocol TransferFactoryProtocol {
     func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
-    func makeTransferDetailsModule(transfer: Transfer,coordinator: TransferCoordinator) -> UIViewController
+    func makeTransferDetailsModule(transfer: TransferDetailsViewModelProtocol, coordinator: TransferCoordinator) -> UIViewController
 }
 
 struct TransferFactory: TransferFactoryProtocol {
@@ -30,10 +30,10 @@ struct TransferFactory: TransferFactoryProtocol {
         return vc
     }
     
-    func makeTransferDetailsModule(transfer: Transfer, coordinator: TransferCoordinator) -> UIViewController {
+    func makeTransferDetailsModule(transfer: TransferDetailsViewModelProtocol, coordinator: TransferCoordinator) -> UIViewController {
         let vc = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
-//        let viewModel = TransferDetailsViewModel(transfer: transfer)
-//        vc.viewModel = viewModel
+        let viewModel = TransferDetailsViewModel(transfer: transfer)
+        vc.viewModel = viewModel
         return vc
     }
 }

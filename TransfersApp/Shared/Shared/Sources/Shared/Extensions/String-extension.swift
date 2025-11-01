@@ -13,5 +13,8 @@ public extension String {
         return formatter.date(from: self)
     }
     
+    func toDateShowable() -> String? {
+        self.toISODate()?.toDateString()
+    }
 
 }

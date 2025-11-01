@@ -54,13 +54,7 @@ extension Transfer: TransferCellShowable {
     }
     
     var amountString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-
-        if let formattedMoney = formatter.string(from: NSNumber(value: moreInfo?.totalTransfer ?? 0)) {
-            return "$\(formattedMoney)"
-        }
-        return "-"
+        moreInfo?.totalTransfer?.asMoneyString() ?? ""
     }
 }
 
@@ -93,12 +87,41 @@ struct Person: Codable, Equatable, Sendable {
          case email, avatar
      }
 }
-
-
-struct TransferDetailsItem: TransferDetailsItemProtocol {
-    var icon: String
-    var title: String
-    var value: String
+//TODO: change location 
+extension Double {
+    func asMoneyString() -> String {
+        return NumberFormatter.moneyString(from: self)
+    }
 }
 
+extension Int {
+    func asMoneyString() -> String {
+        return NumberFormatter.moneyString(from: Double(self))
+    }
+    
+    func asSeperatedString() -> String {
+        return NumberFormatter.moneyString(from: Double(self))
+    }
+}
 
+extension NumberFormatter {
+    static let money: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+
+    static func moneyString(from value: Double) -> String {
+        if let formatted = money.string(from: NSNumber(value: value)) {
+            return "$\(formatted)"
+        }
+        return "-"
+    }
+    
+    static func seperatedString(from value: Double) -> String {
+        if let formatted = money.string(from: NSNumber(value: value)) {
+            return "\(formatted)"
+        }
+        return "-"
+    }
+}
