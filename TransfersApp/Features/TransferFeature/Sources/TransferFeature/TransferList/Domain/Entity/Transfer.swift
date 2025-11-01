@@ -9,7 +9,7 @@ import Foundation
 import Shared
 
 // MARK: - Remote Models (mirror the API payload exactly)
-struct Transfer: Codable, Equatable, Sendable, Identifiable {
+struct Transfer: Codable, Equatable, Sendable, Identifiable, Hashable {
       let person: Person?
       let card: Card?
       let lastTransfer: String?
@@ -49,39 +49,30 @@ extension Transfer: TransferCellShowable {
         lastTransfer?.toISODate() ?? Date(timeIntervalSince1970: 0)
     }
     
+    var dateString: String {
+        lastTransfer?.toISODate()?.toDateString(dateStyle: .medium, timeStyle: .none) ??  ""
+    }
+    
     var amount: Int {
         moreInfo?.totalTransfer ?? 0
     }
     
     var amountString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-
-        if let formattedMoney = formatter.string(from: NSNumber(value: moreInfo?.totalTransfer ?? 0)) {
-            return "$\(formattedMoney)"
-        }
-        return "-"
+        moreInfo?.totalTransfer?.asMoneyString() ?? ""
     }
-    
-    
 }
 
 // MARK: - Card
-struct Card: Codable, Equatable, Sendable {
+struct Card: Codable, Equatable, Sendable, Hashable {
         let cardNumber, cardType: String?
 
     enum CodingKeys: String, CodingKey {
         case cardNumber = "card_number"
         case cardType = "card_type"
     }
-    /// Returns the card number Masked(e.g., **** 1234).
-    var maskedNumber: String? {
-        guard let number = cardNumber?.trimmingCharacters(in: .whitespacesAndNewlines), number.count >= 4 else { return nil }
-        return "**** " + number.suffix(4)
-    }
 }
 
-struct MoreInfo: Codable, Equatable, Sendable {
+struct MoreInfo: Codable, Equatable, Sendable, Hashable {
     let numberOfTransfers, totalTransfer: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -90,7 +81,7 @@ struct MoreInfo: Codable, Equatable, Sendable {
     }
 }
 
-struct Person: Codable, Equatable, Sendable {
+struct Person: Codable, Equatable, Sendable, Hashable {
     let fullName: String?
      let email: String?
      let avatar: String?
@@ -100,7 +91,3 @@ struct Person: Codable, Equatable, Sendable {
          case email, avatar
      }
 }
-
-
-
-

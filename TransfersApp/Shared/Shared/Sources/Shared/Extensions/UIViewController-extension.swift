@@ -33,3 +33,15 @@ public extension UIStoryboard {
         return vc
     }
 }
+
+public extension UIViewController {
+    func setLoading(_ show: Bool) {
+        DispatchQueue.main.async {
+            if show {
+                LoadingManager.shared.show(in: self.view)
+            } else {
+                LoadingManager.shared.hide()
+            }
+        }
+    }
+}

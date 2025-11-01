@@ -13,5 +13,9 @@ public extension String {
         return formatter.date(from: self)
     }
     
+    func toDateShowable(dateStyle: DateFormatter.Style = .short,
+                        timeStyle: DateFormatter.Style = .short) -> String? {
+        self.toISODate()?.toDateString(dateStyle: dateStyle, timeStyle: timeStyle)
+    }
 
 }

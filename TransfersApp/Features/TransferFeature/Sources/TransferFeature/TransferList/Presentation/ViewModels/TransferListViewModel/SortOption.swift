@@ -5,7 +5,6 @@
 //  Created by AREM on 10/31/25.
 //
 
-
 // MARK: - SortOption
 enum SortOption: String{
     case serverSort = "None"

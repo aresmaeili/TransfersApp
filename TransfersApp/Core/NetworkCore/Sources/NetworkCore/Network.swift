@@ -9,6 +9,15 @@ import Foundation
 
 public actor NetworkClient {
     public static let shared = NetworkClient()
+    
+    private let session: URLSession
+    
+    public init() {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 30
+        configuration.timeoutIntervalForResource = 60
+        self.session = URLSession(configuration: configuration)
+    }
 
     public func get<T: Decodable>(endPoint: Endpoint, decoder: JSONDecoder = JSONDecoder()) async throws -> T {
         
@@ -20,7 +29,7 @@ public actor NetworkClient {
         print("🌐 [Request] GET \(url.absoluteString)")
 
         // Perform request
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await session.data(from: url)
 
         // Validate response
         guard let httpResponse = response as? HTTPURLResponse else {

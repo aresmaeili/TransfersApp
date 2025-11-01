@@ -33,4 +33,8 @@ final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
     func getFavorites() -> [Transfer] {
         favoritesRepository.getFavorites()
     }
+    
+    func checkIsFavorite(transfer: Transfer) -> Bool {
+        favoritesRepository.getFavorites().contains(transfer)
+    }
 }

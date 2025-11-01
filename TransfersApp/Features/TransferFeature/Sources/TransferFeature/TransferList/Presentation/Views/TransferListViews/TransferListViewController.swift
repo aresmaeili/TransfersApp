@@ -14,7 +14,7 @@ public final class TransferListViewController: UIViewController {
     
     // Dependencies
     var viewModel: TransferListViewModel?
-    weak var router: Coordinator?
+    var router: TransferCoordinator?
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
@@ -36,8 +36,17 @@ public final class TransferListViewController: UIViewController {
         configureView()
         setupTableView()
         setupSearchController()
+        bindViewModelLoading()
         // Initial data load
         viewModel?.refreshTransfers()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        transferTableView.reloadData()
+    }
+    
+    deinit {
+        print("TransferLIst deinit" )
     }
 }
 
@@ -45,7 +54,8 @@ public final class TransferListViewController: UIViewController {
 extension TransferListViewController: TransferListDisplay {
     func didUpdateTransfers() {
         self.refreshControl.endRefreshing()
-        self.transferTableView.reloadSections([1], with: .automatic)
+//        self.transferTableView.reloadSections([1], with: .automatic)
+        self.transferTableView.reloadData()
     }
     
     func displayError(_ message: String) {
@@ -81,6 +91,12 @@ private extension TransferListViewController {
         // Ask ViewModel to refresh first page. Implement this method in ViewModel accordingly.
         viewModel?.refreshTransfers()
     }
+    
+    private func bindViewModelLoading() {
+        viewModel?.onLoadingChanged = { [weak self] isLoading in
+                self?.setLoading(isLoading)
+            }
+        }
 }
 
 // MARK: - UISearchResultsUpdating
@@ -145,8 +161,9 @@ extension TransferListViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        viewModel?.addTransfersToFavorite(transfer: transfer)
-        tableView.reloadSections([0], with: .automatic)
+//        viewModel?.addTransfersToFavorite(transfer: transfer)
+//        tableView.reloadSections([0], with: .automatic)
+        router?.showTransfersDetails(transfer: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -185,7 +202,8 @@ private extension TransferListViewController {
             assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
-        cell.configCell(data: transfer)
+        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
+        cell.configCell(data: transfer, isFavorite: isFavorite)
         return cell
     }
 }

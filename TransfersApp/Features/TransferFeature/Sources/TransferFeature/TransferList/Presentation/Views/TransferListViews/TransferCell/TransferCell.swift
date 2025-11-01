@@ -13,6 +13,7 @@ import NetworkCore
 protocol TransferCellShowable {
     var name: String { get }
     var date: Date { get }
+    var dateString: String { get }
     var amount: Int { get }
     var amountString: String { get }
     var avatarURLString: String? { get }
@@ -65,16 +66,17 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
         
         // Star Image View
-        starImageView.image = UIImage(systemName: "star.circle")
+        starImageView.image = UIImage.shared(named: "StarFill")
         starImageView.tintColor = .appOperator2
     }
     
     // MARK: Configuration
-    func configCell(data: TransferCellShowable) {
+    func configCell(data: TransferCellShowable, isFavorite: Bool) {
         nameLabel.text = data.name
-        dateLabel.text = "Last Transfer: \(data.date.toDateString(timeStyle: .none))"
+        dateLabel.text = "Last Transfer: \(data.dateString)"
         amountLabel.text = data.amountString
         loadAvatar(from: data.avatarURLString)
+        starImageView.isHidden = !isFavorite
     }
     
     // MARK: Private Helpers
