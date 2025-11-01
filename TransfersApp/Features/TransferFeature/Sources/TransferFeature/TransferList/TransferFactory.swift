@@ -32,8 +32,8 @@ struct TransferFactory: TransferFactoryProtocol {
     
     func makeTransferDetailsModule(transfer: Transfer, coordinator: TransferCoordinator) -> UIViewController {
         let vc = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
-        let viewModel = TransferDetailsViewModel(transfer: transfer)
-        vc.viewModel = viewModel
+//        let viewModel = TransferDetailsViewModel(transfer: transfer)
+//        vc.viewModel = viewModel
         return vc
     }
 }

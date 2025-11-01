@@ -6,6 +6,13 @@
 //
 import UIKit
 
+protocol TransferDetailsProfileProtocol {
+    var name: String { get }
+    var avatarUser: String { get }
+    var mail: String { get }
+    var totalAmount: String { get }
+}
+
 class ProfileView: UIView, ViewConnectable {
     
     @IBOutlet weak var parentView: UIView!
@@ -65,7 +72,7 @@ class ProfileView: UIView, ViewConnectable {
         mailLabel.font = .systemFont(ofSize: 20, weight: .medium)
         mailLabel.textColor = .appText3
         
-        totalLabel.font = .systemFont(ofSize: 24, weight: .medium)
+        totalLabel.font = .systemFont(ofSize: 48, weight: .bold)
         totalLabel.textColor = .appText6
     }
     

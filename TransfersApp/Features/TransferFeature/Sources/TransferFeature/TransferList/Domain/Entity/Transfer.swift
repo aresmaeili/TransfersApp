@@ -62,8 +62,6 @@ extension Transfer: TransferCellShowable {
         }
         return "-"
     }
-    
-    
 }
 
 // MARK: - Card
@@ -73,11 +71,6 @@ struct Card: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
         case cardNumber = "card_number"
         case cardType = "card_type"
-    }
-    /// Returns the card number Masked(e.g., **** 1234).
-    var maskedNumber: String? {
-        guard let number = cardNumber?.trimmingCharacters(in: .whitespacesAndNewlines), number.count >= 4 else { return nil }
-        return "**** " + number.suffix(4)
     }
 }
 
@@ -102,5 +95,10 @@ struct Person: Codable, Equatable, Sendable {
 }
 
 
+struct TransferDetailsItem: TransferDetailsItemProtocol {
+    var icon: String
+    var title: String
+    var value: String
+}
 
 

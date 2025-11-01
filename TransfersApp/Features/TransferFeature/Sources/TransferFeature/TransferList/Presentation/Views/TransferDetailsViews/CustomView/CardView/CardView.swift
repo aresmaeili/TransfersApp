@@ -7,6 +7,17 @@
 
 import UIKit
 
+protocol TransferDetailsCardProtocol {
+    var cardTypeString: String { get }
+    var cardNumberString: String { get }
+    var maskedCardNumber: String { get }
+    var lastTransferDate: String { get }
+    var totalAmount: String { get }
+    var countOfTransfer: String { get }
+    var isFavorite: Bool { get }
+}
+
+
 class CardView: UIView, ViewConnectable {
     
     @IBOutlet weak var parentView: UIView!
