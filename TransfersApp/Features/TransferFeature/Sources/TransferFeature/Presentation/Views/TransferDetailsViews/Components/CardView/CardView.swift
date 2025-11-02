@@ -62,7 +62,7 @@ final class CardView: UIView, ViewConnectable {
         parentView.backgroundColor = .background5
         parentView.layer.cornerRadius = 22
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.border1.cgColor
+        parentView.layer.borderColor = UIColor.border5.cgColor
         
         setupLabels()
         setupStarIcon()

@@ -17,6 +17,7 @@ public extension UIColor {
     // MARK: - Borders
     static var border1: UIColor { UIAppColors.border1 }
     static var border2: UIColor { UIAppColors.border2 }
+    static var border5: UIColor { UIAppColors.border5 }
 
     // MARK: - Text
     static var text1: UIColor { UIAppColors.text1 }

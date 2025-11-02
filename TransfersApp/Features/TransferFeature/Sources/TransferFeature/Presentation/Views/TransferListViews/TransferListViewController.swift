@@ -35,8 +35,7 @@ public final class TransferListViewController: UIViewController {
         setupSearchController()
         bindViewModel()
         viewModel?.refreshTransfers()
-        transferTableView.contentInset = UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0)
-
+        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -44,6 +43,14 @@ public final class TransferListViewController: UIViewController {
         transferTableView.reloadData()
     }
     
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+        }
+    }
+ 
     deinit {
         print("🧹 Deinit: TransferListViewController")
     }
@@ -64,6 +71,8 @@ private extension TransferListViewController {
         transferTableView.dataSource = self
         transferTableView.delegate = self
         transferTableView.backgroundColor = .background3
+        transferTableView.contentInset = UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0)
+
     }
     
     func setupSearchController() {
@@ -92,6 +101,17 @@ private extension TransferListViewController {
         viewModel.onLoadingStateChange = { [weak self] isLoading in
             self?.setLoading(isLoading)
         }
+    }
+    
+    private func updateNavigationBarAppearance(for style: UIUserInterfaceStyle) {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .background3
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.text1]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = (style == .dark) ? .white : .black
     }
 }
 
@@ -229,7 +249,7 @@ private extension TransferListViewController {
     
     func makeSectionHeader(title: String, isFavorites: Bool) -> UIView {
         let header = UIView()
-        header.backgroundColor = .background3
+        header.backgroundColor = .clear
         
         let titleLabel = UILabel()
         titleLabel.font = .preferredFont(forTextStyle: .headline)

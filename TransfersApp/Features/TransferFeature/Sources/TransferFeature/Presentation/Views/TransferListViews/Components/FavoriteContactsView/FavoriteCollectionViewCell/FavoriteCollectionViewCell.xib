@@ -101,7 +101,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
-            <color key="backgroundColor" name="Background 3"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Woz-Ti-BIc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="4xU-JU-J2M"/>
                 <constraint firstAttribute="bottom" secondItem="Woz-Ti-BIc" secondAttribute="bottom" id="W3Q-iN-JNh"/>
@@ -124,9 +124,6 @@
         <image name="StarFill" width="42" height="42"/>
         <image name="minus.circle" catalog="system" width="128" height="123"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
-        <namedColor name="Background 3">
-            <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="Text 10">
             <color red="0.89803921568627454" green="0.27450980392156865" blue="0.37647058823529411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

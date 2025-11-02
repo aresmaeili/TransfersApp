@@ -26,26 +26,34 @@ final class TransferDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+
+    }
+    
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+        }
     }
     
     // MARK: - Setup
     
     private func setupUI() {
-        setupNavigation()
+        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
         setupContent()
     }
     
-    private func setupNavigation() {
-        title = viewModel?.navigationTitle
-        
+    private func updateNavigationBarAppearance(for style: UIUserInterfaceStyle) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .background3
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.text1]
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.compactAppearance = appearance
+        stackView.backgroundColor = .background3
     }
     
     private func setupContent() {

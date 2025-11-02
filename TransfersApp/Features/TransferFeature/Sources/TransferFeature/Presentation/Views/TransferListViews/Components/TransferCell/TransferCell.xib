@@ -151,7 +151,7 @@
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" name="Background 3"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="MfS-pu-Ws2" secondAttribute="trailing" constant="16" id="1D4-QV-uBy"/>
                     <constraint firstItem="MfS-pu-Ws2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="1hd-0H-pfP"/>
@@ -160,6 +160,7 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="amountLabel" destination="ZLR-sc-Gnc" id="xri-Fs-vkI"/>
                 <outlet property="avatarImageView" destination="Cpw-sr-FCq" id="kVf-T3-P0u"/>

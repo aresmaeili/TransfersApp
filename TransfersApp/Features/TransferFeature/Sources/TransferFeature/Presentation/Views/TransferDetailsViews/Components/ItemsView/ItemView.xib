@@ -21,7 +21,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="105"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="90"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wfw-H6-Zr9">
@@ -82,7 +82,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wfw-H6-Zr9" secondAttribute="trailing" constant="24" id="79b-zx-pTL"/>
                 <constraint firstItem="wfw-H6-Zr9" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="Dsh-qA-cXW"/>
@@ -90,7 +90,7 @@
                 <constraint firstItem="wfw-H6-Zr9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="qnW-zS-w57"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="55.725190839694655" y="258.80281690140845"/>
+            <point key="canvasLocation" x="55.725190839694655" y="232.3943661971831"/>
         </view>
     </objects>
     <resources>

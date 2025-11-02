@@ -17,6 +17,7 @@ public enum UIAppColors {
     // MARK: - Border Colors
     public static let border1 = UIColor(named: "Border 1", in: .module, compatibleWith: nil)!
     public static let border2 = UIColor(named: "Border 2", in: .module, compatibleWith: nil)!
+    public static let border5 = UIColor(named: "Border 5", in: .module, compatibleWith: nil)!
 
     // MARK: - Text Colors
     public static let text1 = UIColor(named: "Text 1", in: .module, compatibleWith: nil)!
