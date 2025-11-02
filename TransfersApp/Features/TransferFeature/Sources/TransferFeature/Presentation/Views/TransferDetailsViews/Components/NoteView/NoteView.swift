@@ -46,25 +46,25 @@ final class NoteView: UIView, ViewConnectable {
     }
     
     private func setupParentView() {
-        parentView.backgroundColor = .appBackground1
+        parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 16
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.appBorder1.cgColor
+        parentView.layer.borderColor = UIColor.border1.cgColor
     }
     
     private func setupLabels() {
-        titleLabel.textColor = .appText3
+        titleLabel.textColor = .text3
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
-        valueLabel.textColor = .appText1
+        valueLabel.textColor = .text1
         valueLabel.font = .systemFont(ofSize: 12, weight: .bold)
     }
     
     private func setupIconContainer() {
-        iconParentView.backgroundColor = .appBackground5
+        iconParentView.backgroundColor = .background5
         iconParentView.layer.cornerRadius = 16
         iconParentView.layer.borderWidth = 1
-        iconParentView.layer.borderColor = UIColor.appBorder1.cgColor
+        iconParentView.layer.borderColor = UIColor.border1.cgColor
         iconParentView.clipsToBounds = true
         
         iconImageView.contentMode = .scaleAspectFit

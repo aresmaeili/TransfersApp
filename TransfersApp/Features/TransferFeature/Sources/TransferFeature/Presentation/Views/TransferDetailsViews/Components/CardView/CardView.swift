@@ -59,10 +59,10 @@ final class CardView: UIView, ViewConnectable {
     }
     
     private func setupView() {
-        parentView.backgroundColor = .appBackground5
+        parentView.backgroundColor = .background5
         parentView.layer.cornerRadius = 22
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.appBorder1.cgColor
+        parentView.layer.borderColor = UIColor.border1.cgColor
         
         setupLabels()
         setupStarIcon()
@@ -70,20 +70,20 @@ final class CardView: UIView, ViewConnectable {
     
     private func setupLabels() {
         logoLabel.font = .systemFont(ofSize: 14, weight: .black)
-        logoLabel.textColor = .appText11
+        logoLabel.textColor = .text11
         
         maskedNumberLabel.font = .systemFont(ofSize: 18, weight: .black)
-        maskedNumberLabel.textColor = .appText11
+        maskedNumberLabel.textColor = .text11
         maskedNumberLabel.setCharacterSpacing(6)
         
         nameLabel.font = .systemFont(ofSize: 18, weight: .black)
-        nameLabel.textColor = .appText11
+        nameLabel.textColor = .text11
         
         dueDateLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        dueDateLabel.textColor = .appText11
+        dueDateLabel.textColor = .text11
         
         countLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        countLabel.textColor = .appText11
+        countLabel.textColor = .text11
     }
     
     private func setupStarIcon() {

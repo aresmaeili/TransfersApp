@@ -4,59 +4,43 @@
 //
 //  Created by AREM on 10/31/25.
 //
+
 import UIKit
 import RouterCore
 
+// MARK: - TransferDetailsViewController
+
 final class TransferDetailsViewController: UIViewController {
     
-    // @IBOutlet
-    @IBOutlet weak private var stackView: UIStackView!
+    // MARK: - Outlets
     
-    // Dependencies
+    @IBOutlet private weak var stackView: UIStackView!
+    
+    // MARK: - Dependencies
+    
     var viewModel: TransferDetailsViewModel?
     var router: Coordinator?
     
-    // MARK: - View Lifecycle
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
+    // MARK: - Setup
+    
     private func setupUI() {
-        
-        navigationSetup()
-        
-        if let transfer = viewModel?.cardViewData {
-            let cardView = CardView(with: transfer)
-            stackView.addArrangedSubview(cardView)
-        }
-        
-        if let viewModel {
-            let profileView = ProfileView(viewModel: viewModel)
-            stackView.addArrangedSubview(profileView)
-        }
-        
-        if let items = viewModel?.detailItems {
-            items.forEach { item in
-                if !item.value.isEmpty {
-                    let itemView = ItemView(with: item)
-                    stackView.addArrangedSubview(itemView)
-                }
-            }
-        }
-        
-        if let note = viewModel?.noteItem, !note.value.isEmpty {
-            let noteView = NoteView(with: note)
-            stackView.addArrangedSubview(noteView)
-        }
+        setupNavigation()
+        setupContent()
     }
     
-    func navigationSetup() {
+    private func setupNavigation() {
         title = viewModel?.navigationTitle
-
+        
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .appBackground3
+        appearance.backgroundColor = .background3
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         
         navigationController?.navigationBar.standardAppearance = appearance
@@ -64,8 +48,36 @@ final class TransferDetailsViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .white
     }
     
+    private func setupContent() {
+        
+        // Card View
+        if let cardData = viewModel?.cardViewData {
+            let cardView = CardView(with: cardData)
+            stackView.addArrangedSubview(cardView)
+        }
+        
+        // Profile View
+        let profileView = ProfileView(viewModel: viewModel)
+        stackView.addArrangedSubview(profileView)
+        
+        // Item Views
+        if let items = viewModel?.detailItems {
+            items.forEach { item in
+                let itemView = ItemView(with: item)
+                stackView.addArrangedSubview(itemView)
+            }
+        }
+        
+        // Note View
+        if let note = viewModel?.noteItem, !note.value.isEmpty {
+            let noteView = NoteView(with: note)
+            stackView.addArrangedSubview(noteView)
+        }
+    }
+    
+    // MARK: - Deinitialization
+    
     deinit {
-        print("TransferDetailsViewController deinit")
+        print("🧹 TransferDetailsViewController deinitialized")
     }
 }
-

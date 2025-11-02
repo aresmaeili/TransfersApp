@@ -14,7 +14,7 @@ public extension UIView {
         get { objc_getAssociatedObject(self, &UIView.loadingViewKey) as? UIView }
         set { objc_setAssociatedObject(self, &UIView.loadingViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-
+    
     func showLoading() {
         // Ensure we are updating the UI on the main thread
         let updateUI = {

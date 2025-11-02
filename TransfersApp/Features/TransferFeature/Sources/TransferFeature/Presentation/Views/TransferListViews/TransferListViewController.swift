@@ -171,7 +171,7 @@ extension TransferListViewController: UITableViewDelegate {
         case 0:
             return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
         case 1:
-            return ("Transfers:", "Sort: \(viewModel?.sortOption.rawValue ?? "-")")
+            return ("Transfers:", "Sort: \(viewModel?.sortOption.displayName ?? "-")")
         default:
             return ("", "")
         }
@@ -233,7 +233,7 @@ private extension TransferListViewController {
     
     func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
         let headerView = UIView()
-        headerView.backgroundColor = .appBackground3
+        headerView.backgroundColor = .background3
         
         // --- Label Setup ---
         let label = UILabel()
@@ -254,7 +254,7 @@ private extension TransferListViewController {
         if hasSortButton {
             let sortButton = UIButton(type: .system)
             sortButton.translatesAutoresizingMaskIntoConstraints = false
-            sortButton.setTitle("Sort: \(viewModel?.sortOption.rawValue ?? "-")", for: .normal)
+            sortButton.setTitle("Sort: \(viewModel?.sortOption.displayName ?? "-")", for: .normal)
             sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
             headerView.addSubview(sortButton)
             
@@ -290,7 +290,7 @@ private extension TransferListViewController {
         )
         
         for sort in SortOption.allCases {
-            alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: sort.displayName, style: .default) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel?.sortOption = sort
             })

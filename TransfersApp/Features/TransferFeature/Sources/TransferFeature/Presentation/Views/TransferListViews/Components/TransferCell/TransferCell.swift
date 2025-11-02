@@ -47,34 +47,34 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
     // MARK: Setup
     private func setupUI() {
         // Parent View Styling
-        parentView.backgroundColor = .appBackground1
+        parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 16
         parentView.layer.masksToBounds = true
         parentView.layer.borderWidth = 1
-        parentView.layer.borderColor = UIColor.appBorder2.cgColor
+        parentView.layer.borderColor = UIColor.border2.cgColor
         
         // Name Label
-        nameLabel.textColor = .appText1
+        nameLabel.textColor = .text1
         nameLabel.font = .systemFont(ofSize: 18, weight: .bold)
 
         // Date Label
-        dateLabel.textColor = .appText8
+        dateLabel.textColor = .text8
         dateLabel.font = .systemFont(ofSize: 10, weight: .semibold)
         
         // Avatar Parent View (Container)
         avatarParentView.clipsToBounds = true
         avatarParentView.layer.cornerRadius = 15
         avatarParentView.layer.borderWidth = 1
-        avatarParentView.layer.borderColor = UIColor.appBackground1.cgColor
+        avatarParentView.layer.borderColor = UIColor.background1.cgColor
         
         // Avatar Image View
-        avatarImageView.tintColor = .appBackground3
+        avatarImageView.tintColor = .background3
         avatarImageView.contentMode = .scaleAspectFill
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
         
         // Star Image View
         starImageView.image = UIImage.shared(named: "StarFill")
-        starImageView.tintColor = .appOperator2
+        starImageView.tintColor = .starColor
     }
     
     // MARK: Configuration

@@ -91,7 +91,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         didSet { onUpdate?() }
     }
     
-    var sortOption: SortOption = .serverSort {
+    var sortOption: SortOption = .none {
         didSet { onUpdate?() }
     }
     
@@ -228,7 +228,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
             return transfers.sorted { $0.amount < $1.amount }
         case .amountDescending:
             return transfers.sorted { $0.amount > $1.amount }
-        case .serverSort:
+        case .none:
             return transfers
         }
     }

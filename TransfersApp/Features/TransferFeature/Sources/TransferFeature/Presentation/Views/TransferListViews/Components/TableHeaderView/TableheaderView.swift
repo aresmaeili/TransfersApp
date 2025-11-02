@@ -39,7 +39,6 @@ class TableheaderView: UIView, ViewConnectable {
         titleLabel.textColor = .label
         titleLabel.textAlignment = .left
         titleLabel.text = title
-        //        "Sort: \(viewModel?.sortOption.rawValue ?? "-")"
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         actionButton.setTitle(buttonTitle, for: .normal)
         actionButton.onTap {
