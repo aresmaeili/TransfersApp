@@ -6,28 +6,36 @@
 //
 import Foundation
 
+import Foundation
+
+protocol FavoriteTransferUseCaseProtocol {
+    func fetchFavorites() -> [Transfer]
+    func toggleFavoriteStatus(transfer: Transfer)
+    func isFavorite(transfer: Transfer) -> Bool
+}
+
 final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
 
-    private let favoritesRepository: FavoriteTransferRepository
+    private let favoritesRepository: FavoriteTransferRepositoryProtocol
     
-    init(favoritesRepository: FavoriteTransferRepository) {
+    init(favoritesRepository: FavoriteTransferRepositoryProtocol) {
         self.favoritesRepository = favoritesRepository
     }
     
-    func execute(transfer: Transfer) {
-        if checkIsFavorite(transfer: transfer) {
+    func fetchFavorites() -> [Transfer] {
+        favoritesRepository.getFavorites()
+    }
+    
+    func toggleFavoriteStatus(transfer: Transfer) {
+        if isFavorite(transfer: transfer) {
             favoritesRepository.remove(transfer: transfer)
         } else {
             favoritesRepository.save(transfer: transfer)
 
         }
     }
-    
-    func getFavorites() -> [Transfer] {
-        favoritesRepository.getFavorites()
-    }
-    
-    func checkIsFavorite(transfer: Transfer) -> Bool {
+
+    func isFavorite(transfer: Transfer) -> Bool {
         let favorites = favoritesRepository.getFavorites()
         return favorites.contains(transfer)
     }

@@ -7,16 +7,26 @@
 
 import Foundation
 
-final class TransferRepositoryImpl: TransferRepository {
+final class TransferRepositoryImpl: TransferRepositoryProtocol {
     
-    private let service: TransferDataSource
+    private let dataSource: TransferDataSource
 
-    init(service: TransferDataSource) {
-        self.service = service
+    init(dataSource: TransferDataSource) {
+        self.dataSource = dataSource
     }
 
     func fetchTransfers(page: Int) async throws -> [Transfer] {
-        let dtos = try await service.fetchTransfers(page: page)
+        
+//       TODO: thiss
+//        let dtos: [TransferDTO] = try await dataSource.fetchTransfers(page: page)
+//        return dtos.map { dto in
+//                    // فرض بر وجود متد/Initializer برای نگاشت
+//                    return Transfer(dto: dto)
+//                }
+//        return dtos.map { $0 }
+//        
+        
+        let dtos: [Transfer] = try await dataSource.fetchTransfers(page: page)
         return dtos.map { $0 }
     }
 }

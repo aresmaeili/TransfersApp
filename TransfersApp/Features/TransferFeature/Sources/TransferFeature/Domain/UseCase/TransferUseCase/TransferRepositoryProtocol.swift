@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol TransferRepository: Sendable {
+public protocol TransferRepositoryProtocol: Sendable {
     func fetchTransfers(page: Int) async throws -> [Transfer]
 }

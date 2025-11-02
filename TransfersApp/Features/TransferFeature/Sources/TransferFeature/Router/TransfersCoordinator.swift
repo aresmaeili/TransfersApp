@@ -4,31 +4,46 @@
 //
 //  Created by AREM on 10/30/25.
 //
-import RouterCore
 import UIKit
 import Foundation
+import RouterCore
 
-public final class TransferCoordinator: BaseCoordinator {
+// MARK: - Router Protocol
+@MainActor
+public protocol TransferRouter: AnyObject {
+    func showTransfersDetails(transfer: Transfer)
+}
+
+// MARK: - Coordinator
+@MainActor
+public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
+    // MARK: - Dependencies
+    private let factory: TransferFactory
     
-    public override init(navigationController: UINavigationController) {
+    // MARK: - Initialization
+    public init(
+        navigationController: UINavigationController, transferRepository: TransferRepositoryProtocol? = nil, favoriteRepository: FavoriteTransferRepositoryProtocol? = nil) {
+        let transferRepository = transferRepository ?? TransferRepositoryImpl(dataSource: TransferAPI())
+        let favoriteRepository = favoriteRepository ?? FavoriteRepositoryImpl()
+        self.factory = TransferFactory(transferRepository: transferRepository, favoriteRepository: favoriteRepository)
+        
         super.init(navigationController: navigationController)
     }
     
-//    let factory = TransferFactory(service: TransferMockData())
-    let factory = TransferFactory(service: TransferAPI())
-
+    // MARK: - Lifecycle
     public override func start() {
         showTransfersList()
     }
-
+    
+    // MARK: - Routing
     private func showTransfersList() {
-        let vc = factory.makeTransferListModule(coordinator: self)
-        navigationController.pushViewController(vc, animated: true)
+        let viewController = factory.makeTransferListModule(router: self)
+        navigationController.pushViewController(viewController, animated: true)
     }
     
-    func showTransfersDetails(transfer: Transfer) {
-        let vc = factory.makeTransferDetailsModule(transfer: transfer)
-        navigationController.pushViewController(vc, animated: true)
+    public func showTransfersDetails(transfer: Transfer) {
+        let viewController = factory.makeTransferDetailsModule(transfer: transfer)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }

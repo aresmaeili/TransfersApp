@@ -19,9 +19,9 @@ final class TransferDetailsViewModel {
     
     var isFavorite: Bool {
         get {
-            favoriteUseCase.checkIsFavorite(transfer: cardViewData)
+            favoriteUseCase.isFavorite(transfer: cardViewData)
         } set {
-            favoriteUseCase.execute(transfer: cardViewData)
+            favoriteUseCase.toggleFavoriteStatus(transfer: cardViewData)
         }
     }
     
@@ -47,7 +47,7 @@ final class TransferDetailsViewModel {
     }
 
     func toggleFavorite() {
-        favoriteUseCase.execute(transfer: cardViewData)
+        favoriteUseCase.toggleFavoriteStatus(transfer: cardViewData)
 
     }
 }

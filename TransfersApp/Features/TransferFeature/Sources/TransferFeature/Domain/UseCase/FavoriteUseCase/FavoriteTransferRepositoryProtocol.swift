@@ -7,11 +7,9 @@
 
 import Foundation
 
-protocol FavoriteTransferRepository {
-    /// Retrieves all currently favorited transfers.
+public protocol FavoriteTransferRepositoryProtocol {
     func getFavorites() -> [Transfer]
-    /// Saves a transfer to the favorites store.
     func save(transfer: Transfer)
-    /// Removes a transfer from the favorites store.
     func remove(transfer: Transfer)
+    func isFavorite(transfer: Transfer) -> Bool
 }

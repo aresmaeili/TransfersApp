@@ -4,64 +4,96 @@
 //
 //  Created by AREM on 10/30/25.
 //
+
 import Foundation
 
-// MARK: - TransferListViewModel
+// MARK: - Input Protocol
 @MainActor
-final class TransferListViewModel {
+protocol TransferListViewModelInput {
+    func toggleFavoriteStatus(for transfer: Transfer)
+    func toggleCanEdit()
+    func getTransfer(at index: Int) -> Transfer?
+    func getFavorite(at index: Int) -> Transfer?
+    func getFavoriteTransfer(at index: Int) -> Transfer?
+    func getFavorites() -> [Transfer]
+    func checkIsFavorite(_ transfer: Transfer) -> Bool
+    func loadNextPageIfNeeded(currentItem: Transfer?)
+    func refreshTransfers()
+    func numberOfRows(in section: Int) -> Int
+    func routeToDetails(for transfer: Transfer)
     
-    // MARK: - Output Bindings (Closures for View)
+    var textSearch: String { get set }
+    var sortOption: SortOption { get set }
+}
+
+// MARK: - Output Protocol
+@MainActor
+protocol TransferListViewModelOutput: AnyObject {
+    var onUpdate: (() -> Void)? { get set }
+    var onErrorOccurred: ((String) -> Void)? { get set }
+    var onLoadingStateChange: ((Bool) -> Void)? { get set }
+    var transfersCount: Int { get }
+    var favoritesCount: Int { get }
+    var hasFavoriteRow: Bool { get }
+    var filteredTransfers: [Transfer] { get }
+    var filteredTransfersCount: Int { get }
+}
+
+// MARK: - ViewModel Implementation
+@MainActor
+final class TransferListViewModel: TransferListViewModelInput, TransferListViewModelOutput {
+    
+    // MARK: - Dependencies
+    private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
+    private let favoriteUseCase: FavoriteTransferUseCaseProtocol
+    private let router: TransferCoordinator
+    
+    // MARK: - Outputs
     var onUpdate: (() -> Void)?
     var onErrorOccurred: ((String) -> Void)?
     var onLoadingStateChange: ((Bool) -> Void)?
     
-    // MARK: - Dependencies (Use Cases Injected)
-    private let transfersUseCase: FetchTransfersUseCase
-    private let favoriteUseCase: FavoriteTransferUseCase
-    private let router: TransferCoordinator
-
-    // MARK: - State Properties
+    // MARK: - Initialization
+    init(
+        fetchTransfersUseCase: FetchTransfersUseCaseProtocol,
+        favoriteUseCase: FavoriteTransferUseCaseProtocol,
+        router: TransferCoordinator
+    ) {
+        self.fetchTransfersUseCase = fetchTransfersUseCase
+        self.favoriteUseCase = favoriteUseCase
+        self.router = router
+    }
+    
+    // MARK: - State
     private var currentPage = 1
-    private var pagesEnded: Bool = false
-    var canEdit: Bool = false
+    private var hasReachedEnd = false
+    private(set) var canEdit = false
     
-    private(set) var isLoading: Bool = false {
-        didSet {
-            onLoadingStateChange?(isLoading)
-        }
-    }
-    
-    private var favorites: [Transfer] {
-        return favoriteUseCase.getFavorites()
-    }
-    
-    var favoritesCount: Int {
-        return favorites.count
+    private(set) var isLoading = false {
+        didSet { onLoadingStateChange?(isLoading) }
     }
     
     private(set) var transfers: [Transfer] = [] {
-        didSet {
-            onUpdate?()
-        }
+        didSet { onUpdate?() }
     }
     
     // MARK: - Input Properties
-    
     var textSearch: String = "" {
-        didSet {
-            onUpdate?()
-        }
+        didSet { onUpdate?() }
     }
     
     var sortOption: SortOption = .serverSort {
-        didSet {
-            onUpdate?()
-        }
+        didSet { onUpdate?() }
     }
     
-    // MARK: - Computed Properties (View Read-Only Data)
+    // MARK: - Computed Properties
+    private var allFavorites: [Transfer] { favoriteUseCase.fetchFavorites() }
+    
+    var transfersCount: Int { transfers.count }
+    var favoritesCount: Int { allFavorites.count }
+    
     var hasFavoriteRow: Bool {
-        let hasFavorite: Bool = !favorites.isEmpty
+        let hasFavorite: Bool = !allFavorites.isEmpty
         if !hasFavorite {
             canEdit = false
         }
@@ -69,58 +101,38 @@ final class TransferListViewModel {
     }
     
     var filteredTransfers: [Transfer] {
-        var result = transfers
+        let searched = textSearch.isEmpty
+            ? transfers
+            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
         
-        // 1. Search
-        if !textSearch.isEmpty {
-            result = result.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
-        }
-        
-        // 2. Sort
-        return sortTransfers(result, by: sortOption)
+        return sortTransfers(searched, by: sortOption)
     }
     
-    // MARK: - Initialization
-    init(transfersUseCase: FetchTransfersUseCase, favoriteUseCase: FavoriteTransferUseCase, router: TransferCoordinator) {
-        self.transfersUseCase = transfersUseCase
-        self.favoriteUseCase = favoriteUseCase
-        self.router = router
-    }
+    var filteredTransfersCount: Int { filteredTransfers.count }
     
-    // MARK: - Public Interface
-    
-    private func loadTransfers(page: Int) {
+    // MARK: - Data Fetching
+    private func fetchTransfers(page: Int) {
+        guard !isLoading else { return }
         
         Task { @MainActor in
-            guard !isLoading else {
-                return
-            }
             isLoading = true
-        defer {
-            isLoading = false
-            }
+            defer { isLoading = false }
+            
             do {
-                let newTransfers = try await transfersUseCase.execute(page: page)
+                let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
                 
                 guard !newTransfers.isEmpty else {
-                    pagesEnded = true
-                    print("End of data")
-                    isLoading = false
+                    hasReachedEnd = true
+                    print("No more transfers to load.")
                     return
                 }
                 
-                if page == 1 {
-                    // Refresh / Initial load
-                    transfers = newTransfers
-                } else {
-                    // Pagination
-                    let existingIDs = Set(transfers.map { $0.id })
-                    let uniqueNew = newTransfers.filter { !existingIDs.contains($0.id) }
-                    transfers.append(contentsOf: uniqueNew)
-                }
+                transfers = (page == 1)
+                    ? newTransfers
+                    : appendUniqueTransfers(current: transfers, new: newTransfers)
                 
                 currentPage = page
-                print("Page: \(page) -> \(transfers.count) transfers loaded")
+                print("✅ Page \(page) loaded (\(transfers.count) transfers)")
                 
             } catch {
                 onErrorOccurred?(error.localizedDescription)
@@ -128,91 +140,84 @@ final class TransferListViewModel {
         }
     }
     
-    func editTransfersToFavorite(transfer: Transfer) {
-        favoriteUseCase.execute(transfer: transfer)
+    // MARK: - Actions
+    func toggleFavoriteStatus(for transfer: Transfer) {
+        favoriteUseCase.toggleFavoriteStatus(transfer: transfer)
         onUpdate?()
     }
     
-    func getTransfer(at index: Int) -> Transfer? {
-        return filteredTransfers[safe: index]
-    }
+    func getTransfer(at index: Int) -> Transfer? { filteredTransfers[safe: index] }
+    func getFavorite(at index: Int) -> Transfer? { allFavorites[safe: index] }
     
-    func getFavorite(index : Int) -> Transfer? {
-        return favorites[safe: index]
-    }
-    
-    func getFavoriteTransfer(index : Int) -> Transfer? {
-        let favorit = favorites[safe: index]
-        guard let favoriteTransfer = (transfers.first { transfer in
-            transfer == favorit
-        }) else {
-            onErrorOccurred?("User/Transfer not found in transfers list!")
+    func getFavoriteTransfer(at index: Int) -> Transfer? {
+        guard let favorite = allFavorites[safe: index],
+              let transfer = transfers.first(where: { $0 == favorite }) else {
+            onErrorOccurred?("Transfer not found in list.")
             return nil
         }
-        return favoriteTransfer
+        return transfer
     }
     
-    func getFavorites() -> [Transfer] {
-        return favorites.reversed()
-    }
+    func getFavorites() -> [Transfer] { allFavorites.reversed() }
     
-    func checkIfTransferIsFavorite(transfer: Transfer) -> Bool {
-        return favorites.contains(where: { $0.id == transfer.id })
+    func checkIsFavorite(_ transfer: Transfer) -> Bool {
+        allFavorites.contains(where: { $0.id == transfer.id })
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
-        guard !isLoading, let currentItem, !pagesEnded else { return }
-        
+        guard let currentItem, !isLoading, !hasReachedEnd else { return }
         guard let currentIndex = filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) else { return }
-        let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
         
-        if currentIndex >= thresholdIndex {
-            loadTransfers(page: currentPage + 1)
-        }
+        let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
+        if currentIndex >= thresholdIndex { fetchTransfers(page: currentPage + 1) }
     }
     
     func refreshTransfers() {
-        // Reset state
         currentPage = 1
-        transfers = []
-        pagesEnded = false
-        // Start fetch
-        loadTransfers(page: currentPage)
+        transfers.removeAll()
+        hasReachedEnd = false
+        fetchTransfers(page: currentPage)
     }
     
-    func numberOfRows(section: Int) -> Int {
+    func numberOfRows(in section: Int) -> Int {
         switch section {
-        case 0:
-            return 1
-        case 1:
-            return filteredTransfers.count
-        default:
-            return 0
+        case 0: return hasFavoriteRow ? 1 : 0
+        case 1: return filteredTransfersCount
+        default: return 0
         }
     }
     
-    func routToDetails(for transfer: Transfer) {
+    func routeToDetails(for transfer: Transfer) {
         router.showTransfersDetails(transfer: transfer)
     }
     
-    // MARK: - Private Helpers
+    func toggleCanEdit() {
+        canEdit.toggle()
+    }
     
-    func sortTransfers(_ filteredTransfers: [Transfer], by option: SortOption) -> [Transfer] {
+    // MARK: - Private Helpers
+    private func appendUniqueTransfers(current: [Transfer], new: [Transfer]) -> [Transfer] {
+        let existingIDs = Set(current.map(\.id))
+        let uniqueNew = new.filter { !existingIDs.contains($0.id) }
+        return current + uniqueNew
+    }
+    
+    private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
         switch option {
         case .nameAscending:
-            return filteredTransfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
         case .nameDescending:
-            return filteredTransfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
+            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
         case .dateAscending:
-            return filteredTransfers.sorted { $0.date < $1.date }
+            return transfers.sorted { $0.date < $1.date }
         case .dateDescending:
-            return filteredTransfers.sorted { $0.date > $1.date }
+            return transfers.sorted { $0.date > $1.date }
         case .amountAscending:
-            return filteredTransfers.sorted { $0.amount < $1.amount }
+            return transfers.sorted { $0.amount < $1.amount }
         case .amountDescending:
-            return filteredTransfers.sorted { $0.amount > $1.amount }
+            return transfers.sorted { $0.amount > $1.amount }
         case .serverSort:
-            return filteredTransfers
+            return transfers
         }
     }
 }

@@ -55,7 +55,7 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionViewCell", for: indexPath) as! FavoriteCollectionViewCell
         
-        guard let viewModel, let favorite = viewModel.getFavorite(index: indexPath.row) else { return cell }
+        guard let viewModel, let favorite = viewModel.getFavorite(at: indexPath.row) else { return cell }
         cell.configure(with: favorite, viewModel: viewModel)
         return cell
     }
@@ -66,8 +66,8 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let favorite = viewModel?.getFavoriteTransfer(index: indexPath.row) else { return }
-        viewModel?.routToDetails(for: favorite)
+        guard let favorite = viewModel?.getFavoriteTransfer(at: indexPath.row) else { return }
+        viewModel?.routeToDetails(for: favorite)
     }
 }
 

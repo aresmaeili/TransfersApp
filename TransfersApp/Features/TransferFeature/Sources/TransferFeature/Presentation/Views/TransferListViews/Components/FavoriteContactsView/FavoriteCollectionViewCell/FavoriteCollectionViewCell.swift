@@ -20,7 +20,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     
     @IBAction func removeButtonAction(_ sender: Any) {
         guard let viewModel, let transfer else { return }
-        viewModel.editTransfersToFavorite(transfer: transfer)
+        viewModel.toggleFavoriteStatus(for: transfer)
         onUpdate?()
     }
     

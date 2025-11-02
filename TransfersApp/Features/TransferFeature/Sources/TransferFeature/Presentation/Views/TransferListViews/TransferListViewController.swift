@@ -113,7 +113,7 @@ extension TransferListViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.numberOfRows(section: section) ?? 0
+        viewModel?.numberOfRows(in: section) ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -158,7 +158,7 @@ extension TransferListViewController: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        viewModel?.routToDetails(for: transfer)
+        viewModel?.routeToDetails(for: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -197,7 +197,7 @@ private extension TransferListViewController {
             assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
-        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
+        let isFavorite = viewModel?.checkIsFavorite(transfer) ?? false
         cell.configCell(data: transfer, isFavorite: isFavorite)
         return cell
     }
@@ -301,7 +301,7 @@ private extension TransferListViewController {
     }
     
     @objc func editButtonTapped() {
-        viewModel?.canEdit.toggle()
+        viewModel?.toggleCanEdit()
         transferTableView.reloadData()
     }
 }

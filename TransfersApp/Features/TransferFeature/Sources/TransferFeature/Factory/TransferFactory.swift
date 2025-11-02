@@ -11,32 +11,48 @@ import Shared
 
 @MainActor
 protocol TransferFactoryProtocol {
-    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
+    func makeTransferListModule(router: TransferCoordinator) -> UIViewController
     func makeTransferDetailsModule(transfer: Transfer) -> UIViewController
 }
 
 struct TransferFactory: TransferFactoryProtocol {
     
-    let service: TransferDataSource
 
-    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController {
-        let vc = TransferListViewController.instantiate(from: "TransferList", bundle: .module)
-        let repository = TransferRepositoryImpl(service: service)
-        let useCase = DefaultFetchTransfersUseCase(repository: repository)
-        let favoriteRepository = FavoriteRepositoryImpl()
-        let favoriteUseCase = FavoriteTransferUseCase(favoritesRepository: favoriteRepository)
-        let viewModel = TransferListViewModel(transfersUseCase: useCase, favoriteUseCase: favoriteUseCase, router: coordinator)
-        vc.viewModel = viewModel
-        return vc
+        private let transferRepository: TransferRepositoryProtocol
+        private let favoriteRepository: FavoriteTransferRepositoryProtocol
+        
+        init(transferRepository: TransferRepositoryProtocol, favoriteRepository: FavoriteTransferRepositoryProtocol) {
+            self.transferRepository = transferRepository
+            self.favoriteRepository = favoriteRepository
+        }
+    
+    func makeTransferListModule(router: TransferCoordinator) -> UIViewController {
+        
+        // 1. Use Cases Setup
+        let fetchTransfersUseCase: FetchTransfersUseCaseProtocol = FetchTransfersUseCase(repository: transferRepository)
+        let favoriteTransferUseCase: FavoriteTransferUseCaseProtocol = FavoriteTransferUseCase(favoritesRepository: favoriteRepository)
+        
+        
+        // 2. ViewModel Setup
+        let viewModel = TransferListViewModel(fetchTransfersUseCase: fetchTransfersUseCase, favoriteUseCase: favoriteTransferUseCase, router: router)
+        
+        // 3. ViewController Setup
+        let viewController = TransferListViewController.instantiate(from: "TransferList", bundle: .module)
+        viewController.viewModel = viewModel
+        return viewController
     }
     
     func makeTransferDetailsModule(transfer: Transfer) -> UIViewController {
-        let vc = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
-        let favoriteRepository = FavoriteRepositoryImpl()
+        // 1. Use Cases Setup
         let favoriteUseCase = FavoriteTransferUseCase(favoritesRepository: favoriteRepository)
+        
+        // 2. ViewModel Setup
         let viewModel = TransferDetailsViewModel(transfer: transfer, favoriteUseCase: favoriteUseCase)
-        vc.viewModel = viewModel
-        return vc
+        
+        // 3. ViewController Setup
+        let viewController = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
+        viewController.viewModel = viewModel
+        return viewController
     }
 }
 
