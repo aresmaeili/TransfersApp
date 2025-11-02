@@ -350,8 +350,8 @@
             filePath = "Features/TransferFeature/Sources/TransferFeature/Presentation/Views/TransferListViews/Components/TableHeaderView/TableheaderView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "setupView(title:buttonTitle:action:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -7,11 +7,14 @@
 
 import UIKit
 
+// MARK: - FavoriteTableViewCell
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
     weak var viewModel: TransferListViewModel?
-
+    
+    // MARK: - Lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 //        TODO: check this
@@ -34,6 +37,8 @@ class FavoriteTableViewCell: UITableViewCell {
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
     }
     
+    // MARK: - Configuration
+    
     func configure(with viewModel: TransferListViewModel) {
             self.viewModel = viewModel
             collectionView.reloadData()
@@ -41,7 +46,7 @@ class FavoriteTableViewCell: UITableViewCell {
     
     private func bindViewModel() {
         viewModel?.onUpdate = { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.collectionView.reloadData()
         }
     }
@@ -70,4 +75,3 @@ extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDel
         viewModel?.routeToDetails(for: favorite)
     }
 }
-

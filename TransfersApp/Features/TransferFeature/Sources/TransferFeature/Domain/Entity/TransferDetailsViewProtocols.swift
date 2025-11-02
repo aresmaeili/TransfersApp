@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Transfer + TransferDataShowable
 
-extension Transfer: TransferDataShowable {
+extension Transfer: TransferCellShowable {
     
     public var id: String {
         name + cardNumberString

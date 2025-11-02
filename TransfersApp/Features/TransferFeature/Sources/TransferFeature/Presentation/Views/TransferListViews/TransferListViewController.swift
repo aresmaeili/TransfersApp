@@ -4,19 +4,20 @@
 //
 //  Created by AREM on 10/30/25.
 //
+
 import UIKit
 import RouterCore
 import Shared
 
 public final class TransferListViewController: UIViewController {
-    // MARK: - Properties
     
-    // Dependencies
+    // MARK: - Dependencies
     var viewModel: TransferListViewModel?
     
-    // UI Components
+    // MARK: - UI Components
     @IBOutlet private weak var transferTableView: UITableView!
     private let refreshControl = UIRefreshControl()
+    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
@@ -29,14 +30,10 @@ public final class TransferListViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Setup methods
         configureView()
         setupTableView()
         setupSearchController()
         bindViewModel()
-        
-        // Initial data load
         viewModel?.refreshTransfers()
     }
     
@@ -46,11 +43,11 @@ public final class TransferListViewController: UIViewController {
     }
     
     deinit {
-        print("TransferLIst deinit" )
+        print("🧹 Deinit: TransferListViewController")
     }
 }
 
-// MARK: - Configuration & Binding (MVVM Communication)
+// MARK: - Configuration & Binding
 private extension TransferListViewController {
     
     func configureView() {
@@ -64,7 +61,7 @@ private extension TransferListViewController {
         transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
         transferTableView.dataSource = self
         transferTableView.delegate = self
-//        transferTableView.prefetchDataSource = self
+        transferTableView.backgroundColor = .background3
     }
     
     func setupSearchController() {
@@ -78,19 +75,20 @@ private extension TransferListViewController {
     }
     
     private func bindViewModel() {
-        
-        viewModel?.onUpdate = { [weak self] in
+        guard let viewModel else { return }
+
+        viewModel.onUpdate = { [weak self] in
             guard let self = self else { return }
             self.refreshControl.endRefreshing()
             self.transferTableView.reloadData()
         }
         
-        viewModel?.onErrorOccurred = { [weak self] message in
+        viewModel.onErrorOccurred = { [weak self] message in
             self?.showErrorAlert(title: "Error", message: message)
         }
         
-        viewModel?.onLoadingStateChange = { [weak self] isLoading in
-            self?.setLoading(isLoading) // فرض می‌کنیم setLoading یک متد کمکی در Shared/BaseVC است.
+        viewModel.onLoadingStateChange = { [weak self] isLoading in
+            self?.setLoading(isLoading)
         }
     }
 }
@@ -100,7 +98,7 @@ extension TransferListViewController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if searchText != viewModel?.textSearch {
-            viewModel?.textSearch = searchText // ارسال ورودی کاربر به ViewModel
+            viewModel?.changedTextSearch(with: searchText)
         }
     }
 }
@@ -109,7 +107,7 @@ extension TransferListViewController: UISearchResultsUpdating {
 extension TransferListViewController: UITableViewDataSource {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        numberOfSections
+        2
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -130,30 +128,31 @@ extension TransferListViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension TransferListViewController: UITableViewDelegate {
-    var numberOfSections: Int {
-        return 2
-    }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return viewModel?.hasFavoriteRow ?? false ? 150 : 0
+            return (viewModel?.hasFavoriteRow ?? false) ? 150 : 0
         case 1:
-            return 80
+            return 100
         default:
             return 0
         }
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let hasFavorites = viewModel?.hasFavoriteRow ?? false
+        guard let viewModel else { return nil }
         
-        let title = sectionTitle(section: section)
-        let header = makeSectionHeader(title: title.0, hasSortButton: false)
-        guard section == 0 else {
-            return makeSectionHeader(title: title.0, hasSortButton: true)
+        let title = sectionTitle(for: section)
+        let hasFavorites = viewModel.hasFavoriteRow
+        
+        // Section 0: "Favorites" (with Edit/Done)
+        if section == 0 {
+            return hasFavorites ? makeSectionHeader(title: title.title, isFavorites: true) : nil
         }
-        return hasFavorites ? header : nil
+        
+        // Section 1: "Transfers" (with Sort button)
+        return makeSectionHeader(title: title.title, isFavorites: false)
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -166,7 +165,7 @@ extension TransferListViewController: UITableViewDelegate {
         viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
-    func sectionTitle(section: Int) -> (String, String) {
+    private func sectionTitle(for section: Int) -> (title: String, actionTitle: String) {
         switch section {
         case 0:
             return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
@@ -178,7 +177,8 @@ extension TransferListViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - Cell Creation & Configuration Helpers
+// MARK: - Cell Creation
+
 private extension TransferListViewController {
     
     func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
@@ -197,87 +197,52 @@ private extension TransferListViewController {
             assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
+        
         let isFavorite = viewModel?.checkIsFavorite(transfer) ?? false
         cell.configCell(data: transfer, isFavorite: isFavorite)
         return cell
     }
 }
 
-//// MARK: - Cell Creation & Configuration Helpers
-//private extension TransferListViewController {
-//    
-//    func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-//        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
-//            assertionFailure("Could not dequeue FavoriteTableViewCell")
-//            return UITableViewCell()
-//        }
-//        
-//        cell.configure(with: viewModel)
-//        return cell
-//    }
-//    
-//    func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueCell(TransferCell.self),
-//              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
-//            assertionFailure("Could not dequeue TransferCell or get transfer data")
-//            return UITableViewCell()
-//        }
-//        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
-//        cell.configCell(data: transfer, isFavorite: isFavorite)
-//        return cell
-//    }
-//}
-
-// MARK: - Section Header & Sort Logic
+// MARK: - Section Header & Actions
 private extension TransferListViewController {
     
-    func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
-        let headerView = UIView()
-        headerView.backgroundColor = .background3
+    func makeSectionHeader(title: String, isFavorites: Bool) -> UIView {
+        let header = UIView()
+        header.backgroundColor = .background3
         
-        // --- Label Setup ---
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .preferredFont(forTextStyle: .headline)
-        label.textColor = .label
-        label.textAlignment = .left
-        label.text = title
-        headerView.addSubview(label)
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
+        titleLabel.textColor = .label
+        titleLabel.text = title
+        header.addSubview(titleLabel)
+        
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        if isFavorites {
+            let editTitle = viewModel?.canEdit == true ? "Done" : "Edit"
+            button.setTitle(editTitle, for: .normal)
+            button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        } else {
+            button.setTitle("Sort: \(viewModel?.sortOption.displayName ?? "-")", for: .normal)
+            button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        }
+        
+        header.addSubview(button)
         
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
-            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
+            titleLabel.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
+            titleLabel.centerYAnchor.constraint(equalTo: header.centerYAnchor),
+            
+            button.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -16),
+            button.centerYAnchor.constraint(equalTo: header.centerYAnchor),
+            
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: button.leadingAnchor, constant: -8)
         ])
         
-        // --- Sort Button Setup (Conditional) ---
-        if hasSortButton {
-            let sortButton = UIButton(type: .system)
-            sortButton.translatesAutoresizingMaskIntoConstraints = false
-            sortButton.setTitle("Sort: \(viewModel?.sortOption.displayName ?? "-")", for: .normal)
-            sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
-            headerView.addSubview(sortButton)
-            
-            NSLayoutConstraint.activate([
-                sortButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-                sortButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-                label.trailingAnchor.constraint(lessThanOrEqualTo: sortButton.leadingAnchor, constant: -8)
-            ])
-        } else {
-            let editButton = UIButton(type: .system)
-            editButton.translatesAutoresizingMaskIntoConstraints = false
-            let title = viewModel?.canEdit == true ? "Done" : "Edit"
-            editButton.setTitle(title, for: .normal)
-            editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-            headerView.addSubview(editButton)
-
-            NSLayoutConstraint.activate([
-                editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-                editButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-                label.trailingAnchor.constraint(lessThanOrEqualTo: editButton.leadingAnchor, constant: -8)
-            ])
-        }
-        return headerView
+        return header
     }
     
     @objc func sortButtonTapped() {
@@ -289,14 +254,14 @@ private extension TransferListViewController {
             preferredStyle: .actionSheet
         )
         
-        for sort in SortOption.allCases {
+        SortOption.allCases.forEach { sort in
             alert.addAction(UIAlertAction(title: sort.displayName, style: .default) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel?.sortOption = sort
             })
         }
         
-        alert.addAction(UIAlertAction(title:"Cancel", style: .destructive))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
     }
     
