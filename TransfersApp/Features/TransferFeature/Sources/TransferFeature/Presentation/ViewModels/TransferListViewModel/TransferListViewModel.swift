@@ -94,7 +94,13 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     // MARK: - Computed Properties
+<<<<<<< Updated upstream
     private var allFavorites: [Transfer] { favoriteUseCase.fetchFavorites() }
+=======
+    private var allFavorites: [Transfer] {
+        favoriteUseCase.fetchFavorites().reversed()
+    }
+>>>>>>> Stashed changes
     
     var transfersCount: Int { transfers.count }
     var favoritesCount: Int { allFavorites.count }
