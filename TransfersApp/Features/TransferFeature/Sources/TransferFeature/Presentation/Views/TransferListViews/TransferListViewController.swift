@@ -132,9 +132,9 @@ extension TransferListViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return (viewModel?.hasFavoriteRow ?? false) ? 150 : 0
+            return (viewModel?.hasFavoriteRow ?? false) ? 200 : 0
         case 1:
-            return 100
+            return 120
         default:
             return 0
         }

@@ -83,7 +83,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="StarFill" translatesAutoresizingMaskIntoConstraints="NO" id="hfq-Nc-onW">
-                                <rect key="frame" x="16" y="16" width="32" height="32"/>
+                                <rect key="frame" x="16" y="8" width="32" height="32"/>
                                 <color key="tintColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="hfq-Nc-onW" secondAttribute="height" id="2QL-jd-r1V"/>
@@ -97,7 +97,7 @@
                             <constraint firstAttribute="trailing" secondItem="KdG-MO-c4J" secondAttribute="trailing" constant="4" id="N4h-1x-Ijm"/>
                             <constraint firstItem="KdG-MO-c4J" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" constant="4" id="S0Z-SO-hKx"/>
                             <constraint firstItem="GXB-oL-tOJ" firstAttribute="leading" secondItem="Woz-Ti-BIc" secondAttribute="leading" constant="8" id="ePb-Ic-oZI"/>
-                            <constraint firstItem="hfq-Nc-onW" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" constant="16" id="n4Y-s4-XdR"/>
+                            <constraint firstItem="hfq-Nc-onW" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" constant="8" id="n4Y-s4-XdR"/>
                             <constraint firstAttribute="trailing" secondItem="GXB-oL-tOJ" secondAttribute="trailing" constant="8" id="n59-jn-IkS"/>
                             <constraint firstAttribute="bottom" secondItem="GXB-oL-tOJ" secondAttribute="bottom" constant="8" id="q7M-58-gHO"/>
                             <constraint firstItem="GXB-oL-tOJ" firstAttribute="top" secondItem="Woz-Ti-BIc" secondAttribute="top" constant="8" id="xzP-dt-bBw"/>

@@ -55,11 +55,14 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
         
         // Name Label
         nameLabel.textColor = .text1
-        nameLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        nameLabel.font = .systemFont(ofSize: 20, weight: .bold)
 
         // Date Label
         dateLabel.textColor = .text8
         dateLabel.font = .systemFont(ofSize: 10, weight: .semibold)
+        
+        amountLabel.textColor = .text1
+        amountLabel.font = .systemFont(ofSize: 12, weight: .regular)
         
         // Avatar Parent View (Container)
         avatarParentView.clipsToBounds = true
