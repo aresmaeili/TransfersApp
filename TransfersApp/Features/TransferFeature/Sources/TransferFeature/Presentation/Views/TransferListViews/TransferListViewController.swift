@@ -157,12 +157,12 @@ extension TransferListViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
+        guard indexPath.section == 1, let transfer = viewModel?.getTransferItem(at: indexPath.row) else { return }
         viewModel?.routeToDetails(for: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let currentItem = viewModel?.getTransfer(at: indexPath.row) else { return }
+        guard indexPath.section == 1, let currentItem = viewModel?.getTransferItem(at: indexPath.row) else { return }
         viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
@@ -193,7 +193,7 @@ private extension TransferListViewController {
     
     func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueCell(TransferCell.self),
-              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
+              let transfer = viewModel?.getTransferItem(at: indexPath.row) else {
             assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
@@ -281,7 +281,7 @@ private extension TransferListViewController {
     }
     
     @objc func sortButtonTapped() {
-        guard let currentOption = viewModel?.sortOption else { return }
+        guard let _ = viewModel?.sortOption else { return }
         
         let alert = UIAlertController(
             title: "Sort Transfers",
