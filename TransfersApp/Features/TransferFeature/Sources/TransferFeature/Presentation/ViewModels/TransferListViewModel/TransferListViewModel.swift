@@ -48,7 +48,9 @@ protocol TransferListViewModelOutput: AnyObject {
 // MARK: - ViewModel Implementation
 @MainActor
 final class TransferListViewModel: TransferListViewModelProtocol {
-
+    func changedTextSearch(with text: String) {
+//        textSearch = text
+    }
     
     // MARK: - Dependencies
     private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
@@ -85,7 +87,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     // MARK: - Input Properties
-    private var textSearch: String = "" {
+    var textSearch: String = "" {
         didSet { onUpdate?() }
     }
     
@@ -94,13 +96,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     // MARK: - Computed Properties
-<<<<<<< Updated upstream
     private var allFavorites: [Transfer] { favoriteUseCase.fetchFavorites() }
-=======
-    private var allFavorites: [Transfer] {
-        favoriteUseCase.fetchFavorites().reversed()
-    }
->>>>>>> Stashed changes
     
     var transfersCount: Int { transfers.count }
     var favoritesCount: Int { allFavorites.count }
@@ -115,8 +111,8 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     
     var filteredTransfers: [Transfer] {
         let searched = textSearch.isEmpty
-        ? transfers
-        : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
+            ? transfers
+            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
         
         return sortTransfers(searched, by: sortOption)
     }
@@ -141,8 +137,8 @@ final class TransferListViewModel: TransferListViewModelProtocol {
                 }
                 
                 transfers = (page == 1)
-                ? newTransfers
-                : appendUniqueTransfers(current: transfers, new: newTransfers)
+                    ? newTransfers
+                    : appendUniqueTransfers(current: transfers, new: newTransfers)
                 
                 currentPage = page
                 print("✅ Page \(page) loaded (\(transfers.count) transfers)")
@@ -159,7 +155,9 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         onUpdate?()
     }
     
-    func getTransferItem(at index: Int) -> Transfer? { filteredTransfers[safe: index] }
+    func getTransferItem(at index: Int) -> Transfer? {
+        filteredTransfers[safe: index]
+    }
     func getFavorite(at index: Int) -> Transfer? { allFavorites[safe: index] }
     
     func getFavoriteTransfer(at index: Int) -> Transfer? {
@@ -192,16 +190,20 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         fetchTransfers(page: currentPage)
     }
     
+    func numberOfRows(in section: Int) -> Int {
+        switch section {
+        case 0: return hasFavoriteRow ? 1 : 0
+        case 1: return filteredTransfersCount
+        default: return 0
+        }
+    }
+    
     func routeToDetails(for transfer: Transfer) {
         router.showTransfersDetails(transfer: transfer)
     }
     
     func toggleCanEdit() {
         canEdit.toggle()
-    }
-    
-    func changedTextSearch(with text: String) {
-        textSearch = text
     }
     
     // MARK: - Private Helpers

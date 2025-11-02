@@ -1,22 +1,16 @@
-//
-//  TransferListViewController.swift
-//  TransfersApp
-//
-//  Created by AREM on 10/30/25.
-//
 import UIKit
 import RouterCore
 import Shared
 
 public final class TransferListViewController: UIViewController {
-    
     // MARK: - Properties
-        var viewModel: TransferListViewModelProtocol?
+    
+    // Dependencies
+    var viewModel: TransferListViewModel?
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
     private let refreshControl = UIRefreshControl()
-    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
@@ -110,7 +104,7 @@ extension TransferListViewController: UISearchResultsUpdating {
 extension TransferListViewController: UITableViewDataSource {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel?.hasFavoriteRow == true ? 2 : 1
+        return 2
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -184,25 +178,13 @@ extension TransferListViewController: UITableViewDelegate {
         guard indexPath.section == 1, let itemViewModel = viewModel?.getTransferItem(at: indexPath.row) else { return }
         viewModel?.loadNextPageIfNeeded(currentItem: itemViewModel)
     }
-    
-//    func sectionTitle(section: Int) -> (String, String) {
-//        switch section {
-//        case 0:
-//            return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
-//        case 1:
-//            return ("Transfers:", "Sort: \(viewModel?.sortOption.rawValue ?? "-")")
-//        default:
-//            return ("", "")
-//        }
 }
 
 // MARK: - Cell Creation & Configuration Helpers
 private extension TransferListViewController {
     
     func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self),
-              let viewModel = viewModel else {
-            assertionFailure("Could not dequeue FavoriteTableViewCell")
+        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
             return UITableViewCell()
         }
         
@@ -224,7 +206,7 @@ private extension TransferListViewController {
     func makeSectionHeader(title: String, showEditButton: Bool = false, showSortButton: Bool = false, isTransfersSection: Bool) -> UIView {
         // 💡 Simplify header creation by only passing necessary data
         let headerView = UIView()
-        headerView.backgroundColor = .systemBackground
+        headerView.backgroundColor = .appBackground3
         
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -279,10 +261,9 @@ private extension TransferListViewController {
             preferredStyle: .actionSheet
         )
         
-        // 💡 فرض می‌کنیم SortOption.allCases تعریف شده است.
         for sort in SortOption.allCases {
             alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
-                self?.viewModel?.sortOption = sort // 💡 ارسال Input به ViewModel
+                self?.viewModel?.sortOption = sort
             })
         }
         
