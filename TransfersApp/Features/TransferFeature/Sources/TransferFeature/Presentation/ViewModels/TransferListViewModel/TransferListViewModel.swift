@@ -31,6 +31,7 @@ protocol TransferListViewModelOutput: AnyObject {
     var transfersCount: Int { get }
     var sortOption: SortOption { get set }
     var canEdit: Bool { get }
+    var textSearch: String { get }
     var onUpdate: (() -> Void)? { get set }
     var onErrorOccurred: ((String) -> Void)? { get set }
     var onLoadingStateChange: ((Bool) -> Void)? { get set }

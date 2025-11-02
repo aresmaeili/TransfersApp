@@ -24,7 +24,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    weak var viewModel: TransferListViewModel?
+    weak var viewModel: TransferListViewModelInput?
     private var avatarTask: Task<Void, Never>?
     private(set) var transfer: Transfer?
     var onUpdate: (() -> Void)?
@@ -92,7 +92,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with transfer: Transfer, viewModel: TransferListViewModel) {
+    func configure(with transfer: Transfer, viewModel: TransferListViewModelInput) {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"

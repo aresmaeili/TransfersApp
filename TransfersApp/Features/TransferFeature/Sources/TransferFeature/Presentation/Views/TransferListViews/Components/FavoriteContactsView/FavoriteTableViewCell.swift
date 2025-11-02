@@ -11,7 +11,7 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    weak var viewModel: TransferListViewModel?
+    weak var viewModel: TransferListViewModelInput?
     
     // MARK: - Lifecycle
     
@@ -39,7 +39,7 @@ class FavoriteTableViewCell: UITableViewCell {
     
     // MARK: - Configuration
     
-    func configure(with viewModel: TransferListViewModel) {
+    func configure(with viewModel: TransferListViewModelInput) {
             self.viewModel = viewModel
             collectionView.reloadData()
     }
