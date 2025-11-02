@@ -9,31 +9,46 @@ import Foundation
 
 // MARK: - Input Protocol
 @MainActor
-protocol TransferListViewModelInput {
-    func toggleFavoriteStatus(for transfer: Transfer)
-    func toggleCanEdit()
-    func getTransfer(at index: Int) -> Transfer?
-    func getFavorite(at index: Int) -> Transfer?
+protocol TransferListViewModelProtocol: TransferListViewModelInput, TransferListViewModelOutput, AnyObject {}
+
+@MainActor
+protocol TransferListViewModelInput: AnyObject {
+    var favoritesCount: Int { get }
+    var onUpdate: (() -> Void)? { get set }
+    var canEdit: Bool { get }
+    
     func getFavoriteTransfer(at index: Int) -> Transfer?
-    func getFavorites() -> [Transfer]
-    func checkIsFavorite(_ transfer: Transfer) -> Bool
-    func loadNextPageIfNeeded(currentItem: Transfer?)
-    func refreshTransfers()
-    func numberOfRows(in section: Int) -> Int
+    func getFavorite(at index: Int) -> Transfer?
+    func toggleFavoriteStatus(for transfer: Transfer)
     func routeToDetails(for transfer: Transfer)
-    var textSearch: String { get set }
-    var sortOption: SortOption { get set }
 }
 
 // MARK: - Output Protocol
 @MainActor
 protocol TransferListViewModelOutput: AnyObject {
-
+    func checkIsFavorite(_ transfer: Transfer) -> Bool
+    var hasFavoriteRow: Bool { get }
+    var transfersCount: Int { get }
+    var sortOption: SortOption { get set }
+    var canEdit: Bool { get }
+    var onUpdate: (() -> Void)? { get set }
+    var onErrorOccurred: ((String) -> Void)? { get set }
+    var onLoadingStateChange: ((Bool) -> Void)? { get set }
+    
+    func getFavorites() -> [Transfer]
+    func loadNextPageIfNeeded(currentItem: Transfer?)
+    func changedTextSearch(with text: String)
+    func toggleCanEdit()
+    func refreshTransfers()
+    func routeToDetails(for transfer: Transfer)
+    func getTransferItem(at index: Int) -> Transfer?
+    func getFavorite(at index: Int) -> Transfer?
 }
 
 // MARK: - ViewModel Implementation
 @MainActor
-final class TransferListViewModel: TransferListViewModelInput, TransferListViewModelOutput {
+final class TransferListViewModel: TransferListViewModelProtocol {
+
     
     // MARK: - Dependencies
     private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
@@ -70,7 +85,7 @@ final class TransferListViewModel: TransferListViewModelInput, TransferListViewM
     }
     
     // MARK: - Input Properties
-    var textSearch: String = "" {
+    private var textSearch: String = "" {
         didSet { onUpdate?() }
     }
     
@@ -94,8 +109,8 @@ final class TransferListViewModel: TransferListViewModelInput, TransferListViewM
     
     var filteredTransfers: [Transfer] {
         let searched = textSearch.isEmpty
-            ? transfers
-            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
+        ? transfers
+        : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
         
         return sortTransfers(searched, by: sortOption)
     }
@@ -120,8 +135,8 @@ final class TransferListViewModel: TransferListViewModelInput, TransferListViewM
                 }
                 
                 transfers = (page == 1)
-                    ? newTransfers
-                    : appendUniqueTransfers(current: transfers, new: newTransfers)
+                ? newTransfers
+                : appendUniqueTransfers(current: transfers, new: newTransfers)
                 
                 currentPage = page
                 print("✅ Page \(page) loaded (\(transfers.count) transfers)")
@@ -138,7 +153,7 @@ final class TransferListViewModel: TransferListViewModelInput, TransferListViewM
         onUpdate?()
     }
     
-    func getTransfer(at index: Int) -> Transfer? { filteredTransfers[safe: index] }
+    func getTransferItem(at index: Int) -> Transfer? { filteredTransfers[safe: index] }
     func getFavorite(at index: Int) -> Transfer? { allFavorites[safe: index] }
     
     func getFavoriteTransfer(at index: Int) -> Transfer? {
@@ -171,20 +186,16 @@ final class TransferListViewModel: TransferListViewModelInput, TransferListViewM
         fetchTransfers(page: currentPage)
     }
     
-    func numberOfRows(in section: Int) -> Int {
-        switch section {
-        case 0: return hasFavoriteRow ? 1 : 0
-        case 1: return filteredTransfersCount
-        default: return 0
-        }
-    }
-    
     func routeToDetails(for transfer: Transfer) {
         router.showTransfersDetails(transfer: transfer)
     }
     
     func toggleCanEdit() {
         canEdit.toggle()
+    }
+    
+    func changedTextSearch(with text: String) {
+        textSearch = text
     }
     
     // MARK: - Private Helpers

@@ -24,7 +24,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         onUpdate?()
     }
     
-    weak var viewModel: TransferListViewModel?
+    weak var viewModel: TransferListViewModelInput?
     var transfer: Transfer?
     var onUpdate: (() -> Void)?
 
@@ -66,7 +66,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         starImageView.image = UIImage.shared(named: "StarFill")
     }
     
-    func configure(with transfer: Transfer, viewModel: TransferListViewModel) {
+    func configure(with transfer: Transfer, viewModel: TransferListViewModelInput) {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"

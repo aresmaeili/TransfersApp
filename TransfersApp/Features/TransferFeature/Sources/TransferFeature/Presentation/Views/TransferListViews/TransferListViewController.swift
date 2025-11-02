@@ -9,18 +9,18 @@ import RouterCore
 import Shared
 
 public final class TransferListViewController: UIViewController {
-    // MARK: - Properties
     
-    // Dependencies
-    var viewModel: TransferListViewModel?
+    // MARK: - Properties
+        var viewModel: TransferListViewModelProtocol?
     
     // UI Components
     @IBOutlet private weak var transferTableView: UITableView!
     private let refreshControl = UIRefreshControl()
+    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
-        controller.obscuresBackgroundDuringPresentation = true
+        controller.obscuresBackgroundDuringPresentation = false
         controller.hidesNavigationBarDuringPresentation = true
         return controller
     }()
@@ -29,6 +29,10 @@ public final class TransferListViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let _ = viewModel else {
+            fatalError("ViewModel must be injected.")
+        }
         
         // Setup methods
         configureView()
@@ -46,7 +50,7 @@ public final class TransferListViewController: UIViewController {
     }
     
     deinit {
-        print("TransferLIst deinit" )
+        print("TransferList deinit")
     }
 }
 
@@ -64,7 +68,6 @@ private extension TransferListViewController {
         transferTableView.registerCell(FavoriteTableViewCell.self, module: .module)
         transferTableView.dataSource = self
         transferTableView.delegate = self
-//        transferTableView.prefetchDataSource = self
     }
     
     func setupSearchController() {
@@ -90,7 +93,7 @@ private extension TransferListViewController {
         }
         
         viewModel?.onLoadingStateChange = { [weak self] isLoading in
-            self?.setLoading(isLoading) // فرض می‌کنیم setLoading یک متد کمکی در Shared/BaseVC است.
+            self?.setLoading(isLoading)
         }
     }
 }
@@ -99,9 +102,7 @@ private extension TransferListViewController {
 extension TransferListViewController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        if searchText != viewModel?.textSearch {
-            viewModel?.textSearch = searchText // ارسال ورودی کاربر به ViewModel
-        }
+        viewModel?.changedTextSearch(with: searchText)
     }
 }
 
@@ -109,11 +110,20 @@ extension TransferListViewController: UISearchResultsUpdating {
 extension TransferListViewController: UITableViewDataSource {
     
     public func numberOfSections(in tableView: UITableView) -> Int {
-        numberOfSections
+        return viewModel?.hasFavoriteRow == true ? 2 : 1
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel?.numberOfRows(in: section) ?? 0
+        guard let viewModel = viewModel else { return 0 }
+        
+        switch section {
+        case 0:
+            return viewModel.hasFavoriteRow ? 1 : 0
+        case 1:
+            return viewModel.transfersCount
+        default:
+            return 0
+        }
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -130,14 +140,13 @@ extension TransferListViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 extension TransferListViewController: UITableViewDelegate {
-    var numberOfSections: Int {
-        return 2
-    }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let viewModel = viewModel else { return 0 }
+        
         switch indexPath.section {
         case 0:
-            return viewModel?.hasFavoriteRow ?? false ? 150 : 0
+            return viewModel.hasFavoriteRow ? 150 : 0
         case 1:
             return 80
         default:
@@ -146,43 +155,53 @@ extension TransferListViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let hasFavorites = viewModel?.hasFavoriteRow ?? false
+        guard let viewModel = viewModel else { return nil }
         
-        let title = sectionTitle(section: section)
-        let header = makeSectionHeader(title: title.0, hasSortButton: false)
-        guard section == 0 else {
-            return makeSectionHeader(title: title.0, hasSortButton: true)
+        switch section {
+        case 0:
+            return viewModel.hasFavoriteRow ? makeSectionHeader(title: "Favorites:", showEditButton: true, isTransfersSection: false) : nil
+        case 1:
+            return makeSectionHeader(title: "Transfers:", showSortButton: true, isTransfersSection: true)
+        default:
+            return nil
         }
-        return hasFavorites ? header : nil
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let transfer = viewModel?.getTransfer(at: indexPath.row) else { return }
-        viewModel?.routeToDetails(for: transfer)
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch indexPath.section {
+        case 1:
+            guard let transfer = viewModel?.getTransferItem(at: indexPath.row) else { return }
+            viewModel?.routeToDetails(for: transfer)
+        default:
+            return
+        }
+        
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let currentItem = viewModel?.getTransfer(at: indexPath.row) else { return }
-        viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
+        guard indexPath.section == 1, let itemViewModel = viewModel?.getTransferItem(at: indexPath.row) else { return }
+        viewModel?.loadNextPageIfNeeded(currentItem: itemViewModel)
     }
     
-    func sectionTitle(section: Int) -> (String, String) {
-        switch section {
-        case 0:
-            return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
-        case 1:
-            return ("Transfers:", "Sort: \(viewModel?.sortOption.rawValue ?? "-")")
-        default:
-            return ("", "")
-        }
-    }
+//    func sectionTitle(section: Int) -> (String, String) {
+//        switch section {
+//        case 0:
+//            return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
+//        case 1:
+//            return ("Transfers:", "Sort: \(viewModel?.sortOption.rawValue ?? "-")")
+//        default:
+//            return ("", "")
+//        }
 }
 
 // MARK: - Cell Creation & Configuration Helpers
 private extension TransferListViewController {
     
     func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
+        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self),
+              let viewModel = viewModel else {
             assertionFailure("Could not dequeue FavoriteTableViewCell")
             return UITableViewCell()
         }
@@ -192,66 +211,33 @@ private extension TransferListViewController {
     }
     
     func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueCell(TransferCell.self),
-              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
-            assertionFailure("Could not dequeue TransferCell or get transfer data")
-            return UITableViewCell()
-        }
+        guard let cell = tableView.dequeueCell(TransferCell.self), let transfer = viewModel?.getTransferItem(at: indexPath.row) else { return UITableViewCell() }
         let isFavorite = viewModel?.checkIsFavorite(transfer) ?? false
         cell.configCell(data: transfer, isFavorite: isFavorite)
         return cell
     }
 }
 
-//// MARK: - Cell Creation & Configuration Helpers
-//private extension TransferListViewController {
-//    
-//    func createFavoriteCell(for tableView: UITableView) -> UITableViewCell {
-//        guard let cell = tableView.dequeueCell(FavoriteTableViewCell.self), let viewModel else {
-//            assertionFailure("Could not dequeue FavoriteTableViewCell")
-//            return UITableViewCell()
-//        }
-//        
-//        cell.configure(with: viewModel)
-//        return cell
-//    }
-//    
-//    func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueCell(TransferCell.self),
-//              let transfer = viewModel?.getTransfer(at: indexPath.row) else {
-//            assertionFailure("Could not dequeue TransferCell or get transfer data")
-//            return UITableViewCell()
-//        }
-//        let isFavorite = viewModel?.checkIfTransferIsFavorite(transfer: transfer) ?? false
-//        cell.configCell(data: transfer, isFavorite: isFavorite)
-//        return cell
-//    }
-//}
-
-// MARK: - Section Header & Sort Logic
+// MARK: - Section Header & Actions
 private extension TransferListViewController {
     
-    func makeSectionHeader(title: String, hasSortButton: Bool) -> UIView {
+    func makeSectionHeader(title: String, showEditButton: Bool = false, showSortButton: Bool = false, isTransfersSection: Bool) -> UIView {
+        // 💡 Simplify header creation by only passing necessary data
         let headerView = UIView()
-        headerView.backgroundColor = .appBackground3
+        headerView.backgroundColor = .systemBackground
         
-        // --- Label Setup ---
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .headline)
-        label.textColor = .label
-        label.textAlignment = .left
         label.text = title
         headerView.addSubview(label)
         
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
-            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
+            label.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
         ])
         
-        // --- Sort Button Setup (Conditional) ---
-        if hasSortButton {
+        if showSortButton {
             let sortButton = UIButton(type: .system)
             sortButton.translatesAutoresizingMaskIntoConstraints = false
             sortButton.setTitle("Sort: \(viewModel?.sortOption.rawValue ?? "-")", for: .normal)
@@ -263,25 +249,29 @@ private extension TransferListViewController {
                 sortButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
                 label.trailingAnchor.constraint(lessThanOrEqualTo: sortButton.leadingAnchor, constant: -8)
             ])
-        } else {
-            let editButton = UIButton(type: .system)
-            editButton.translatesAutoresizingMaskIntoConstraints = false
-            let title = viewModel?.canEdit == true ? "Done" : "Edit"
-            editButton.setTitle(title, for: .normal)
-            editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-            headerView.addSubview(editButton)
-
-            NSLayoutConstraint.activate([
-                editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-                editButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-                label.trailingAnchor.constraint(lessThanOrEqualTo: editButton.leadingAnchor, constant: -8)
-            ])
         }
+        
+        // 💡 Edit Button (only for Favorites section)
+        if showEditButton {
+             let editButton = UIButton(type: .system)
+             editButton.translatesAutoresizingMaskIntoConstraints = false
+             let buttonTitle = viewModel?.canEdit == true ? "Done" : "Edit"
+             editButton.setTitle(buttonTitle, for: .normal)
+             editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+             headerView.addSubview(editButton)
+
+             NSLayoutConstraint.activate([
+                 editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
+                 editButton.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+                 label.trailingAnchor.constraint(lessThanOrEqualTo: editButton.leadingAnchor, constant: -8)
+             ])
+        }
+        
         return headerView
     }
     
     @objc func sortButtonTapped() {
-        guard let currentOption = viewModel?.sortOption else { return }
+        guard let _ = viewModel?.sortOption else { return }
         
         let alert = UIAlertController(
             title: "Sort Transfers",
@@ -289,18 +279,19 @@ private extension TransferListViewController {
             preferredStyle: .actionSheet
         )
         
+        // 💡 فرض می‌کنیم SortOption.allCases تعریف شده است.
         for sort in SortOption.allCases {
             alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
-                guard let self else { return }
-                self.viewModel?.sortOption = sort
+                self?.viewModel?.sortOption = sort // 💡 ارسال Input به ViewModel
             })
         }
         
-        alert.addAction(UIAlertAction(title:"Cancel", style: .destructive))
+        alert.addAction(UIAlertAction(title:"Cancel", style: .cancel))
         present(alert, animated: true)
     }
     
     @objc func editButtonTapped() {
+        // 💡 فرض می‌کنیم متد toggleCanEdit به ViewModel اضافه شده است.
         viewModel?.toggleCanEdit()
         transferTableView.reloadData()
     }
