@@ -20,7 +20,7 @@ protocol TransferCellShowable {
 }
 
 // MARK: - TransferCell
-final class TransferCell: UITableViewCell { // Use 'final' for performance
+final class TransferCell: UITableViewCell { 
     
     // MARK: Outlets
     @IBOutlet private weak var parentView: UIView!
@@ -34,8 +34,9 @@ final class TransferCell: UITableViewCell { // Use 'final' for performance
     // MARK: Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-//        TODO: Check
-        setupUI()
+        Task { @MainActor in
+            setupUI()
+        }
     }
     
     override func prepareForReuse() {

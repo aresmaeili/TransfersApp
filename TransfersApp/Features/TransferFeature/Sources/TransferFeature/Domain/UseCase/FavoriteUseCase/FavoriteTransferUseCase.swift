@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - FavoriteTransferUseCaseProtocol
 
-/// Defines the operations available for managing favorite transfers.
 protocol FavoriteTransferUseCaseProtocol {
     func fetchFavorites() -> [Transfer]
     func toggleFavoriteStatus(transfer: Transfer)
@@ -18,7 +17,6 @@ protocol FavoriteTransferUseCaseProtocol {
 
 // MARK: - FavoriteTransferUseCase
 
-/// Handles business logic related to marking and retrieving favorite transfers.
 final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
     
     // MARK: - Dependencies

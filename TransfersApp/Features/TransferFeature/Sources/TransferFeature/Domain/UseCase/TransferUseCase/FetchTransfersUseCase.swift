@@ -9,14 +9,12 @@ import Foundation
 
 // MARK: - FetchTransfersUseCaseProtocol
 
-/// Defines the use case for retrieving transfers, either from a remote API or local source.
 protocol FetchTransfersUseCaseProtocol: Sendable {
     func fetchTransfers(page: Int) async throws -> [Transfer]
 }
 
 // MARK: - FetchTransfersUseCase
 
-/// The default implementation of `FetchTransfersUseCaseProtocol`.
 final class FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
     
     // MARK: - Dependencies

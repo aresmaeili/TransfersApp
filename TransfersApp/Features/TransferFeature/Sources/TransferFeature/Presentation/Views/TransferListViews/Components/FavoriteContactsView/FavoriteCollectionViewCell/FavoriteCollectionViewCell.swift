@@ -33,7 +33,9 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupUI()
+        Task { @MainActor in
+            setupUI()
+        }
     }
     
     override func prepareForReuse() {

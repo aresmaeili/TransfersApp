@@ -21,7 +21,6 @@ enum SortOption: String, CaseIterable {
 
 extension SortOption {
     
-    /// User-friendly display name for UI labels or menus.
     var displayName: String {
         switch self {
         case .none: return "No Sort"
@@ -34,7 +33,6 @@ extension SortOption {
         }
     }
     
-    /// Indicates whether the sort is ascending.
     var isAscending: Bool {
         switch self {
         case .nameAscending, .dateAscending, .amountAscending:

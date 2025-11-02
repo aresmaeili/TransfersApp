@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - ViewModel Protocols
 
-/// Defines the outputs and exposed data of the Transfer Details ViewModel.
 protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObject {
     var navigationTitle: String { get }
     var cardViewData: Transfer { get }
@@ -18,7 +17,6 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
     var isFavorite: Bool { get }
 }
 
-/// Defines the input actions that can be triggered from the view.
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
     func toggleFavorite()
@@ -26,7 +24,6 @@ protocol TransferDetailsViewModelInput: AnyObject {
 
 // MARK: - TransferDetailsItem
 
-/// Represents a single labeled item displayed in the transfer details view.
 struct TransferDetailsItem: TransferDetailsItemProtocol {
     let icon: String
     let title: String
@@ -35,7 +32,6 @@ struct TransferDetailsItem: TransferDetailsItemProtocol {
 
 // MARK: - TransferDetailsViewModel
 
-/// ViewModel responsible for providing formatted data for the transfer details screen.
 final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     
     // MARK: - Dependencies
