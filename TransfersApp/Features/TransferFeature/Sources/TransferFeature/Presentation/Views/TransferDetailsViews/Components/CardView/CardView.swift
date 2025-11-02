@@ -69,7 +69,7 @@ final class CardView: UIView, ViewConnectable {
     }
     
     private func setupLabels() {
-        logoLabel.font = .systemFont(ofSize: 14, weight: .black)
+        logoLabel.font = .systemFont(ofSize: 20, weight: .black)
         logoLabel.textColor = .text11
         
         maskedNumberLabel.font = .systemFont(ofSize: 18, weight: .black)
@@ -94,7 +94,7 @@ final class CardView: UIView, ViewConnectable {
     
     private func configure(with data: TransferDetailsCardProtocol) {
         maskedNumberLabel.text = data.maskedCardNumber
-        dueDateLabel.text = data.lastTransferDate
+        dueDateLabel.text = "last transfer: \(data.lastTransferDate)"
         countLabel.text = "#\(data.countOfTransfer)"
         logoLabel.text = data.cardTypeString
         nameLabel.text = data.name

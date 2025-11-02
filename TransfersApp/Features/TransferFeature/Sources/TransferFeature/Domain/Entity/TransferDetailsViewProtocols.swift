@@ -91,6 +91,6 @@ extension Transfer: TransferDetailsProfileProtocol {
     }
     
     var mail: String {
-        "email: \(person?.email ?? "-")"
+        "📧\(person?.email ?? "-")"
     }
 }

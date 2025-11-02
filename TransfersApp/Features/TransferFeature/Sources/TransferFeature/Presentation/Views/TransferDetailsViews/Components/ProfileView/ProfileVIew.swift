@@ -63,7 +63,7 @@ class ProfileView: UIView, ViewConnectable {
         avatarParentView.layer.cornerRadius = 16
         avatarParentView.backgroundColor = .background3
         avatarParentView.layer.borderColor = UIColor.border1.cgColor
-        avatarParentView.layer.borderWidth = 1
+        avatarParentView.layer.borderWidth = 2
         avatarParentView.clipsToBounds = true
         
         avatarImageView.contentMode = .scaleAspectFill
@@ -71,7 +71,7 @@ class ProfileView: UIView, ViewConnectable {
         nameLabel.font = .systemFont(ofSize: 24, weight: .bold)
         nameLabel.textColor = .text1
 
-        mailLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        mailLabel.font = .systemFont(ofSize: 16, weight: .medium)
         mailLabel.textColor = .text3
         
         totalLabel.font = .systemFont(ofSize: 48, weight: .bold)

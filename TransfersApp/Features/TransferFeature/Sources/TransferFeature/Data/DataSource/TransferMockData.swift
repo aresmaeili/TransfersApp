@@ -36,7 +36,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676534970-2Q1WYKZGJ571C2N50WWY/Sammy-19.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 4321",
+                            cardNumber: "6232 4235 5642 4321",
                             cardType: "Visa"
                         ),
                         lastTransfer: "2024-01-10T09:15:00Z",
@@ -53,7 +53,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676395992-9OIQSDIHPL3PQS14IVC6/RC?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 9876",
+                            cardNumber: "6232 4235 5642 9876",
                             cardType: "MasterCard"
                         ),
                         lastTransfer: "2024-02-14T12:45:00Z",
@@ -70,7 +70,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676352637-1K6JK547ZU2L928STUKM/Maria-21-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 1122",
+                            cardNumber: "6232 4235 5642 1122",
                             cardType: "Amex"
                         ), lastTransfer: "2024-03-20T17:30:00Z",
                         note: "Project expense split",
@@ -86,7 +86,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676793533-RHPWC0VZL03GZVOY9WPI/Lou-22-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 3344",
+                            cardNumber: "6232 4235 5642 3344",
                             cardType: "Discover"
                         ),
                         lastTransfer: "2024-04-25T08:00:00Z",
@@ -103,7 +103,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676534970-2Q1WYKZGJ571C2N50WWY/Sammy-19.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 4321",
+                            cardNumber: "6232 4235 5642 4321",
                             cardType: "Visa"
                         ),
                         lastTransfer: "2024-05-30T10:10:00Z",
@@ -120,7 +120,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676395992-9OIQSDIHPL3PQS14IVC6/RC?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 9876",
+                            cardNumber: "6232 4235 5642 9876",
                             cardType: "MasterCard"
                         ),
                         lastTransfer: "2024-06-05T14:20:00Z",
@@ -137,7 +137,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676352637-1K6JK547ZU2L928STUKM/Maria-21-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 1122",
+                            cardNumber: "6232 4235 5642 1122",
                             cardType: "Amex"
                         ), lastTransfer: "2024-07-12T18:40:00Z",
                         note: "Project expense split",
@@ -153,7 +153,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676793533-RHPWC0VZL03GZVOY9WPI/Lou-22-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 3344",
+                            cardNumber: "6232 4235 5642 3344",
                             cardType: "Discover"
                         ),
                         lastTransfer: "2024-08-18T11:50:00Z",
@@ -170,7 +170,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676534970-2Q1WYKZGJ571C2N50WWY/Sammy-19.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 4321",
+                            cardNumber: "6232 4235 5642 4321",
                             cardType: "Visa"
                         ),
                         lastTransfer: "2024-09-22T09:05:00Z",
@@ -187,7 +187,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676395992-9OIQSDIHPL3PQS14IVC6/RC?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 9876",
+                            cardNumber: "6232 4235 5642 9876",
                             cardType: "MasterCard"
                         ),
                         lastTransfer: "2024-10-28T13:30:00Z",
@@ -204,7 +204,7 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676352637-1K6JK547ZU2L928STUKM/Maria-21-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 1122",
+                            cardNumber: "6232 4235 5642 1122",
                             cardType: "Amex"
                         ), lastTransfer: "2024-11-05T16:45:00Z",
                         note: "Project expense split",
@@ -220,11 +220,11 @@ final class TransferMockData: TransferDataSource {
                             avatar: "https://images.squarespace-cdn.com/content/v1/590beb9b893fc0ef1a3523e3/1658676793533-RHPWC0VZL03GZVOY9WPI/Lou-22-Edit.jpg?format=1500w"
                         ),
                         card: Card(
-                            cardNumber: "**** **** **** 3344",
+                            cardNumber: "6232 4235 5642 3344",
                             cardType: "Discover"
                         ),
                         lastTransfer: "2024-12-15T19:55:00Z",
-                        note: "Gift transfer",
+                        note: "Gift transfer to sister in LA - $100 USD - 12/15/2024 - Pending Approval - #2345 - Transfer ID: 123456789 - Reference: 123456789 - Description: Gift for sister in LA - 12/15/2024 Gift transfer to sister in LA - $100 USD - 12/15/2024 - Pending Approval - #2345 - Transfer ID: 123456789 - Reference: 123456789 - Description: Gift for sister in LA - 12/15/2024",
                         moreInfo: MoreInfo(
                             numberOfTransfers: 3,
                             totalTransfer: 300

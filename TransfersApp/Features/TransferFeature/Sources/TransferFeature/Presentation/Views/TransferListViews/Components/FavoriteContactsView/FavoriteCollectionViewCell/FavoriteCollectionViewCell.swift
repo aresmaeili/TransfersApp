@@ -58,7 +58,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     private func setupParentView() {
         parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 20
-        parentView.layer.borderWidth = 1
+        parentView.layer.borderWidth = 2
         parentView.layer.borderColor = UIColor.border2.cgColor
     }
     

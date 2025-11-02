@@ -26,9 +26,10 @@
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-Oc-JAF">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                                <color key="backgroundColor" name="Background 1"/>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" name="Background 3"/>
+                                        <color key="backgroundColor" name="Background 1"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="6xr-Oc-JAF" secondAttribute="bottom" id="EAQ-fR-WFZ"/>
                                             <constraint firstItem="6xr-Oc-JAF" firstAttribute="leading" secondItem="r2o-y0-4WI" secondAttribute="leading" id="sid-7g-1wv"/>
@@ -67,6 +68,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="Background 1">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="Background 3">
             <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
