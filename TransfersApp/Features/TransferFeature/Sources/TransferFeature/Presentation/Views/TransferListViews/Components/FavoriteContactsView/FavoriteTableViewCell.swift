@@ -10,7 +10,7 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    weak var viewModel: TransferListViewModel?
+    weak var viewModel: TransferListViewModelInput?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,7 +34,7 @@ class FavoriteTableViewCell: UITableViewCell {
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
     }
     
-    func configure(with viewModel: TransferListViewModel) {
+    func configure(with viewModel: TransferListViewModelInput) {
             self.viewModel = viewModel
             collectionView.reloadData()
     }
