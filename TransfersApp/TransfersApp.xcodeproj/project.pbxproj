@@ -14,7 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		34348F162EB3164C0007AC16 /* TransfersApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransfersApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34348F162EB3164C0007AC16 /* BTransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -83,7 +83,7 @@
 		34348F172EB3164C0007AC16 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				34348F162EB3164C0007AC16 /* TransfersApp.app */,
+				34348F162EB3164C0007AC16 /* BTransfer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,7 +121,7 @@
 				342D32A52EB3579200CF12D6 /* Shared */,
 			);
 			productName = TransfersApp;
-			productReference = 34348F162EB3164C0007AC16 /* TransfersApp.app */;
+			productReference = 34348F162EB3164C0007AC16 /* BTransfer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +201,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BTransfer;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -234,7 +234,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BTransfer;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
