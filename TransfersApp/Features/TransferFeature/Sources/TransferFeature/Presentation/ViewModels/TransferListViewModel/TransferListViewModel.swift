@@ -82,7 +82,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         didSet { onLoadingStateChange?(isLoading) }
     }
     
-    private(set) var transfers: [Transfer] = [] {
+    private var transfers: [Transfer] = [] {
         didSet { onUpdate?() }
     }
     
@@ -98,7 +98,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     // MARK: - Computed Properties
     private var allFavorites: [Transfer] { favoriteUseCase.fetchFavorites() }
     
-    var transfersCount: Int { transfers.count }
+    var transfersCount: Int { filteredTransfers.count }
     var favoritesCount: Int { allFavorites.count }
     
     var hasFavoriteRow: Bool {
