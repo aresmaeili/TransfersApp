@@ -226,11 +226,6 @@ extension TransferListViewController: UITableViewDelegate {
         if section == .favorites { return viewModel.hasFavoriteRow }
         return true
     }
-    
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let itemViewModel = viewModel?.getTransferItem(at: indexPath.row) else { return }
-        viewModel?.loadNextPageIfNeeded(currentItem: itemViewModel)
-    }
 }
 
 // MARK: - Cell Creation
