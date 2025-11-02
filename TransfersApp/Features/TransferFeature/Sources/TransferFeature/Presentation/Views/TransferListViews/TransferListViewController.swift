@@ -224,8 +224,7 @@ private extension TransferListViewController {
     func makeSectionHeader(title: String, showEditButton: Bool = false, showSortButton: Bool = false, isTransfersSection: Bool) -> UIView {
         // 💡 Simplify header creation by only passing necessary data
         let headerView = UIView()
-        headerView.backgroundColor = .systemBackground
-        
+        headerView.backgroundColor = .appBackground3
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .headline)
