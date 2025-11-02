@@ -22,6 +22,7 @@ final class ItemView: UIView, ViewConnectable {
     
     // MARK: - Outlets
     
+    @IBOutlet private weak var backView: UIView!
     @IBOutlet private weak var parentView: UIView!
     @IBOutlet private weak var iconParentView: UIView!
     @IBOutlet private weak var iconImageView: UIImageView!
@@ -54,6 +55,7 @@ final class ItemView: UIView, ViewConnectable {
     }
     
     private func setupParentView() {
+        backView.backgroundColor = .background1
         parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 16
         parentView.layer.borderWidth = 1
@@ -64,17 +66,17 @@ final class ItemView: UIView, ViewConnectable {
         titleLabel.textColor = .text3
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
-        valueLabel.textColor = .background5
+        valueLabel.textColor = .text6
         valueLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
     
     private func setupIconContainer() {
         iconParentView.backgroundColor = .background5
+        iconImageView.tintColor = .background1
         iconParentView.layer.cornerRadius = 16
         iconParentView.layer.borderWidth = 1
-        iconParentView.layer.borderColor = UIColor.border1.cgColor
+        iconParentView.layer.borderColor = UIColor.border5.cgColor
         iconParentView.clipsToBounds = true
-        
         iconImageView.contentMode = .scaleAspectFit
     }
     

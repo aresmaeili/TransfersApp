@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <device id="retina6_12" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ItemView" customModule="TransferFeature">
             <connections>
+                <outlet property="backView" destination="iN0-l3-epB" id="jqz-QK-DKg"/>
                 <outlet property="iconImageView" destination="q41-N7-G74" id="oHJ-50-f1Y"/>
                 <outlet property="iconParentView" destination="TsV-uY-nsV" id="ltc-aX-eAn"/>
                 <outlet property="parentView" destination="wfw-H6-Zr9" id="hV7-gX-EPS"/>

@@ -14,6 +14,7 @@ final class NoteView: UIView, ViewConnectable {
     
     // MARK: - Outlets
     
+    @IBOutlet private weak var backView: UIView!
     @IBOutlet private weak var parentView: UIView!
     @IBOutlet private weak var iconParentView: UIView!
     @IBOutlet private weak var iconImageView: UIImageView!
@@ -46,6 +47,7 @@ final class NoteView: UIView, ViewConnectable {
     }
     
     private func setupParentView() {
+        backView.backgroundColor = .background1
         parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 16
         parentView.layer.borderWidth = 1

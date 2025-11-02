@@ -133,7 +133,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" name="Background 1"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="yoa-4s-VOJ" firstAttribute="top" secondItem="GNp-q3-n09" secondAttribute="top" constant="24" id="Hdq-RL-XdA"/>
                         <constraint firstAttribute="trailing" secondItem="yoa-4s-VOJ" secondAttribute="trailing" constant="24" id="LFX-Ey-dvA"/>
@@ -158,9 +158,6 @@
     <resources>
         <image name="StarFill" width="42" height="42"/>
         <image name="person" catalog="system" width="128" height="121"/>
-        <namedColor name="Background 1">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="Background 3">
             <color red="0.95686274509803926" green="0.95686274509803926" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
