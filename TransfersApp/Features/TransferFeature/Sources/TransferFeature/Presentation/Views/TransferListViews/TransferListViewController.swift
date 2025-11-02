@@ -105,11 +105,11 @@ extension TransferListViewController: UISearchResultsUpdating {
     }
 }
 
+
 // MARK: - UITableViewDataSource
 extension TransferListViewController: UITableViewDataSource {
-    
     public func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        Section.allCases.count
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,13 +117,12 @@ extension TransferListViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+        switch section {
+        case .favorites:
             return createFavoriteCell(for: tableView)
-        case 1:
+        case .transfers:
             return createTransferCell(for: tableView, at: indexPath)
-        default:
-            return UITableViewCell()
         }
     }
 }
@@ -131,62 +130,72 @@ extension TransferListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension TransferListViewController: UITableViewDelegate {
     
+    // MARK: - Section Definition
+    private enum Section: Int, CaseIterable {
+        case favorites
+        case transfers
+        
+        var height: CGFloat {
+            switch self {
+            case .favorites: return 160
+            case .transfers: return 100
+            }
+        }
+        
+        var titlePrefix: String {
+            switch self {
+            case .favorites: return "Favorites:"
+            case .transfers: return "Transfers:"
+            }
+        }
+    }
+    
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return (viewModel?.hasFavoriteRow ?? false) ? 200 : 0
-        case 1:
-            return 120
-        default:
-            return 0
+        guard let section = Section(rawValue: indexPath.section),
+              let viewModel else { return 0 }
+
+        switch section {
+        case .favorites:
+            return viewModel.hasFavoriteRow ? section.height : 0
+        case .transfers:
+            return section.height
         }
     }
     
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == 0, !(viewModel?.hasFavoriteRow ?? false) else { return UITableView.automaticDimension }
-        return 0
-
+        return shouldShowHeader(for: section) ? UITableView.automaticDimension : 0
     }
     
     public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        guard section == 0, !(viewModel?.hasFavoriteRow ?? false) else { return UITableView.automaticDimension }
-        return 0
-
+        return shouldShowHeader(for: section) ? UITableView.automaticDimension : 0
     }
+    
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let viewModel else { return nil }
+        guard let section = Section(rawValue: section), let viewModel else { return nil }
+        let title = section.titlePrefix
         
-        let title = sectionTitle(for: section)
-        let hasFavorites = viewModel.hasFavoriteRow
-        
-        // Section 0: "Favorites" (with Edit/Done)
-        if section == 0 {
-            return hasFavorites ? makeSectionHeader(title: title.title, isFavorites: true) : nil
+        switch section {
+        case .favorites:
+            return viewModel.hasFavoriteRow ? makeSectionHeader(title: title, isFavorites: true) : nil
+        case .transfers:
+            return makeSectionHeader(title: title, isFavorites: false)
         }
-        
-        // Section 1: "Transfers" (with Sort button)
-        return makeSectionHeader(title: title.title, isFavorites: false)
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let transfer = viewModel?.getTransferItem(at: indexPath.row) else { return }
+        guard let section = Section(rawValue: indexPath.section), section == .transfers, let transfer = viewModel?.getTransferItem(at: indexPath.row) else { return }
         viewModel?.routeToDetails(for: transfer)
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard indexPath.section == 1, let currentItem = viewModel?.getTransferItem(at: indexPath.row) else { return }
+        guard let section = Section(rawValue: indexPath.section), section == .transfers, let currentItem = viewModel?.getTransferItem(at: indexPath.row) else { return }
         viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
-    private func sectionTitle(for section: Int) -> (title: String, actionTitle: String) {
-        switch section {
-        case 0:
-            return ("Favorites:", viewModel?.canEdit ?? false ? "Done" : "Edit")
-        case 1:
-            return ("Transfers:", "Sort: \(viewModel?.sortOption.displayName ?? "-")")
-        default:
-            return ("", "")
-        }
+    private func shouldShowHeader(for sectionIndex: Int) -> Bool {
+        guard let section = Section(rawValue: sectionIndex), let viewModel else { return false }
+        if section == .favorites { return viewModel.hasFavoriteRow }
+        return true
     }
 }
 
@@ -215,7 +224,6 @@ private extension TransferListViewController {
         return cell
     }
 }
-
 // MARK: - Section Header & Actions
 private extension TransferListViewController {
     
@@ -224,44 +232,43 @@ private extension TransferListViewController {
         header.backgroundColor = .background3
         
         let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.textColor = .label
         titleLabel.text = title
-        header.addSubview(titleLabel)
         
         let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
+        configureHeaderButton(button, isFavorites: isFavorites)
         
-        if isFavorites {
-            let editTitle = viewModel?.canEdit == true ? "Done" : "Edit"
-            button.setTitle(editTitle, for: .normal)
-            button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-        } else {
-            button.setTitle("Sort: \(viewModel?.sortOption.displayName ?? "-")", for: .normal)
-            button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        [titleLabel, button].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            header.addSubview($0)
         }
         
-        header.addSubview(button)
-
         let padding: CGFloat = 16
-        
         NSLayoutConstraint.activate([
-            // Title Label Constraints
             titleLabel.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: padding),
             titleLabel.centerYAnchor.constraint(equalTo: header.centerYAnchor, constant: -5),
             
-            // Button Constraints
             button.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -padding),
             button.centerYAnchor.constraint(equalTo: header.centerYAnchor, constant: -5),
-            
-            // Ensure button doesn't overlap the title (optional but good practice)
             button.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 8)
         ])
         
         return header
     }
     
+    func configureHeaderButton(_ button: UIButton, isFavorites: Bool) {
+        if isFavorites {
+            let editTitle = viewModel?.canEdit == true ? "Done" : "Edit"
+            button.setTitle(editTitle, for: .normal)
+            button.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        } else {
+            let sortTitle = "Sort: \(viewModel?.sortOption.displayName ?? "-")"
+            button.setTitle(sortTitle, for: .normal)
+            button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        }
+    }
+
     @objc func sortButtonTapped() {
         guard let _ = viewModel?.sortOption else { return }
         

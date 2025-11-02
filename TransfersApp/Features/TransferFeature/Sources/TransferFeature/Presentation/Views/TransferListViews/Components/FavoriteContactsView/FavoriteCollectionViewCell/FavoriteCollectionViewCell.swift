@@ -94,10 +94,14 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"
-        removeButton.isHidden = !viewModel.canEdit
-        
-        if let urlString = transfer.avatar {
-            loadAvatar(from: urlString)
+
+        UIView.transition(with: removeButton, duration: 0.25, options: .transitionCrossDissolve) { [weak self] in
+            guard let self else { return }
+            self.removeButton.isHidden = !viewModel.canEdit
+            nameLabel.text = transfer.person?.fullName ?? "-"
+            if let urlString = transfer.avatar {
+                loadAvatar(from: urlString)
+            }
         }
     }
     
@@ -116,12 +120,9 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         
         avatarTask = Task {
             guard let image = try? await ImageDownloader.shared.downloadImage(from: urlString) else { return }
-            
-            await MainActor.run {
-                UIView.transition(with: self.avatarImageView, duration: 0.25, options: .transitionCrossDissolve) {
-                    self.avatarImageView.image = image
-                }
-            }
+            self.avatarImageView.image = image
+
+           
         }
     }
 }

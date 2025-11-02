@@ -29,15 +29,15 @@
                                         <rect key="frame" x="0.0" y="0.0" width="161" height="99"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ufy-OQ-6eS">
-                                                <rect key="frame" x="20.666666666666671" y="-10.666666666666664" width="120.00000000000001" height="120.33333333333331"/>
+                                                <rect key="frame" x="40.666666666666657" y="9.6666666666666714" width="80" height="80"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Vy2-XS-8AQ">
-                                                        <rect key="frame" x="0.0" y="0.6666666666666643" width="120" height="119"/>
+                                                        <rect key="frame" x="0.0" y="0.6666666666666643" width="80" height="78.666666666666686"/>
                                                     </imageView>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="120" id="4Gp-tM-LeH"/>
+                                                    <constraint firstAttribute="height" constant="80" id="4Gp-tM-LeH"/>
                                                     <constraint firstAttribute="trailing" secondItem="Vy2-XS-8AQ" secondAttribute="trailing" id="BvA-3Z-bpH"/>
                                                     <constraint firstAttribute="width" secondItem="ufy-OQ-6eS" secondAttribute="height" id="Wgd-sW-ck6"/>
                                                     <constraint firstAttribute="bottom" secondItem="Vy2-XS-8AQ" secondAttribute="bottom" id="dvu-lV-DOZ"/>
@@ -52,20 +52,15 @@
                                             <constraint firstItem="ufy-OQ-6eS" firstAttribute="centerX" secondItem="efu-hF-vly" secondAttribute="centerX" id="gOr-TE-r63"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="UKw-Ir-g8w">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3Sz-8O-Kh7">
                                         <rect key="frame" x="76.333333333333329" y="99" width="8.3333333333333286" height="50"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3Sz-8O-Kh7">
-                                                <rect key="frame" x="0.0" y="0.0" width="8.3333333333333339" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="Bb4-8s-dFi"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Bb4-8s-dFi"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </stackView>
