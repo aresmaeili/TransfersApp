@@ -7,31 +7,36 @@
 
 import UIKit
 
-public final actor ImageDownloader {
-    
+public actor ImageDownloader {
     public static let shared = ImageDownloader()
-    private init() {}
     
     private var cache = NSCache<NSString, UIImage>()
+    private let session: URLSession
+
+    var isCacheActive: Bool { true }
     
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
+
     public func downloadImage(from urlString: String) async throws -> UIImage? {
-        if let cached = cache.object(forKey: urlString as NSString) {
+        if let cached = cache.object(forKey: urlString as NSString) , isCacheActive {
             return cached
         }
         
         guard let url = URL(string: urlString) else {
-            throw URLError(.badURL)
+            return nil
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
+        
+        let (data, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-        
-        guard let image = UIImage(data: data) else {
-            throw URLError(.cannotDecodeContentData)
+              200..<300 ~= httpResponse.statusCode,
+              let image = UIImage(data: data)
+        else {
+            return nil
         }
         
         cache.setObject(image, forKey: urlString as NSString)

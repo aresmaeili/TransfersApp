@@ -45,3 +45,10 @@ public extension UIViewController {
         }
     }
 }
+
+public extension UIViewController {
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        present(alert, animated: true)
+    }
+}

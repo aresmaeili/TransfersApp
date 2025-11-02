@@ -14,14 +14,7 @@ final class AppCoordinator: BaseCoordinator {
         showTransferFeature()
     }
     
-    
     private func showTransferFeature() {
-        let transferCoordinator = TransferCoordinator(navigationController: navigationController)
-        add(child: transferCoordinator)
-        transferCoordinator.start()
-    }
-    
-    private func testFeature() {
         let transferCoordinator = TransferCoordinator(navigationController: navigationController)
         add(child: transferCoordinator)
         transferCoordinator.start()
