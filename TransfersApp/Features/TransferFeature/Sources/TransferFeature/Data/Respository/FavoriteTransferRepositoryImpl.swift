@@ -7,30 +7,45 @@
 
 import Foundation
 
+// MARK: - FavoriteRepositoryImpl
+
+/// Repository responsible for persisting and managing favorite transfers.
 final class FavoriteRepositoryImpl: FavoriteTransferRepositoryProtocol {
-
+    
+    // MARK: - Storage
+    
     @UserDefaultTransfers private var storedFavorites: [Transfer]
-
-    // MARK: - FavoriteTransferRepositoryProtocol Implementation
+    
+    // MARK: - Initialization
+    
+    init() {
+        // Ensures default empty state
+        if storedFavorites.isEmpty {
+            storedFavorites = []
+        }
+    }
+    
+    // MARK: - FavoriteTransferRepositoryProtocol
+    
     func getFavorites() -> [Transfer] {
-        return storedFavorites
+        storedFavorites
     }
     
     func save(transfer: Transfer) {
-        if !storedFavorites.contains(where: { $0.id == transfer.id }) {
-            var updatedFavorites = storedFavorites
-            updatedFavorites.append(transfer)
-            storedFavorites = updatedFavorites
-        }
+        guard !storedFavorites.contains(where: { $0.id == transfer.id }) else { return }
+        
+        var updated = storedFavorites
+        updated.append(transfer)
+        storedFavorites = updated
     }
     
     func remove(transfer: Transfer) {
-        var updatedFavorites = storedFavorites
-        updatedFavorites.removeAll { $0.id == transfer.id }
-        storedFavorites = updatedFavorites
+        var updated = storedFavorites
+        updated.removeAll { $0.id == transfer.id }
+        storedFavorites = updated
     }
     
     func isFavorite(transfer: Transfer) -> Bool {
-            return storedFavorites.contains(where: { $0.id == transfer.id })
-        }
+        storedFavorites.contains { $0.id == transfer.id }
+    }
 }

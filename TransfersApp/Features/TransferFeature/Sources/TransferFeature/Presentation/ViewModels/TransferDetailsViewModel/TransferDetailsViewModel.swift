@@ -7,7 +7,8 @@
 
 import Foundation
 
-// MARK: - Output Protocol
+// MARK: - ViewModel Protocols
+
 protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObject {
     var navigationTitle: String { get }
     var cardViewData: Transfer { get }
@@ -16,36 +17,43 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
     var isFavorite: Bool { get }
 }
 
-// MARK: - Input Protocol
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
     func toggleFavorite()
 }
 
-// MARK: - Model
+// MARK: - TransferDetailsItem
+
 struct TransferDetailsItem: TransferDetailsItemProtocol {
     let icon: String
     let title: String
     let value: String
 }
 
-// MARK: - ViewModel
-final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
+// MARK: - TransferDetailsViewModel
 
+final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
+    
     // MARK: - Dependencies
+    
     private let favoriteUseCase: FavoriteTransferUseCaseProtocol
     
-    // MARK: - Stored Properties
+    // MARK: - State
+    
     private(set) var cardViewData: Transfer
     
     // MARK: - Initialization
+    
     init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCaseProtocol) {
         self.cardViewData = transfer
         self.favoriteUseCase = favoriteUseCase
     }
     
     // MARK: - Outputs
-    var navigationTitle: String { "\(cardViewData.name) Details" }
+    
+    var navigationTitle: String {
+        "\(cardViewData.name) Details"
+    }
     
     var isFavorite: Bool {
         favoriteUseCase.isFavorite(transfer: cardViewData)
@@ -61,10 +69,15 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     }
     
     var noteItem: TransferDetailsItemProtocol {
-        TransferDetailsItem(icon: "text.bubble", title: "Note:", value: cardViewData.note ?? "")
+        TransferDetailsItem(
+            icon: "text.bubble",
+            title: "Note:",
+            value: cardViewData.note ?? ""
+        )
     }
     
     // MARK: - Inputs
+    
     func toggleFavorite() {
         favoriteUseCase.toggleFavoriteStatus(transfer: cardViewData)
     }

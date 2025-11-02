@@ -16,16 +16,7 @@ final class TransferRepositoryImpl: TransferRepositoryProtocol {
     }
 
     func fetchTransfers(page: Int) async throws -> [Transfer] {
-        
-//       TODO: thiss
-//        let dtos: [TransferDTO] = try await dataSource.fetchTransfers(page: page)
-//        return dtos.map { dto in
-//                    // فرض بر وجود متد/Initializer برای نگاشت
-//                    return Transfer(dto: dto)
-//                }
-//        return dtos.map { $0 }
-//        
-        
+
         let dtos: [Transfer] = try await dataSource.fetchTransfers(page: page)
         return dtos.map { $0 }
     }

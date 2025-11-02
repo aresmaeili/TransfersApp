@@ -7,40 +7,60 @@
 
 import UIKit
 
+// MARK: - ViewConnectable
+
+/// A protocol that allows a UIView to automatically connect its corresponding XIB file.
 @MainActor
 public protocol ViewConnectable {
     func connectView(bundle: Bundle?)
 }
 
+// MARK: - Default Implementation
+
 public extension ViewConnectable where Self: UIView {
+    
+    /// Connects the view to its matching XIB file by class name.
     func connectView(bundle: Bundle?) {
-        let name = getName()
-         let nib = UINib(nibName: name, bundle: bundle)
-        let views = nib.instantiate(withOwner: self, options: nil)
-        guard let view = views.first as? UIView else { return }
-        addExpletiveSubView(view: view)
+        let nibName = resolvedNibName()
+        let nib = UINib(nibName: nibName, bundle: bundle)
+        
+        guard let view = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
+            preconditionFailure("❌ Failed to load nib for \(nibName)")
+        }
+        
+        addFullSizeSubview(view)
     }
     
-    // MARK: - ByPass Generic Names
-    private func getName() -> String {
+    // MARK: - Helpers
+    
+    /// Handles generic class names (e.g., `CardView<T>` → `CardView`).
+    private func resolvedNibName() -> String {
         var name = String(describing: Self.self)
         if let genericTypeRange = name.range(of: "<") {
-          name.removeSubrange(genericTypeRange.lowerBound..<name.endIndex)
+            name.removeSubrange(genericTypeRange.lowerBound..<name.endIndex)
         }
         return name
     }
 }
 
-extension UIView {
-    public func addExpletiveSubView(view: UIView, height: CGFloat? = nil) {
+// MARK: - UIView Helper
+
+public extension UIView {
+    
+    /// Adds a subview that fully fills its parent using Auto Layout.
+    func addFullSizeSubview(_ view: UIView, fixedHeight: CGFloat? = nil) {
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
-        view.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        view.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        view.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        view.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        if let height = height, height > 0 {
-            view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: topAnchor),
+            view.bottomAnchor.constraint(equalTo: bottomAnchor),
+            view.leadingAnchor.constraint(equalTo: leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+        
+        if let fixedHeight, fixedHeight > 0 {
+            view.heightAnchor.constraint(equalToConstant: fixedHeight).isActive = true
         }
     }
 }

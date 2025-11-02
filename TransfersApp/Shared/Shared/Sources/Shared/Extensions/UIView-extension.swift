@@ -14,37 +14,34 @@ public extension UIView {
         get { objc_getAssociatedObject(self, &UIView.loadingViewKey) as? UIView }
         set { objc_setAssociatedObject(self, &UIView.loadingViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-
+    
     func showLoading() {
         // Ensure we are updating the UI on the main thread
         let updateUI = {
             guard self.loadingView == nil else { return }
-
+            
             let overlay = UIView(frame: self.bounds)
             overlay.backgroundColor = UIColor(white: 0, alpha: 0.4)
             overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             overlay.isUserInteractionEnabled = true
-
+            
             let spinner = UIActivityIndicatorView(style: .large)
             spinner.translatesAutoresizingMaskIntoConstraints = false
             spinner.startAnimating()
             overlay.addSubview(spinner)
-
+            
             self.addSubview(overlay)
-
+            
             NSLayoutConstraint.activate([
                 spinner.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
                 spinner.centerYAnchor.constraint(equalTo: overlay.centerYAnchor)
             ])
-
+            
             self.loadingView = overlay
             self.isUserInteractionEnabled = false
         }
-
-        if Thread.isMainThread {
+        Task { @MainActor in
             updateUI()
-        } else {
-            OperationQueue.main.addOperation(updateUI)
         }
     }
 
@@ -54,11 +51,8 @@ public extension UIView {
             self.loadingView = nil
             self.isUserInteractionEnabled = true
         }
-
-        if Thread.isMainThread {
+        Task { @MainActor in
             removeUI()
-        } else {
-            OperationQueue.main.addOperation(removeUI)
         }
     }
 }

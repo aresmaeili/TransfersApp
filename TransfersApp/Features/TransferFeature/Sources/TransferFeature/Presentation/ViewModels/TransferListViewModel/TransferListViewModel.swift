@@ -49,7 +49,7 @@ protocol TransferListViewModelOutput: AnyObject {
 @MainActor
 final class TransferListViewModel: TransferListViewModelProtocol {
     func changedTextSearch(with text: String) {
-//        textSearch = text
+        textSearch = text
     }
     
     // MARK: - Dependencies
@@ -91,7 +91,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         didSet { onUpdate?() }
     }
     
-    var sortOption: SortOption = .serverSort {
+    var sortOption: SortOption = .none {
         didSet { onUpdate?() }
     }
     
@@ -199,6 +199,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     func routeToDetails(for transfer: Transfer) {
+        canEdit = false
         router.showTransfersDetails(transfer: transfer)
     }
     
@@ -227,7 +228,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
             return transfers.sorted { $0.amount < $1.amount }
         case .amountDescending:
             return transfers.sorted { $0.amount > $1.amount }
-        case .serverSort:
+        case .none:
             return transfers
         }
     }

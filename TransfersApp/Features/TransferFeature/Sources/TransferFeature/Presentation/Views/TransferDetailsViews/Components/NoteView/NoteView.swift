@@ -4,16 +4,24 @@
 //
 //  Created by AREM on 11/1/25.
 //
+
 import UIKit
 import Shared
 
-class NoteView: UIView, ViewConnectable {
+// MARK: - NoteView
+
+final class NoteView: UIView, ViewConnectable {
     
-    @IBOutlet weak var parentView: UIView!
-    @IBOutlet weak var iconParentView: UIView!
-    @IBOutlet weak var iconImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var valueLabel: UILabel!
+    // MARK: - Outlets
+    
+    @IBOutlet private weak var backView: UIView!
+    @IBOutlet private weak var parentView: UIView!
+    @IBOutlet private weak var iconParentView: UIView!
+    @IBOutlet private weak var iconImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var valueLabel: UILabel!
+    
+    // MARK: - Initializers
     
     required init(with data: TransferDetailsItemProtocol) {
         super.init(frame: .zero)
@@ -24,6 +32,8 @@ class NoteView: UIView, ViewConnectable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup
+    
     private func initialize(with data: TransferDetailsItemProtocol) {
         connectView(bundle: .module)
         setupView()
@@ -31,25 +41,38 @@ class NoteView: UIView, ViewConnectable {
     }
     
     private func setupView() {
-        parentView.backgroundColor = .appBackground1
+        setupParentView()
+        setupLabels()
+        setupIconContainer()
+    }
+    
+    private func setupParentView() {
+        backView.backgroundColor = .background1
+        parentView.backgroundColor = .background1
         parentView.layer.cornerRadius = 16
-        parentView.layer.borderColor = UIColor.appBorder1.cgColor
         parentView.layer.borderWidth = 1
-        
-        titleLabel.textColor = .appText3
+        parentView.layer.borderColor = UIColor.border1.cgColor
+    }
+    
+    private func setupLabels() {
+        titleLabel.textColor = .text3
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
-        valueLabel.textColor = .appText1
+        valueLabel.textColor = .text1
         valueLabel.font = .systemFont(ofSize: 12, weight: .bold)
-        
-        iconParentView.backgroundColor = .appBackground5
+    }
+    
+    private func setupIconContainer() {
+        iconParentView.backgroundColor = .background5
         iconParentView.layer.cornerRadius = 16
-        iconParentView.layer.borderColor = UIColor.appBorder1.cgColor
         iconParentView.layer.borderWidth = 1
+        iconParentView.layer.borderColor = UIColor.border1.cgColor
         iconParentView.clipsToBounds = true
         
         iconImageView.contentMode = .scaleAspectFit
     }
+    
+    // MARK: - Configuration
     
     private func configure(with data: TransferDetailsItemProtocol) {
         titleLabel.text = data.title

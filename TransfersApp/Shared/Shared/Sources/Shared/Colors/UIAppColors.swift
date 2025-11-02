@@ -5,14 +5,6 @@
 //  Created by AREM on 10/30/25.
 //
 
-
-//
-//  AppColors.swift
-//  Colors
-//
-//  Created by AREM on 10/29/25.
-//
-
 import UIKit
 
 public enum UIAppColors {
@@ -25,6 +17,7 @@ public enum UIAppColors {
     // MARK: - Border Colors
     public static let border1 = UIColor(named: "Border 1", in: .module, compatibleWith: nil)!
     public static let border2 = UIColor(named: "Border 2", in: .module, compatibleWith: nil)!
+    public static let border5 = UIColor(named: "Border 5", in: .module, compatibleWith: nil)!
 
     // MARK: - Text Colors
     public static let text1 = UIColor(named: "Text 1", in: .module, compatibleWith: nil)!
@@ -38,12 +31,5 @@ public enum UIAppColors {
     public static let text12 = UIColor(named: "Text 12", in: .module, compatibleWith: nil)!
 
     // MARK: - Operator Colors
-    public static let operator1 = UIColor(named: "Operator 1", in: .module, compatibleWith: nil)!
     public static let operator2 = UIColor(named: "Operator 2", in: .module, compatibleWith: nil)!
-    public static let operator3 = UIColor(named: "Operator 3", in: .module, compatibleWith: nil)!
-
-    // MARK: - Transparent Colors
-    public static let transparent1 = UIColor(named: "Transparent 1", in: .module, compatibleWith: nil)!
-    public static let transparent2 = UIColor(named: "Transparent 2", in: .module, compatibleWith: nil)!
-    public static let transparent3 = UIColor(named: "Transparent 3", in: .module, compatibleWith: nil)!
 }

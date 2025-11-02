@@ -5,7 +5,6 @@
 //  Created by AREM on 10/31/25.
 //
 
-// TODO: Move safe array access helper and Bundle extension to separate files for better organization
 public extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil

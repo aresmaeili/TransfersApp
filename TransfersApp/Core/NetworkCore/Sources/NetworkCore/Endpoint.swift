@@ -24,19 +24,3 @@ public extension Endpoint {
         return components?.url?.absoluteString ?? host + path
     }
 }
-
-public struct TransferListEndpoint: Endpoint {
-    public let page: Int
-
-       public init(page: Int) {
-           self.page = page
-       }
-
-    public var host: String {  "https://2f2e3046-0d87-4cb0-a44e-11eec03cf0fd.mock.pstmn.io" }
-    public var path: String { "/transfer-list" }
-    public var method: HTTPMethod { .get }
-    public var queryItems: [URLQueryItem]? {
-           [URLQueryItem(name: "page", value: "\(page)")]
-       }
-//    public var options: RequestOptions { .init() }
-}

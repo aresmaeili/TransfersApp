@@ -10,30 +10,26 @@ import UIKit
 public extension UIColor {
 
     // MARK: - Background
-    static var appBackground1: UIColor { UIAppColors.background1 }
-    static var appBackground3: UIColor { UIAppColors.background3 }
-    static var appBackground5: UIColor { UIAppColors.background5 }
+    static var background1: UIColor { UIAppColors.background1 }
+    static var background3: UIColor { UIAppColors.background3 }
+    static var background5: UIColor { UIAppColors.background5 }
 
     // MARK: - Borders
-    static var appBorder1: UIColor { UIAppColors.border1 }
-    static var appBorder2: UIColor { UIAppColors.border2 }
+    static var border1: UIColor { UIAppColors.border1 }
+    static var border2: UIColor { UIAppColors.border2 }
+    static var border5: UIColor { UIAppColors.border5 }
 
     // MARK: - Text
-    static var appText1: UIColor { UIAppColors.text1 }
-    static var appText2: UIColor { UIAppColors.text2 }
-    static var appText3: UIColor { UIAppColors.text3 }
-    static var appText6: UIColor { UIAppColors.text6 }
-    static var appText8: UIColor { UIAppColors.text8 }
-    static var appText9: UIColor { UIAppColors.text9 }
-    static var appText10: UIColor { UIAppColors.text10 }
-    static var appText11: UIColor { UIAppColors.text11 }
-    static var appText12: UIColor { UIAppColors.text12 }
+    static var text1: UIColor { UIAppColors.text1 }
+    static var text2: UIColor { UIAppColors.text2 }
+    static var text3: UIColor { UIAppColors.text3 }
+    static var text6: UIColor { UIAppColors.text6 }
+    static var text8: UIColor { UIAppColors.text8 }
+    static var text9: UIColor { UIAppColors.text9 }
+    static var text10: UIColor { UIAppColors.text10 }
+    static var text11: UIColor { UIAppColors.text11 }
+    static var text12: UIColor { UIAppColors.text12 }
 
     // MARK: - Operator
-    static var appOperator1: UIColor { UIAppColors.operator1 }
-    static var appOperator2: UIColor { UIAppColors.operator2 }
-    static var appOperator3: UIColor { UIAppColors.operator3 }
-    static var appTransparent1: UIColor { UIAppColors.transparent1 }
-    static var appTransparent2: UIColor { UIAppColors.transparent2 }
-    static var appTransparent3: UIColor { UIAppColors.transparent3 }
+    static var starColor: UIColor { UIAppColors.operator2 }
 }
