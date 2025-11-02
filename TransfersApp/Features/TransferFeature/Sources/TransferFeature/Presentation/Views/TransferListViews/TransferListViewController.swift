@@ -35,6 +35,8 @@ public final class TransferListViewController: UIViewController {
         setupSearchController()
         bindViewModel()
         viewModel?.refreshTransfers()
+        transferTableView.contentInset = UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0)
+
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -140,6 +142,17 @@ extension TransferListViewController: UITableViewDelegate {
         }
     }
     
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section == 0, !(viewModel?.hasFavoriteRow ?? false) else { return UITableView.automaticDimension }
+        return 0
+
+    }
+    
+    public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        guard section == 0, !(viewModel?.hasFavoriteRow ?? false) else { return UITableView.automaticDimension }
+        return 0
+
+    }
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let viewModel else { return nil }
         
@@ -194,7 +207,6 @@ private extension TransferListViewController {
     func createTransferCell(for tableView: UITableView, at indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueCell(TransferCell.self),
               let transfer = viewModel?.getTransferItem(at: indexPath.row) else {
-            assertionFailure("Could not dequeue TransferCell or get transfer data")
             return UITableViewCell()
         }
         
@@ -231,15 +243,20 @@ private extension TransferListViewController {
         }
         
         header.addSubview(button)
+
+        let padding: CGFloat = 16
         
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: header.centerYAnchor),
+            // Title Label Constraints
+            titleLabel.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: padding),
+            titleLabel.centerYAnchor.constraint(equalTo: header.centerYAnchor, constant: -5),
             
-            button.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -16),
-            button.centerYAnchor.constraint(equalTo: header.centerYAnchor),
+            // Button Constraints
+            button.trailingAnchor.constraint(equalTo: header.trailingAnchor, constant: -padding),
+            button.centerYAnchor.constraint(equalTo: header.centerYAnchor, constant: -5),
             
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: button.leadingAnchor, constant: -8)
+            // Ensure button doesn't overlap the title (optional but good practice)
+            button.leadingAnchor.constraint(greaterThanOrEqualTo: titleLabel.trailingAnchor, constant: 8)
         ])
         
         return header

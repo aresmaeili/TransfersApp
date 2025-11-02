@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="D7W-O9-KQH">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <rect key="frame" x="0.0" y="118" width="393" height="734"/>
                                 <color key="backgroundColor" name="Background 3"/>
                             </tableView>
                         </subviews>
@@ -28,7 +28,7 @@
                             <constraint firstAttribute="trailing" secondItem="D7W-O9-KQH" secondAttribute="trailing" id="0do-H9-nM9"/>
                             <constraint firstAttribute="bottom" secondItem="D7W-O9-KQH" secondAttribute="bottom" id="7Cs-0c-6oc"/>
                             <constraint firstItem="D7W-O9-KQH" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="LcY-Eb-Csb"/>
-                            <constraint firstItem="D7W-O9-KQH" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="ljd-WJ-N3L"/>
+                            <constraint firstItem="D7W-O9-KQH" firstAttribute="top" secondItem="jAt-3r-JM3" secondAttribute="top" id="ljd-WJ-N3L"/>
                         </constraints>
                     </view>
                     <connections>

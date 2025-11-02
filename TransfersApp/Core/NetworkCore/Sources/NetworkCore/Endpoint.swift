@@ -32,7 +32,7 @@ public struct TransferListEndpoint: Endpoint {
            self.page = page
        }
 
-    public var host: String {  "https://2f2e3046-0d87-4cb0-a44e-11eec03cf0fd.mock.pstmn.io" }
+    public var host: String {  "https://3642fee5-406d-487e-9022-65b1a71665b3.mock.pstmn.io" }
     public var path: String { "/transfer-list" }
     public var method: HTTPMethod { .get }
     public var queryItems: [URLQueryItem]? {
