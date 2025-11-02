@@ -4,39 +4,48 @@
 //
 //  Created by AREM on 11/1/25.
 //
-import Foundation
 
 import Foundation
 
+// MARK: - FavoriteTransferUseCaseProtocol
+
+/// Defines the operations available for managing favorite transfers.
 protocol FavoriteTransferUseCaseProtocol {
     func fetchFavorites() -> [Transfer]
     func toggleFavoriteStatus(transfer: Transfer)
     func isFavorite(transfer: Transfer) -> Bool
 }
 
-final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
+// MARK: - FavoriteTransferUseCase
 
-    private let favoritesRepository: FavoriteTransferRepositoryProtocol
+/// Handles business logic related to marking and retrieving favorite transfers.
+final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
     
-    init(favoritesRepository: FavoriteTransferRepositoryProtocol) {
-        self.favoritesRepository = favoritesRepository
+    // MARK: - Dependencies
+    
+    private let repository: FavoriteTransferRepositoryProtocol
+    
+    // MARK: - Initialization
+    
+    init(repository: FavoriteTransferRepositoryProtocol) {
+        self.repository = repository
     }
     
+    // MARK: - FavoriteTransferUseCaseProtocol Implementation
+    
     func fetchFavorites() -> [Transfer] {
-        favoritesRepository.getFavorites()
+        repository.getFavorites()
     }
     
     func toggleFavoriteStatus(transfer: Transfer) {
         if isFavorite(transfer: transfer) {
-            favoritesRepository.remove(transfer: transfer)
+            repository.remove(transfer: transfer)
         } else {
-            favoritesRepository.save(transfer: transfer)
-
+            repository.save(transfer: transfer)
         }
     }
-
+    
     func isFavorite(transfer: Transfer) -> Bool {
-        let favorites = favoritesRepository.getFavorites()
-        return favorites.contains(transfer)
+        repository.isFavorite(transfer: transfer)
     }
 }

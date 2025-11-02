@@ -24,44 +24,6 @@ public struct Transfer: Codable, Equatable, Sendable, Identifiable, Hashable {
       }
 }
 
-extension Transfer: TransferCellShowable {
-    var avatarURLString: String? {
-        person?.avatar ?? ""
-    }
-    
-    public var id: String {
-        return (name + cardNo)
-    }
-    
-    var cardNo: String {
-        card?.cardNumber ?? "-"
-    }
-    
-    var avatar: String? {
-        person?.avatar
-    }
-    
-    var name: String {
-        person?.fullName ?? "-"
-    }
-
-    var date: Date {
-        lastTransfer?.toISODate() ?? Date(timeIntervalSince1970: 0)
-    }
-    
-    var dateString: String {
-        lastTransfer?.toISODate()?.toDateString(dateStyle: .medium, timeStyle: .none) ??  ""
-    }
-    
-    var amount: Int {
-        moreInfo?.totalTransfer ?? 0
-    }
-    
-    var amountString: String {
-        moreInfo?.totalTransfer?.asMoneyString() ?? ""
-    }
-}
-
 // MARK: - Card
 public struct Card: Codable, Equatable, Sendable, Hashable {
         let cardNumber, cardType: String?
