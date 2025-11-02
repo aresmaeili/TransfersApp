@@ -14,6 +14,7 @@ final class TransferDetailsViewController: UIViewController {
     
     // MARK: - Outlets
     
+    @IBOutlet private var backView: UIView!
     @IBOutlet private weak var stackView: UIStackView!
     
     // MARK: - Dependencies
@@ -41,6 +42,7 @@ final class TransferDetailsViewController: UIViewController {
     // MARK: - Setup
     
     private func setupUI() {
+        backView.backgroundColor = .background1
         updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
         setupContent()
     }

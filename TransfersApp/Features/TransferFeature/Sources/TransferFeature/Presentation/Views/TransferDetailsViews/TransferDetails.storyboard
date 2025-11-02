@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,7 +47,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="Background 1"/>
                         <constraints>
                             <constraint firstItem="Pf2-kv-sB0" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="24r-Sr-Qjj"/>
                             <constraint firstItem="Pf2-kv-sB0" firstAttribute="bottom" secondItem="5EZ-qb-Rvc" secondAttribute="bottom" id="4jI-DC-9ae"/>
@@ -57,6 +58,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backView" destination="5EZ-qb-Rvc" id="qyt-D9-kmG"/>
                         <outlet property="stackView" destination="6xr-Oc-JAF" id="67T-tn-m75"/>
                     </connections>
                 </viewController>
@@ -65,4 +67,9 @@
             <point key="canvasLocation" x="139.69465648854961" y="91.549295774647888"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="Background 1">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TransferFlowFactory: AnyObject {
+protocol TransferCoordinatorProtocol: AnyObject {
     func makeTransferList(coordinator: TransferCoordinator) -> UIViewController
     func makeTransfersDetails(transfer: Transfer) -> UIViewController
 }

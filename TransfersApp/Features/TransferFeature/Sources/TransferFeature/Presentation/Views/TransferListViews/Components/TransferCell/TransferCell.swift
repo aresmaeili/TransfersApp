@@ -60,7 +60,7 @@ final class TransferCell: UITableViewCell {
 
         // Date Label
         dateLabel.textColor = .text8
-        dateLabel.font = .systemFont(ofSize: 10, weight: .semibold)
+        dateLabel.font = .systemFont(ofSize: 8, weight: .semibold)
         
         amountLabel.textColor = .text1
         amountLabel.font = .systemFont(ofSize: 12, weight: .regular)
