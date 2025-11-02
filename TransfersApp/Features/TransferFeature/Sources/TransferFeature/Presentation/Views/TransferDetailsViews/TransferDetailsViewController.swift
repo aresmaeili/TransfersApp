@@ -36,7 +36,7 @@ final class TransferDetailsViewController: UIViewController {
             stackView.addArrangedSubview(profileView)
         }
         
-        if let items = viewModel?.items {
+        if let items = viewModel?.detailItems {
             items.forEach { item in
                 if !item.value.isEmpty {
                     let itemView = ItemView(with: item)
@@ -45,7 +45,7 @@ final class TransferDetailsViewController: UIViewController {
             }
         }
         
-        if let note = viewModel?.note, !note.value.isEmpty {
+        if let note = viewModel?.noteItem, !note.value.isEmpty {
             let noteView = NoteView(with: note)
             stackView.addArrangedSubview(noteView)
         }

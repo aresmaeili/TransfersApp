@@ -32,7 +32,7 @@ class ProfileView: UIView, ViewConnectable {
         starbutton.setImage(image, for: .normal)
     }
     
-    weak var viewModel: TransferDetailsViewModel?
+    weak var viewModel: TransferDetailsViewModelInput?
     
     required init(viewModel: TransferDetailsViewModel?) {
         
@@ -78,7 +78,6 @@ class ProfileView: UIView, ViewConnectable {
         totalLabel.textColor = .appText6
         
     }
-    
     
     private func configure(viewModel: TransferDetailsViewModel?) {
         guard let data = viewModel?.cardViewData, let isFavorite = viewModel?.isFavorite else { return }

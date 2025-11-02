@@ -21,7 +21,6 @@ protocol TransferListViewModelInput {
     func refreshTransfers()
     func numberOfRows(in section: Int) -> Int
     func routeToDetails(for transfer: Transfer)
-    
     var textSearch: String { get set }
     var sortOption: SortOption { get set }
 }
@@ -29,14 +28,7 @@ protocol TransferListViewModelInput {
 // MARK: - Output Protocol
 @MainActor
 protocol TransferListViewModelOutput: AnyObject {
-    var onUpdate: (() -> Void)? { get set }
-    var onErrorOccurred: ((String) -> Void)? { get set }
-    var onLoadingStateChange: ((Bool) -> Void)? { get set }
-    var transfersCount: Int { get }
-    var favoritesCount: Int { get }
-    var hasFavoriteRow: Bool { get }
-    var filteredTransfers: [Transfer] { get }
-    var filteredTransfersCount: Int { get }
+
 }
 
 // MARK: - ViewModel Implementation
