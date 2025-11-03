@@ -113,7 +113,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     var filteredTransfers: [Transfer] { 
-        fetchTransfersUseCase.filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
+       filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
     }
     
     var filteredTransfersCount: Int { filteredTransfers.count }
@@ -192,6 +192,31 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         case 1: return filteredTransfersCount
         default: return 0
         }
+    }
+    
+    
+    private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
+        switch option {
+        case .nameAscending:
+            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .nameDescending:
+            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
+        case .amountAscending:
+            return transfers.sorted { $0.amount < $1.amount }
+        case .amountDescending:
+            return transfers.sorted { $0.amount > $1.amount }
+        case .none:
+            return transfers
+        }
+    }
+    
+    
+    func filterAndSort( _ transfers: [Transfer], searchText: String, sortOption: SortOption) -> [Transfer] {
+        let searched = searchText.isEmpty
+        ? transfers
+        : transfers.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        
+        return sortTransfers(searched, by: sortOption)
     }
     
     func routeToDetails(for transfer: Transfer) {
