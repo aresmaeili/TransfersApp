@@ -82,10 +82,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     private(set) var isLoading = false {
         didSet { onLoadingStateChange?(isLoading) }
     }
-    
-    private var transfers: [Transfer] = [] {
-        didSet { onUpdate?() }
-    }
+  
     
     // MARK: - Input Properties
     var textSearch: String = "" {
@@ -102,6 +99,9 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         favoriteUseCase.favoritesCount
     }
     
+    private var transfers: [Transfer] = [] {
+        didSet { onUpdate?() }
+    }
     var transfersCount: Int { filteredTransfers.count }
     
     var hasFavoriteRow: Bool {
@@ -166,13 +166,13 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
-        guard let currentItem, !isLoading, !hasReachedEnd else { return }
+        guard let currentItem, !isLoading, !hasReachedEnd, textSearch.isEmpty else { return }
         guard let currentIndex = filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) else { return }
-        
-        let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
-        if currentIndex >= thresholdIndex {
+        guard filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2) < currentIndex else { return }
+//        let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
+//        if currentIndex >= thresholdIndex {
             fetchTransfers(page: currentPage + 1)
-        }
+//        }
     }
     
     func refreshTransfers() {
