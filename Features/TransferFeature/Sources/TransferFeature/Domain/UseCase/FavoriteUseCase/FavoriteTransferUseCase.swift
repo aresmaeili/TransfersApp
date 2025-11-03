@@ -10,6 +10,9 @@ import Foundation
 // MARK: - FavoriteTransferUseCaseProtocol
 
 protocol FavoriteTransferUseCaseProtocol {
+    var isFavoriteExist: Bool { get }
+    func getFavoriteItem(at index: Int) -> Transfer?
+    var favoritesCount: Int { get }
     func fetchFavorites() -> [Transfer]
     func toggleFavoriteStatus(transfer: Transfer)
     func isFavorite(transfer: Transfer) -> Bool
@@ -29,10 +32,24 @@ final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
         self.repository = repository
     }
     
+    
+    private var allFavorites: [Transfer] { fetchFavorites() }
+
+    var favoritesCount: Int { allFavorites.count }
+    
+    
+    var isFavoriteExist: Bool {
+        !allFavorites.isEmpty
+    }
+    
     // MARK: - FavoriteTransferUseCaseProtocol Implementation
     
     func fetchFavorites() -> [Transfer] {
         repository.getFavorites()
+    }
+    
+    func getFavoriteItem(at index: Int) -> Transfer? {
+        allFavorites[safe: index]
     }
     
     func toggleFavoriteStatus(transfer: Transfer) {
