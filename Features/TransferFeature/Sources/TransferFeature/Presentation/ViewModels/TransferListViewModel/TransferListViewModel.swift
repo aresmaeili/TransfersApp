@@ -112,7 +112,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         return hasFavorite
     }
     
-    var filteredTransfers: [Transfer] {
+    var filteredTransfers: [Transfer] { 
         fetchTransfersUseCase.filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
     }
     
