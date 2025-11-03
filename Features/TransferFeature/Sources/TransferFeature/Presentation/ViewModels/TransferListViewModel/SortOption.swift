@@ -11,8 +11,7 @@ enum SortOption: String, CaseIterable {
     case none = "None"
     case nameAscending = "Name Asc"
     case nameDescending = "Name Desc"
-    case dateAscending = "Date Asc"
-    case dateDescending = "Date Desc"
+
     case amountAscending = "Amount Asc"
     case amountDescending = "Amount Desc"
 }
@@ -26,8 +25,6 @@ extension SortOption {
         case .none: return "No Sort"
         case .nameAscending: return "Name (A–Z)"
         case .nameDescending: return "Name (Z–A)"
-        case .dateAscending: return "Date (Oldest First)"
-        case .dateDescending: return "Date (Newest First)"
         case .amountAscending: return "Amount (Low–High)"
         case .amountDescending: return "Amount (High–Low)"
         }
@@ -35,7 +32,7 @@ extension SortOption {
     
     var isAscending: Bool {
         switch self {
-        case .nameAscending, .dateAscending, .amountAscending:
+        case .nameAscending, .amountAscending:
             return true
         default:
             return false
