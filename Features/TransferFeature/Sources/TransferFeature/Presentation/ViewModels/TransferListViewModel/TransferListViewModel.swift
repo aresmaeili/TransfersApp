@@ -131,6 +131,10 @@ final class TransferListViewModel: TransferListViewModelProtocol {
             }
             do {
                 let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
+                guard let newTransfers, !newTransfers.isEmpty else {
+                    hasReachedEnd = true
+                    return
+                }
                 let totalTransfer = fetchTransfersUseCase.mergeTransfers(current: transfers, new: newTransfers)
                 self.transfers = totalTransfer
             } catch {
@@ -170,8 +174,8 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         guard let currentItem, !isLoading, !hasReachedEnd, textSearch.isEmpty else { return }
         guard let currentIndex = filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) else { return }
         guard filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2) < currentIndex else { return }
-
-            fetchTransfers(page: currentPage + 1)
+        currentPage = currentPage + 1
+        fetchTransfers(page: currentPage)
     }
     
     func refreshTransfers() {
