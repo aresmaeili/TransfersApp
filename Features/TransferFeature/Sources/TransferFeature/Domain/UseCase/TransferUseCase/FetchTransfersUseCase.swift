@@ -24,6 +24,7 @@ import Foundation
 //}
 
 protocol FetchTransfersUseCaseProtocol: Sendable {
+    
     func fetchTransfers(page: Int) async throws -> [Transfer]
     
     func filterAndSort( _ transfers: [Transfer], searchText: String, sortOption: SortOption) -> [Transfer]
@@ -35,6 +36,17 @@ protocol FetchTransfersUseCaseProtocol: Sendable {
 // MARK: - FetchTransfersUseCase
 
 final class FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
+      
+    // MARK: - Dependencies
+    
+    private let repository: TransferRepositoryProtocol
+    
+    // MARK: - Initialization
+    
+    init(repository: TransferRepositoryProtocol) {
+        self.repository = repository
+    }
+    
     
     func filterAndSort( _ transfers: [Transfer], searchText: String, sortOption: SortOption) -> [Transfer] {
         let searched = searchText.isEmpty
@@ -63,15 +75,6 @@ final class FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
         case .none:
             return transfers
         }
-    }
-    // MARK: - Dependencies
-    
-    private let repository: TransferRepositoryProtocol
-    
-    // MARK: - Initialization
-    
-    init(repository: TransferRepositoryProtocol) {
-        self.repository = repository
     }
     
     // MARK: - FetchTransfersUseCaseProtocol
