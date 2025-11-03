@@ -103,7 +103,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     var transfersCount: Int { filteredTransfers.count }
-
+    
     var hasFavoriteRow: Bool {
         let hasFavorite: Bool = favoriteUseCase.isFavoriteExist
         if !hasFavorite {
@@ -120,11 +120,21 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     
     // MARK: - Data Fetching
     private func fetchTransfers(page: Int) {
-        Task {
+        guard !isLoading else { return }
+        
+        Task { [weak self] in
+            guard let self else { return }
+            
+            isLoading = true
+            defer {
+                isLoading = false
+            }
             do {
-                transfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
+                let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
+                let totalTransfer = fetchTransfersUseCase.mergeTransfers(current: transfers, new: newTransfers)
+                self.transfers = totalTransfer
             } catch {
-                print(error)
+                onErrorOccurred?(error.localizedDescription)
             }
         }
     }
@@ -160,7 +170,9 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         guard let currentIndex = filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) else { return }
         
         let thresholdIndex = filteredTransfers.index(filteredTransfers.endIndex, offsetBy: -2)
-        if currentIndex >= thresholdIndex { fetchTransfers(page: currentPage + 1) }
+        if currentIndex >= thresholdIndex {
+            fetchTransfers(page: currentPage + 1)
+        }
     }
     
     func refreshTransfers() {

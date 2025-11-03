@@ -28,7 +28,7 @@ protocol FetchTransfersUseCaseProtocol: Sendable {
     
     func filterAndSort( _ transfers: [Transfer], searchText: String, sortOption: SortOption) -> [Transfer]
     
-    func mergeTransfers( current: [Transfer], new: [Transfer] ) -> [Transfer]
+    func mergeTransfers( current: [Transfer]?, new: [Transfer] ) -> [Transfer]
 }
 
 
@@ -44,10 +44,10 @@ final class FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
         return sortTransfers(searched, by: sortOption)
     }
     
-    func mergeTransfers(current: [Transfer], new: [Transfer]) -> [Transfer] {
-        let existingIDs = Set(current.map(\.id))
-        let uniqueNew = new.filter { !existingIDs.contains($0.id) }
-        return current + uniqueNew
+    func mergeTransfers(current: [Transfer]?, new: [Transfer]) -> [Transfer] {
+        guard var current, !current.isEmpty else { return new }
+        current.append(contentsOf: new)
+        return current
     }
     
     private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
