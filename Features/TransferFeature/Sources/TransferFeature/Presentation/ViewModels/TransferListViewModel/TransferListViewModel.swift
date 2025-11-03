@@ -83,10 +83,6 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         didSet { onLoadingStateChange?(isLoading) }
     }
     
-    private var transfers: [Transfer] = [] {
-        didSet { onUpdate?() }
-    }
-    
     // MARK: - Input Properties
     var textSearch: String = "" {
         didSet { onUpdate?() }
@@ -102,8 +98,23 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         favoriteUseCase.favoritesCount
     }
     
+    
+    private var transfers: [Transfer] = [] {
+        didSet { onUpdate?() }
+    }
+    
     var transfersCount: Int { filteredTransfers.count }
+    
+    var filteredTransfersCount: Int { filteredTransfers.count }
 
+    var filteredTransfers: [Transfer] {
+        let searched = textSearch.isEmpty
+            ? transfers
+            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
+        
+        return fetchTransfersUseCase.sortTransfers(transfers, by: sortOption)
+    }
+    
     var hasFavoriteRow: Bool {
         let hasFavorite: Bool = favoriteUseCase.isFavoriteExist
         if !hasFavorite {
@@ -112,15 +123,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         return hasFavorite
     }
     
-    var filteredTransfers: [Transfer] {
-        let searched = textSearch.isEmpty
-            ? transfers
-            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
-        
-        return sortTransfers(searched, by: sortOption)
-    }
-    
-    var filteredTransfersCount: Int { filteredTransfers.count }
+
     
     // MARK: - Data Fetching
     private func fetchTransfers(page: Int) {
@@ -215,24 +218,5 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         let existingIDs = Set(current.map(\.id))
         let uniqueNew = new.filter { !existingIDs.contains($0.id) }
         return current + uniqueNew
-    }
-    
-    private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
-        switch option {
-        case .nameAscending:
-            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        case .nameDescending:
-            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
-        case .dateAscending:
-            return transfers.sorted { $0.date < $1.date }
-        case .dateDescending:
-            return transfers.sorted { $0.date > $1.date }
-        case .amountAscending:
-            return transfers.sorted { $0.amount < $1.amount }
-        case .amountDescending:
-            return transfers.sorted { $0.amount > $1.amount }
-        case .none:
-            return transfers
-        }
     }
 }
