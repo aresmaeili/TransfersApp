@@ -15,6 +15,7 @@
 
 /* Begin PBXFileReference section */
 		34348F162EB3164C0007AC16 /* BTransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34A8953C2EB8753300534F80 /* TransfersApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TransfersApp.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -95,6 +96,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		34A8953E2EB8753300534F80 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -151,6 +157,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 34348F172EB3164C0007AC16 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 34A8953E2EB8753300534F80 /* Products */;
+					ProjectRef = 34A8953C2EB8753300534F80 /* TransfersApp.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				34348F152EB3164C0007AC16 /* TransfersApp */,
@@ -186,7 +198,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PM5BA2RD58;
+				DEVELOPMENT_TEAM = M5RJ49734H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TransfersApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -200,7 +212,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApp;
+				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApps;
 				PRODUCT_NAME = BTransfer;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -219,7 +231,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PM5BA2RD58;
+				DEVELOPMENT_TEAM = M5RJ49734H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TransfersApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -233,7 +245,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApp;
+				PRODUCT_BUNDLE_IDENTIFIER = Arem.TransfersApps;
 				PRODUCT_NAME = BTransfer;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
