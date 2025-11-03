@@ -13,9 +13,9 @@ protocol TransferListViewModelProtocol: TransferListViewModelInput, TransferList
 
 @MainActor
 protocol TransferListViewModelInput: AnyObject {
-    var favoritesCount: Int { get }
     var onUpdate: (() -> Void)? { get set }
     var canEdit: Bool { get }
+    var favoriteCount: Int { get }
     
     func getFavoriteTransfer(at index: Int) -> Transfer?
     func getFavorite(at index: Int) -> Transfer?
@@ -97,13 +97,15 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     // MARK: - Computed Properties
-    private var allFavorites: [Transfer] { favoriteUseCase.fetchFavorites() }
+    
+    var favoriteCount: Int {
+        favoriteUseCase.favoritesCount
+    }
     
     var transfersCount: Int { filteredTransfers.count }
-    var favoritesCount: Int { allFavorites.count }
-    
+
     var hasFavoriteRow: Bool {
-        let hasFavorite: Bool = !allFavorites.isEmpty
+        let hasFavorite: Bool = favoriteUseCase.isFavoriteExist
         if !hasFavorite {
             canEdit = false
         }
@@ -159,10 +161,10 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     func getTransferItem(at index: Int) -> Transfer? {
         filteredTransfers[safe: index]
     }
-    func getFavorite(at index: Int) -> Transfer? { allFavorites[safe: index] }
+    func getFavorite(at index: Int) -> Transfer? { favoriteUseCase.getFavoriteItem(at: index) }
     
     func getFavoriteTransfer(at index: Int) -> Transfer? {
-        guard let favorite = allFavorites[safe: index],
+        guard let favorite = favoriteUseCase.getFavoriteItem(at: index),
               let transfer = transfers.first(where: { $0 == favorite }) else {
             onErrorOccurred?("Transfer not found in list.")
             return nil
@@ -170,10 +172,10 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         return transfer
     }
     
-    func getFavorites() -> [Transfer] { allFavorites.reversed() }
+    func getFavorites() -> [Transfer] { favoriteUseCase.fetchFavorites().reversed() }
     
     func checkIsFavorite(_ transfer: Transfer) -> Bool {
-        allFavorites.contains(where: { $0.id == transfer.id })
+        favoriteUseCase.isFavorite(transfer: transfer)
     }
     
     func loadNextPageIfNeeded(currentItem: Transfer?) {
