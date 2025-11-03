@@ -131,7 +131,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
             }
             do {
                 let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
-                guard let newTransfers, !newTransfers.isEmpty else {
+                guard !newTransfers.isEmpty else {
                     hasReachedEnd = true
                     return
                 }
