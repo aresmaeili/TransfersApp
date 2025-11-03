@@ -175,6 +175,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     func refreshTransfers() {
+        canEdit = false 
         currentPage = 1
         transfers.removeAll()
         hasReachedEnd = false
