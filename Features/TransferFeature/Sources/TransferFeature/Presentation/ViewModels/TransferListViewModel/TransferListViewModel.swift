@@ -113,41 +113,18 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     var filteredTransfers: [Transfer] {
-        let searched = textSearch.isEmpty
-            ? transfers
-            : transfers.filter { $0.name.localizedCaseInsensitiveContains(textSearch) }
-        
-        return sortTransfers(searched, by: sortOption)
+        fetchTransfersUseCase.filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
     }
     
     var filteredTransfersCount: Int { filteredTransfers.count }
     
     // MARK: - Data Fetching
     private func fetchTransfers(page: Int) {
-        guard !isLoading else { return }
-        
-        Task { @MainActor in
-            isLoading = true
-            defer { isLoading = false }
-            
+        Task {
             do {
-                let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
-                
-                guard !newTransfers.isEmpty else {
-                    hasReachedEnd = true
-                    print("No more transfers to load.")
-                    return
-                }
-                
-                transfers = (page == 1)
-                    ? newTransfers
-                    : appendUniqueTransfers(current: transfers, new: newTransfers)
-                
-                currentPage = page
-                print("✅ Page \(page) loaded (\(transfers.count) transfers)")
-                
+                transfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
             } catch {
-                onErrorOccurred?(error.localizedDescription)
+                print(error)
             }
         }
     }
@@ -211,28 +188,9 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
     
     // MARK: - Private Helpers
-    private func appendUniqueTransfers(current: [Transfer], new: [Transfer]) -> [Transfer] {
+    func appendUniqueTransfers(current: [Transfer], new: [Transfer]) -> [Transfer] {
         let existingIDs = Set(current.map(\.id))
         let uniqueNew = new.filter { !existingIDs.contains($0.id) }
         return current + uniqueNew
-    }
-    
-    private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
-        switch option {
-        case .nameAscending:
-            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        case .nameDescending:
-            return transfers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedDescending }
-        case .dateAscending:
-            return transfers.sorted { $0.date < $1.date }
-        case .dateDescending:
-            return transfers.sorted { $0.date > $1.date }
-        case .amountAscending:
-            return transfers.sorted { $0.amount < $1.amount }
-        case .amountDescending:
-            return transfers.sorted { $0.amount > $1.amount }
-        case .none:
-            return transfers
-        }
     }
 }
