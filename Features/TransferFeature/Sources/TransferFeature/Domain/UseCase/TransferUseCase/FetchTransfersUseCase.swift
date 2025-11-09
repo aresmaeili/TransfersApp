@@ -7,22 +7,6 @@
 
 import Foundation
 
-// MARK: - FetchTransfersUseCaseProtocol
-
-//protocol FetchTransfersUseCaseProtocol {
-//    var filteredTransfers: [Transfer] { get }
-//    var transfers: [Transfer] { get }
-//    func fetchTransfers(page: Int) async throws
-//    func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer]
-//    func getfilteredTransfersItem(index: Int) -> Transfer?
-//    func getFirstTransfersItem(index: Int) -> Transfer?
-//    func loadNextPageIfNeeded(currentItem: Transfer?, isLoading: Bool) async throws
-//    func refreshTransfers() async throws
-//    func changeSortOption(_ option: SortOption)
-//    func getSortOption() -> SortOption
-//    func chancChangeSearchText(_ text: String)
-//}
-
 protocol FetchTransfersUseCaseProtocol: Sendable {
     
     func fetchTransfers(page: Int) async throws -> [Transfer]

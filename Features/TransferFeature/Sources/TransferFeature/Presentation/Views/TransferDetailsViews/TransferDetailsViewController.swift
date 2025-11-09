@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RouterCore
 
 // MARK: - TransferDetailsViewController
 
@@ -20,7 +19,6 @@ final class TransferDetailsViewController: UIViewController {
     // MARK: - Dependencies
     
     var viewModel: TransferDetailsViewModel?
-    var router: Coordinator?
     
     // MARK: - Lifecycle
     

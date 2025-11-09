@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RouterCore
 import Shared
 
 public final class TransferListViewController: UIViewController {
@@ -316,7 +315,6 @@ private extension TransferListViewController {
     }
     
     @objc func editButtonTapped() {
-        // 💡 فرض می‌کنیم متد toggleCanEdit به ViewModel اضافه شده است.
         viewModel?.toggleCanEdit()
         transferTableView.reloadData()
     }

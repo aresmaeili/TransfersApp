@@ -94,11 +94,12 @@ final class TransferCell: UITableViewCell {
 
     func loadAvatar(from urlString: String?) {
         avatarTask?.cancel()
-        avatarTask = Task {
+        avatarTask = Task { [weak self] in
+            guard let self else { return }
             guard let urlString else { return }
             if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
                 await MainActor.run {
-                    self.avatarImageView.image = image
+                    avatarImageView.image = image
                 }
             }
         }

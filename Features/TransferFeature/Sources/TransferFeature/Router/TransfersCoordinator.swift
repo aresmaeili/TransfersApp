@@ -25,7 +25,7 @@ public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     public init(
         navigationController: UINavigationController, transferRepository: TransferRepositoryProtocol? = nil, favoriteRepository: FavoriteTransferRepositoryProtocol? = nil) {
         let transferRepository = transferRepository ?? TransferRepositoryImpl(dataSource: TransferAPI())
-        let favoriteRepository = favoriteRepository ?? FavoriteRepositoryImpl()
+        let favoriteRepository = favoriteRepository ?? FavoriteRepositoryImpl(dataSource: FavoriteDataSource())
         self.factory = TransferFactory(transferRepository: transferRepository, favoriteRepository: favoriteRepository)
         
         super.init(navigationController: navigationController)

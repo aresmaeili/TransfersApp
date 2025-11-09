@@ -120,7 +120,8 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     private func loadAvatar(from urlString: String) {
         avatarTask?.cancel()
         
-        avatarTask = Task {
+        avatarTask = Task {  [weak self] in
+            guard let self else { return }
             guard let image = try? await ImageDownloader.shared.downloadImage(from: urlString) else { return }
             self.avatarImageView.image = image
 

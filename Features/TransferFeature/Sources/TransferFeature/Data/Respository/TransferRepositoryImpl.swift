@@ -9,9 +9,9 @@ import Foundation
 
 final class TransferRepositoryImpl: TransferRepositoryProtocol {
     
-    private let dataSource: TransferDataSource
+    private let dataSource: TransferDataSourceProtocol
 
-    init(dataSource: TransferDataSource) {
+    init(dataSource: TransferDataSourceProtocol) {
         self.dataSource = dataSource
     }
 
@@ -21,3 +21,4 @@ final class TransferRepositoryImpl: TransferRepositoryProtocol {
         return dtos.map { $0 }
     }
 }
+
