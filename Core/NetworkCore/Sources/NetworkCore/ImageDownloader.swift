@@ -27,8 +27,6 @@ public actor ImageDownloader {
     public init(session: URLSession = .shared, cacheEnabled: Bool = true) {
         self.session = session
         self.cacheEnabled = cacheEnabled
-        cache.countLimit = 100 // reasonable default, can be adjusted
-        cache.totalCostLimit = 50 * 1024 * 1024 // 50 MB memory cap
     }
     
     // MARK: - Image Downloading

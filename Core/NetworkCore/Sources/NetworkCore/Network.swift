@@ -9,69 +9,34 @@ import Foundation
 
 // MARK: - NetworkClient
 
-/// A lightweight, async-safe networking client using Swift Concurrency.
 public actor NetworkClient {
-    
-    // MARK: - Shared Instance
-    
+
     public static let shared = NetworkClient()
-    
-    // MARK: - Properties
-    
+
     private let session: URLSession
-    
-    // MARK: - Initialization
-    
-    public init(session: URLSession? = nil) {
-        if let session = session {
-            self.session = session
-        } else {
-            let configuration = URLSessionConfiguration.default
-            configuration.timeoutIntervalForRequest = 30
-            configuration.timeoutIntervalForResource = 60
-            configuration.waitsForConnectivity = true
-            self.session = URLSession(configuration: configuration)
-        }
+
+    public init(session: URLSession = .shared) {
+        self.session = session
     }
-    
-    // MARK: - Networking Methods
-    
-    /// Performs a GET request to a given endpoint and decodes the response.
-    ///
-    /// - Parameters:
-    ///   - endPoint: The API endpoint to request.
-    ///   - decoder: The JSON decoder to use (default is `JSONDecoder()`).
-    /// - Returns: A decoded model of type `T`.
-    public func get<T: Decodable>(
-        endPoint: Endpoint,
-        decoder: JSONDecoder = JSONDecoder()
-    ) async throws -> T {
-        
-        // Validate URL
-        guard let url = URL(string: endPoint.fullPath) else {
-            throw URLError(.badURL)
-        }
-        
-        log("🌐 [Request] GET \(url.absoluteString)")
-        
-        // Perform request
-        let (data, response) = try await session.data(from: url)
-        
-        // Validate response
+
+    public func request<T: Decodable>(_ endpoint: Endpoint, decoder: JSONDecoder = JSONDecoder()) async throws -> T {
+
+        let request = try buildRequest(from: endpoint)
+        log("🌐 [Request] \(request)")
+
+        let (data, response) = try await session.data(for: request)
+
         guard let httpResponse = response as? HTTPURLResponse else {
-            log("❌ Invalid response")
             throw URLError(.badServerResponse)
         }
-        
+
         log("✅ [Response] Status: \(httpResponse.statusCode)")
         logResponseBody(data)
-        
-        // Handle HTTP status codes
+
         guard 200..<300 ~= httpResponse.statusCode else {
             throw URLError(.badServerResponse)
         }
-        
-        // Decode JSON
+
         do {
             let decoded = try decoder.decode(T.self, from: data)
             log("🎯 [Decoded Model]: \(decoded)")
@@ -81,18 +46,61 @@ public actor NetworkClient {
             throw error
         }
     }
-    
-    // MARK: - Private Helpers
-    
-    /// Logs response body safely (limited to 500 characters).
+
+    // MARK: - Build request
+    private func buildRequest(from endpoint: Endpoint) throws -> URLRequest {
+
+        guard let url = URL(string: endpoint.fullPath) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = endpoint.method.rawValue
+        request.httpBody = endpoint.body
+
+        endpoint.headers?.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+
+        return request
+    }
+
+    // MARK: - Logging
     private func logResponseBody(_ data: Data) {
         guard let text = String(data: data, encoding: .utf8) else { return }
         let preview = text.count > 500 ? text.prefix(500) + "…" : text
-        log("📦 [Raw Response Body]:\n\(preview)")
+        log("📦 [Raw Response]:\n\(preview)")
     }
-    
-    /// Simple console logger (only active in debug builds).
+
     private func log(_ message: String) {
         print(message)
     }
 }
+
+// MARK: - Samples 
+
+//struct GetUserEndpoint: Endpoint {
+//    var host: String { "https://api.example.com" }
+//    var path: String { "/user" }
+//    var method: HTTPMethod { .GET }
+//    var queryItems: [URLQueryItem]? { [ URLQueryItem(name: "id", value: "123") ] }
+//}
+
+//let user: User = try await NetworkClient.shared.request(GetUserEndpoint())
+
+//struct CreateUserEndpoint: Endpoint {
+//    var host: String { "https://api.example.com" }
+//    var path: String { "/user" }
+//    var method: HTTPMethod { .POST }
+//
+//    var body: Data? {
+//        try? JSONEncoder().encode(["name": "Alice"])
+//    }
+//
+//    var headers: [String : String]? {
+//        ["Content-Type": "application/json"]
+//    }
+//
+//    var queryItems: [URLQueryItem]? { nil }
+//}
+
+//let createdUser: User = try await NetworkClient.shared.request(CreateUserEndpoint())
+
