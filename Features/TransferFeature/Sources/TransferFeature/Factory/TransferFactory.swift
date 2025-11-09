@@ -14,7 +14,7 @@ import Shared
 /// Defines a factory responsible for creating Transfer-related modules.
 @MainActor
 protocol TransferFactoryProtocol {
-    func makeTransferListModule(router: TransferCoordinator) -> UIViewController
+    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController
     func makeTransferDetailsModule(transfer: Transfer) -> UIViewController
 }
 
@@ -42,7 +42,7 @@ struct TransferFactory: TransferFactoryProtocol {
     // MARK: - Module Builders
     
     /// Builds and returns the Transfer List module.
-    func makeTransferListModule(router: TransferCoordinator) -> UIViewController {
+    func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController {
         // 1. Use Case Setup
         let fetchTransfersUseCase: FetchTransfersUseCaseProtocol =
             FetchTransfersUseCase(repository: transferRepository)
@@ -54,7 +54,7 @@ struct TransferFactory: TransferFactoryProtocol {
         let viewModel = TransferListViewModel(
             fetchTransfersUseCase: fetchTransfersUseCase,
             favoriteUseCase: favoriteUseCase,
-            router: router
+            coordinator: coordinator
         )
         
         // 3. ViewController Setup

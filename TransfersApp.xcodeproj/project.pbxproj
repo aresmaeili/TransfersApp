@@ -16,6 +16,7 @@
 /* Begin PBXFileReference section */
 		34348F162EB3164C0007AC16 /* BTransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A8953C2EB8753300534F80 /* TransfersApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TransfersApp.xcodeproj; sourceTree = "<group>"; };
+		34D51DBA2EBB6F5100DB7C39 /* TransfersApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TransfersApp.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -101,6 +102,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		34D51DBC2EBB6F5100DB7C39 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -161,6 +167,10 @@
 				{
 					ProductGroup = 34A8953E2EB8753300534F80 /* Products */;
 					ProjectRef = 34A8953C2EB8753300534F80 /* TransfersApp.xcodeproj */;
+				},
+				{
+					ProductGroup = 34D51DBC2EBB6F5100DB7C39 /* Products */;
+					ProjectRef = 34D51DBA2EBB6F5100DB7C39 /* TransfersApp.xcodeproj */;
 				},
 			);
 			projectRoot = "";

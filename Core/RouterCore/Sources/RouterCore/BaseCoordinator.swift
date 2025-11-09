@@ -5,24 +5,33 @@
 //  Created by AREM on 10/28/25.
 //
 import UIKit
-
 open class BaseCoordinator: Coordinator {
-    public var navigationController: UINavigationController
-    private var childCoordinators: [Coordinator] = []
-    
-    public init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+
+    public weak var parent: BaseCoordinator?
+    public private(set) var childCoordinators: [BaseCoordinator] = []
+
+    public let router: Router
+
+    public init(router: Router) {
+        self.router = router
     }
-    
+
+    // MARK: - Lifecycle
     open func start() {
-        fatalError("Start method should be implemented in subclass")
+        fatalError("start() must be overridden")
     }
-    
-    public func add(child coordinator: Coordinator) {
+
+    open func finish() {
+        parent?.removeChild(self)
+    }
+
+    // MARK: - Child management
+    public func addChild(_ coordinator: BaseCoordinator) {
+        coordinator.parent = self
         childCoordinators.append(coordinator)
     }
-    
-    func remove(child coordinator: Coordinator) {
+
+    public func removeChild(_ coordinator: BaseCoordinator) {
         childCoordinators.removeAll { $0 === coordinator }
     }
 }

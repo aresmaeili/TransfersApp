@@ -56,7 +56,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     // MARK: - Dependencies
     private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
     private let favoriteUseCase: FavoriteTransferUseCaseProtocol
-    private let router: TransferCoordinator
+    private let coordinator: TransferCoordinator
     
     // MARK: - Outputs
     var onUpdate: (() -> Void)?
@@ -67,11 +67,11 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     init(
         fetchTransfersUseCase: FetchTransfersUseCaseProtocol,
         favoriteUseCase: FavoriteTransferUseCaseProtocol,
-        router: TransferCoordinator
+        coordinator: TransferCoordinator
     ) {
         self.fetchTransfersUseCase = fetchTransfersUseCase
         self.favoriteUseCase = favoriteUseCase
-        self.router = router
+        self.coordinator = coordinator
     }
     
     // MARK: - State
@@ -221,7 +221,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     
     func routeToDetails(for transfer: Transfer) {
         canEdit = false
-        router.showTransfersDetails(transfer: transfer)
+        coordinator.showTransfersDetails(transfer: transfer)
     }
     
     func toggleCanEdit() {

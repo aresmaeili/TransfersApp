@@ -23,12 +23,12 @@ public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
     // MARK: - Initialization
     public init(
-        navigationController: UINavigationController, transferRepository: TransferRepositoryProtocol? = nil, favoriteRepository: FavoriteTransferRepositoryProtocol? = nil) {
+        router: Router, transferRepository: TransferRepositoryProtocol? = nil, favoriteRepository: FavoriteTransferRepositoryProtocol? = nil) {
         let transferRepository = transferRepository ?? TransferRepositoryImpl(dataSource: TransferAPI())
         let favoriteRepository = favoriteRepository ?? FavoriteRepositoryImpl(dataSource: FavoriteDataSource())
         self.factory = TransferFactory(transferRepository: transferRepository, favoriteRepository: favoriteRepository)
         
-        super.init(navigationController: navigationController)
+        super.init(router: router)
     }
     
     // MARK: - Lifecycle
@@ -38,12 +38,12 @@ public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
     // MARK: - Routing
     private func showTransfersList() {
-        let viewController = factory.makeTransferListModule(router: self)
-        navigationController.pushViewController(viewController, animated: true)
+        let viewController = factory.makeTransferListModule(coordinator: self)
+        router.push(viewController, animated: true)
     }
     
     public func showTransfersDetails(transfer: Transfer) {
         let viewController = factory.makeTransferDetailsModule(transfer: transfer)
-        navigationController.pushViewController(viewController, animated: true)
+        router.push(viewController, animated: true)
     }
 }

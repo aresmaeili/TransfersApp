@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RouterCore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -14,13 +15,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
      func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
          guard let windowScene = scene as? UIWindowScene else { return }
-         
-         let navController = UINavigationController()
-         coordinator = AppCoordinator(navigationController: navController)
+
+              let nav = UINavigationController()
+              let router = NavigationRouter(navigationController: nav)
+
+         coordinator = AppCoordinator(router: router)
          coordinator?.start()
 
          window = UIWindow(windowScene: windowScene)
-         window?.rootViewController = navController
+         window?.rootViewController = nav
          window?.makeKeyAndVisible()
      }
 
