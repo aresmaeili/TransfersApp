@@ -373,47 +373,97 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "ED04CCE7-D44C-4B68-8E71-629E8A3CFFEE"
+            uuid = "67A8D61E-91F8-4AE3-B0AA-4B1E67594453"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Core/NetworkCore/Tests/NetworkCoreTests/sasad/NetworkCoreTests.swift"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/Domain/UseCase/TransferUseCase/FetchTransfersUseCase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "testFetchTransfersRealRequest()"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "FetchTransfersUseCase"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "500AC25F-8B4C-4937-A10F-CBC355932BC3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Core/NetworkCore/Tests/NetworkCoreTests/NetworkCoreTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "test_createPost_realAPI()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "ED04CCE7-D44C-4B68-8E71-629E8A3CFFEE - 60bb8f0a83eb7736"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for NetworkCoreTests.NetworkCoreTests.testFetchTransfersRealRequest() async throws -&gt; ()"
-                  moduleName = "NetworkCoreTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/arem/Education/TransfersApp/Core/NetworkCore/Tests/NetworkCoreTests/sasad/NetworkCoreTests.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "29"
-                  endingLineNumber = "29">
-               </Location>
-               <Location
-                  uuid = "ED04CCE7-D44C-4B68-8E71-629E8A3CFFEE - b3ad4318c41ed537"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for NetworkCoreTests.NetworkCoreTests.testFetchTransfersRealRequest() async throws -&gt; ()"
-                  moduleName = "NetworkCoreTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/arem/Education/TransfersApp/Core/NetworkCore/Tests/NetworkCoreTests/sasad/NetworkCoreTests.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "29"
-                  endingLineNumber = "29">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6E947D3D-221D-45D6-B4B7-526279FEAA7E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TransfersApp/FlowAViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "finishFlow()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2C8D3BB-29DF-4573-9614-DAEB9CC60973"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TransfersApp/FlowACoordinator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "start()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3EBE6C8F-D599-4A5C-94CA-F47DC5DFAB3F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TransfersApp/FlowACoordinator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "goBackToSavedVC()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "35066F18-E506-4B98-AB5C-1E9ED8D6CAD3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/Presentation/Views/TransferDetailsViews/TransferDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

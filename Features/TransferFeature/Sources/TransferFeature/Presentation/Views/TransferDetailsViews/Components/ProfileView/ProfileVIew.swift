@@ -95,12 +95,15 @@ class ProfileView: UIView, ViewConnectable {
     private func loadAvatar(from urlString: String?) {
         avatarTask?.cancel()
         avatarTask = Task { [weak self] in
-            guard let self else { return }
-            guard let urlString else { return }
-            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+            guard let self, let urlString else { return }
+
+            do {
+                let image = try await ImageDownloader.shared.downloadImage(from: urlString)
                 await MainActor.run {
-                    avatarImageView.image = image
+                    self.avatarImageView.image = image
                 }
+            } catch {
+                print("Avatar load error:", error)
             }
         }
     }
