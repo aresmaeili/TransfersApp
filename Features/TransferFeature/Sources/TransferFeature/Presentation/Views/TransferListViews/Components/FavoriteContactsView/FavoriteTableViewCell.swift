@@ -11,7 +11,7 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    weak var viewModel: TransferListViewModelInput?
+    private var viewModel: TransferListViewModelInput?
     
     // MARK: - Lifecycle
     

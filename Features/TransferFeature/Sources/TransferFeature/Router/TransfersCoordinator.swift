@@ -19,15 +19,11 @@ public protocol TransferRouter: AnyObject {
 public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
     // MARK: - Dependencies
-    private let factory: TransferFactory
+    private let factory: TransferFactoryProtocol
     
     // MARK: - Initialization
-    public init(
-        router: Router, transferRepository: TransferRepositoryProtocol? = nil, favoriteRepository: FavoriteTransferRepositoryProtocol? = nil) {
-        let transferRepository = transferRepository ?? TransferRepositoryImpl(dataSource: TransferAPI())
-        let favoriteRepository = favoriteRepository ?? FavoriteRepositoryImpl(dataSource: FavoriteDataSource())
-        self.factory = TransferFactory(transferRepository: transferRepository, favoriteRepository: favoriteRepository)
-        
+    public override init(router: Router) {
+        self.factory = TransferVCFactory()
         super.init(router: router)
     }
     

@@ -8,7 +8,6 @@
 import Foundation
 
 // MARK: - Input Protocol
-@MainActor
 protocol TransferListViewModelProtocol: TransferListViewModelInput, TransferListViewModelOutput, AnyObject {}
 
 @MainActor
@@ -102,6 +101,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     private var transfers: [Transfer] = [] {
         didSet { onUpdate?() }
     }
+    
     var transfersCount: Int { filteredTransfers.count }
     
     var hasFavoriteRow: Bool {
@@ -226,12 +226,5 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     
     func toggleCanEdit() {
         canEdit.toggle()
-    }
-    
-    // MARK: - Private Helpers
-    func appendUniqueTransfers(current: [Transfer], new: [Transfer]) -> [Transfer] {
-        let existingIDs = Set(current.map(\.id))
-        let uniqueNew = new.filter { !existingIDs.contains($0.id) }
-        return current + uniqueNew
     }
 }

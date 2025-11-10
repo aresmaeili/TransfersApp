@@ -24,7 +24,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    weak var viewModel: TransferListViewModelInput?
+    private var viewModel: TransferListViewModelInput?
     private var avatarTask: Task<Void, Never>?
     private(set) var transfer: Transfer?
     var onUpdate: (() -> Void)?

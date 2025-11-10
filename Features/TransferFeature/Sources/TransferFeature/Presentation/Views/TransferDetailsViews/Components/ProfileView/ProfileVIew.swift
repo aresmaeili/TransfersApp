@@ -32,7 +32,7 @@ class ProfileView: UIView, ViewConnectable {
         starbutton.setImage(image, for: .normal)
     }
     
-    weak var viewModel: TransferDetailsViewModelInput?
+    private var viewModel: TransferDetailsViewModelInput?
     
     required init(viewModel: TransferDetailsViewModel?) {
         

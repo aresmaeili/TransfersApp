@@ -22,27 +22,18 @@ protocol TransferFactoryProtocol {
 
 /// Concrete implementation of `TransferFactoryProtocol`.
 /// Handles dependency injection and module assembly for the Transfer feature.
-struct TransferFactory: TransferFactoryProtocol {
-    
-    // MARK: - Dependencies
-    
-    private let transferRepository: TransferRepositoryProtocol
-    private let favoriteRepository: FavoriteTransferRepositoryProtocol
-    
-    // MARK: - Initialization
-    
-    init(
-        transferRepository: TransferRepositoryProtocol,
-        favoriteRepository: FavoriteTransferRepositoryProtocol
-    ) {
-        self.transferRepository = transferRepository
-        self.favoriteRepository = favoriteRepository
-    }
+struct TransferVCFactory: TransferFactoryProtocol {
     
     // MARK: - Module Builders
     
     /// Builds and returns the Transfer List module.
     func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController {
+        
+        let transferDataSource = TransferAPI()
+        let transferRepository = TransferRepositoryImpl(dataSource: transferDataSource)
+        let favoriteDataSource = FavoriteDataSource()
+        let favoriteRepository = FavoriteRepositoryImpl(dataSource: favoriteDataSource)
+        
         // 1. Use Case Setup
         let fetchTransfersUseCase: FetchTransfersUseCaseProtocol =
             FetchTransfersUseCase(repository: transferRepository)
@@ -69,6 +60,11 @@ struct TransferFactory: TransferFactoryProtocol {
     
     /// Builds and returns the Transfer Details module.
     func makeTransferDetailsModule(transfer: Transfer) -> UIViewController {
+        
+        //  DataSource Setup
+        let favoriteDataSource = FavoriteDataSource()
+        let favoriteRepository = FavoriteRepositoryImpl(dataSource: favoriteDataSource)
+        
         //  Use Case Setup
         let favoriteUseCase = FavoriteTransferUseCase(repository: favoriteRepository)
         

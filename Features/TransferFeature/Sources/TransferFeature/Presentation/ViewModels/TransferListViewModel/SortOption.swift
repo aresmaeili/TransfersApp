@@ -29,13 +29,4 @@ extension SortOption {
         case .amountDescending: return "Amount (High–Low)"
         }
     }
-    
-    var isAscending: Bool {
-        switch self {
-        case .nameAscending, .amountAscending:
-            return true
-        default:
-            return false
-        }
-    }
 }

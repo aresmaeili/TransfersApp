@@ -43,46 +43,28 @@ final class NetworkClientRealTests: XCTestCase {
             XCTFail("❌ POST failed: \(error)")
         }
     }
-    
-    
-    struct GetPostEndpoint: Endpoint {
-        var host: String { "https://jsonplaceholder.typicode.com" }
-        var path: String { "/posts/1" }
-        var method: HTTPMethod { .get }
-        var queryItems: [URLQueryItem]? { nil }
+}
+
+extension NetworkCoreTests {
+    func execute() async throws -> Transfers {
+        let endpoint = TransferListEndpoint(page: 1)
+        let result: Transfers = try await NetworkClient.shared.get(endPoint: endpoint)
+        return result
     }
-
-    struct Post: Decodable {
-        let userId: Int
-        let id: Int
-        let title: String
-        let body: String
-    }
-
-    struct CreatePostEndpoint: Endpoint {
-
-        var host: String { "https://jsonplaceholder.typicode.com" }
-        var path: String { "/posts" }
-        var method: HTTPMethod { .post }
-
-        var body: Data? {
-            try? JSONEncoder().encode(
-                ["title": "Test Title", "body": "Hello API", "userId": "1"]
-            )
+     
+    public struct TransferListEndpoint: Endpoint {
+        public let page: Int
+        
+        public init(page: Int) {
+            self.page = page
         }
-
-        var headers: [String : String]? {
-            ["Content-Type": "application/json"]
+        
+        public var host: String {  "https://3642fee5-406d-487e-9022-65b1a71665b3.mock.pstmn.io" }
+        public var path: String { "/transfer-list" }
+        public var method: HTTPMethod { .get }
+        public var queryItems: [URLQueryItem]? {
+            [URLQueryItem(name: "page", value: "\(page)")]
         }
-
-        var queryItems: [URLQueryItem]? { nil }
+        //    public var options: RequestOptions { .init() }
     }
-
-    struct CreatedPost: Decodable {
-        let id: Int
-        let title: String
-        let body: String
-        let userId: String
-    }
-
 }
