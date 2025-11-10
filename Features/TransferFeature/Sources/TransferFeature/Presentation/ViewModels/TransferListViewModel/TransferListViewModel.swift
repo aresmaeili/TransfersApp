@@ -20,6 +20,7 @@ protocol TransferListViewModelInput: AnyObject {
     func getFavorite(at index: Int) -> Transfer?
     func toggleFavoriteStatus(for transfer: Transfer)
     func routeToDetails(for transfer: Transfer)
+    func removeItems(item: Transfer)
 }
 
 // MARK: - Output Protocol
@@ -139,11 +140,17 @@ final class TransferListViewModel: TransferListViewModelProtocol {
                 self.transfers = totalTransfer
             } catch {
                 onErrorOccurred?(error.localizedDescription)
+                currentPage -= 1
             }
         }
     }
     
     // MARK: - Actions
+    
+    func removeItems(item: Transfer) {
+        transfers.removeAll(where: { $0.id == item.id })
+    }
+    
     func toggleFavoriteStatus(for transfer: Transfer) {
         favoriteUseCase.toggleFavoriteStatus(transfer: transfer)
         onUpdate?()
@@ -194,7 +201,6 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         }
     }
     
-    
     private func sortTransfers(_ transfers: [Transfer], by option: SortOption) -> [Transfer] {
         switch option {
         case .nameAscending:
@@ -209,7 +215,6 @@ final class TransferListViewModel: TransferListViewModelProtocol {
             return transfers
         }
     }
-    
     
     func filterAndSort( _ transfers: [Transfer], searchText: String, sortOption: SortOption) -> [Transfer] {
         let searched = searchText.isEmpty

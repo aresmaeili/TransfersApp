@@ -20,7 +20,7 @@ protocol TransferCellShowable {
 }
 
 // MARK: - TransferCell
-final class TransferCell: UITableViewCell { 
+final class TransferCell: UITableViewCell {
     
     // MARK: Outlets
     @IBOutlet private weak var parentView: UIView!
@@ -43,6 +43,10 @@ final class TransferCell: UITableViewCell {
         super.prepareForReuse()
         avatarTask?.cancel()
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        starImageView.isHidden = true
+        nameLabel.text = nil
+        dateLabel.text = nil
+        amountLabel.text = nil
     }
     
     // MARK: Setup
@@ -96,8 +100,10 @@ final class TransferCell: UITableViewCell {
         avatarTask?.cancel()
         avatarTask = Task { [weak self] in
             guard let self else { return }
-            guard let urlString else { return }
+            self.avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+            guard let urlString, !urlString.isEmpty else { return }
             if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+                guard !Task.isCancelled else { return }
                 await MainActor.run {
                     avatarImageView.image = image
                 }

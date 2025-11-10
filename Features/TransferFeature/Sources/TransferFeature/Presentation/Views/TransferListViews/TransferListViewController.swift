@@ -33,8 +33,8 @@ public final class TransferListViewController: UIViewController {
         setupTableView()
         setupSearchController()
         bindViewModel()
-        viewModel?.refreshTransfers()
         updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+        viewModel?.refreshTransfers()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -45,9 +45,8 @@ public final class TransferListViewController: UIViewController {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
-            updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
-        }
+        guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else { return }
+        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
     }
  
     deinit {
@@ -132,10 +131,10 @@ extension TransferListViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let viewModel = viewModel else { return 0 }
         
-        switch section {
-        case 0:
+        switch Section(rawValue: section) {
+        case .favorites:
             return viewModel.hasFavoriteRow ? 1 : 0
-        case 1:
+        case .transfers:
             return viewModel.transfersCount
         default:
             return 0
@@ -177,8 +176,7 @@ extension TransferListViewController: UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let section = Section(rawValue: indexPath.section),
-              let viewModel else { return 0 }
+        guard let section = Section(rawValue: indexPath.section), let viewModel = viewModel else { return 0 }
 
         switch section {
         case .favorites:
@@ -218,11 +216,29 @@ extension TransferListViewController: UITableViewDelegate {
         viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
     }
     
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let viewModel,
+                  let item = viewModel.getTransferItem(at: indexPath.row) else { return }
+            tableView.beginUpdates()
+            print("Before delete:", viewModel.transfersCount)
+            viewModel.removeItems(item: item)
+            print("After delete:", viewModel.transfersCount)
+
+            
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
+    
+    
     private func shouldShowHeader(for sectionIndex: Int) -> Bool {
         guard let section = Section(rawValue: sectionIndex), let viewModel else { return false }
         if section == .favorites { return viewModel.hasFavoriteRow }
         return true
     }
+    
+    
 }
 
 // MARK: - Cell Creation

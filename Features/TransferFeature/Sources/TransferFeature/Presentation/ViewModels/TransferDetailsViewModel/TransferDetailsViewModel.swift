@@ -19,6 +19,7 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
 
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
+    var cardViewData: Transfer { get }
     func toggleFavorite()
 }
 

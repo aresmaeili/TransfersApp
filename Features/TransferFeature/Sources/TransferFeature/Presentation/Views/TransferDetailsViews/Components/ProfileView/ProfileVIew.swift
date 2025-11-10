@@ -34,7 +34,7 @@ class ProfileView: UIView, ViewConnectable {
     
     private var viewModel: TransferDetailsViewModelInput?
     
-    required init(viewModel: TransferDetailsViewModel?) {
+    required init(viewModel: TransferDetailsViewModelInput?) {
         
         super.init(frame: .zero)
         guard let viewModel else { return }
@@ -47,8 +47,7 @@ class ProfileView: UIView, ViewConnectable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initialize(viewModel: TransferDetailsViewModel) {
-        self.viewModel = viewModel
+    private func initialize(viewModel: TransferDetailsViewModelInput) {
         connectView(bundle: .module)
         setupView()
         configure(viewModel: viewModel)
@@ -79,7 +78,7 @@ class ProfileView: UIView, ViewConnectable {
         
     }
     
-    private func configure(viewModel: TransferDetailsViewModel?) {
+    private func configure(viewModel: TransferDetailsViewModelInput?) {
         guard let data = viewModel?.cardViewData, let isFavorite = viewModel?.isFavorite else { return }
         nameLabel.text = data.name
         mailLabel.text = data.mail
