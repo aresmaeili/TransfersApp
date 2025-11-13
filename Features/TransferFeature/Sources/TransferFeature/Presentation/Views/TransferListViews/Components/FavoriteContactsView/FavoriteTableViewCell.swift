@@ -14,13 +14,9 @@ class FavoriteTableViewCell: UITableViewCell {
     private var viewModel: TransferListViewModelInput?
     
     // MARK: - Lifecycle
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        Task { @MainActor in
-                setupCollectionView()
-        }
+        setupCollectionView()
     }
 
     private func setupCollectionView() {
@@ -30,18 +26,17 @@ class FavoriteTableViewCell: UITableViewCell {
         layout.sectionInset = .init(top: 0, left: 16, bottom: 0, right: 16)
 
         collectionView.collectionViewLayout = layout
-        collectionView.showsHorizontalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
     }
-    
+
     // MARK: - Configuration
-    
     func configure(with viewModel: TransferListViewModelInput) {
-            self.viewModel = viewModel
-            collectionView.reloadData()
+        self.viewModel = viewModel
+        collectionView.reloadData()
+        bindViewModel()
     }
     
     private func bindViewModel() {

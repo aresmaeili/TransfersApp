@@ -26,6 +26,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     private var viewModel: TransferListViewModelInput?
     private var avatarTask: Task<Void, Never>?
+    private let avatarLoader = UIActivityIndicatorView(style: .medium)
     private(set) var transfer: Transfer?
     var onUpdate: (() -> Void)?
     
@@ -42,6 +43,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         avatarTask?.cancel()
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        avatarLoader.stopAnimating()
         nameLabel.text = nil
         transfer = nil
         viewModel = nil
@@ -84,6 +86,12 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         avatarImageView.layer.borderWidth = 1
         avatarImageView.layer.borderColor = UIColor.border2.cgColor
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        avatarLoader.translatesAutoresizingMaskIntoConstraints = false
+        circleView.addSubview(avatarLoader)
+        NSLayoutConstraint.activate([
+            avatarLoader.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
+            avatarLoader.centerYAnchor.constraint(equalTo: circleView.centerYAnchor)
+        ])
     }
     
     private func setupStarImageView() {
@@ -118,14 +126,32 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     // MARK: - Avatar Loading
     
     private func loadAvatar(from urlString: String) {
+        avatarLoader.startAnimating()
         avatarTask?.cancel()
-        
-        avatarTask = Task {  [weak self] in
-            guard let self else { return }
-            guard let image = try? await ImageDownloader.shared.downloadImage(from: urlString) else { return }
-            self.avatarImageView.image = image
 
-           
+        avatarTask = Task { [weak self] in
+            guard let self else { return }
+
+            self.avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+
+            guard !urlString.isEmpty else {
+                await MainActor.run { self.avatarLoader.stopAnimating() }
+                return
+            }
+
+            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+                guard !Task.isCancelled else {
+                    await MainActor.run { self.avatarLoader.stopAnimating() }
+                    return
+                }
+
+                await MainActor.run {
+                    self.avatarImageView.image = image
+                    self.avatarLoader.stopAnimating()
+                }
+            } else {
+                await MainActor.run { self.avatarLoader.stopAnimating() }
+            }
         }
     }
 }

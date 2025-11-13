@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 // MARK: - Input Protocol
 protocol TransferListViewModelProtocol: TransferListViewModelInput, TransferListViewModelOutput, AnyObject {}
@@ -49,10 +50,8 @@ protocol TransferListViewModelOutput: AnyObject {
 // MARK: - ViewModel Implementation
 @MainActor
 final class TransferListViewModel: TransferListViewModelProtocol {
-    func changedTextSearch(with text: String) {
-        textSearch = text
-    }
     
+
     // MARK: - Dependencies
     private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
     private let favoriteUseCase: FavoriteTransferUseCaseProtocol
@@ -222,6 +221,14 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         : transfers.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         
         return sortTransfers(searched, by: sortOption)
+    }
+    
+    func changedTextSearch(with text: String) {
+        let debouncer = Debouncer(delay: 0.75)
+        debouncer.schedule { [weak self] in
+            guard let self else { return }
+            self.textSearch = text
+        }
     }
     
     func routeToDetails(for transfer: Transfer) {
