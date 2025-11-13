@@ -21,11 +21,6 @@ public final class NavigationRouter: Router {
         self.navigationController = navigationController
     }
 
-    public func setRoot(_ vc: UIViewController, hideBar: Bool = false) {
-        navigationController?.setViewControllers([vc], animated: false)
-        navigationController?.setNavigationBarHidden(hideBar, animated: false)
-    }
-
     public func push(_ vc: UIViewController, animated: Bool = true) {
         navigationController?.pushViewController(vc, animated: animated)
     }
@@ -50,7 +45,6 @@ public final class NavigationRouter: Router {
                 vc.modalPresentationStyle = .pageSheet
                 vc.preferredContentSize = CGSize(width: UIScreen.main.bounds.width,
                                                  height: height)
-            
         }
         navigationController?.present(vc, animated: animated)
     }

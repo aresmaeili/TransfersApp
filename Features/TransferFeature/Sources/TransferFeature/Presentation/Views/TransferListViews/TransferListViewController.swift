@@ -221,16 +221,12 @@ extension TransferListViewController: UITableViewDelegate {
             guard let viewModel,
                   let item = viewModel.getTransferItem(at: indexPath.row) else { return }
             tableView.beginUpdates()
-            print("Before delete:", viewModel.transfersCount)
             viewModel.removeItems(item: item)
-            print("After delete:", viewModel.transfersCount)
-
             
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
     }
-    
     
     private func shouldShowHeader(for sectionIndex: Int) -> Bool {
         guard let section = Section(rawValue: sectionIndex), let viewModel else { return false }
@@ -265,6 +261,7 @@ private extension TransferListViewController {
         return cell
     }
 }
+
 // MARK: - Section Header & Actions
 private extension TransferListViewController {
     

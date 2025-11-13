@@ -10,7 +10,6 @@ import UIKit
 
 @MainActor
 public protocol Router: AnyObject {
-    func setRoot(_ vc: UIViewController, hideBar: Bool)
     func push(_ vc: UIViewController, animated: Bool)
     func present(_ vc: UIViewController, animated: Bool)
     func present(_ vc: UIViewController, style: PresentationStyle, animated: Bool)

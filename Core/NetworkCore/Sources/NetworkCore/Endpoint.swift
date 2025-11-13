@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Endpoint Protocol
 public protocol Endpoint {
-    var host: String { get }
+    var baseUrl: String { get }
     var path: String { get }
     var method: HTTPMethod { get }
     var queryItems: [URLQueryItem]? { get }
@@ -23,9 +23,9 @@ public extension Endpoint {
 
     /// Compose full URL as string
     var fullPath: String {
-        var components = URLComponents(string: host)
+        var components = URLComponents(string: baseUrl)
         components?.path = path
         components?.queryItems = queryItems
-        return components?.url?.absoluteString ?? (host + path)
+        return components?.url?.absoluteString ?? (baseUrl + path)
     }
 }
