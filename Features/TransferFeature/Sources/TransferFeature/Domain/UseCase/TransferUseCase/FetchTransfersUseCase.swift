@@ -8,7 +8,6 @@
 import Foundation
 
 protocol FetchTransfersUseCaseProtocol: Sendable {
-    
     func fetchTransfers(page: Int) async throws -> [Transfer]
     func mergeTransfers( current: [Transfer]?, new: [Transfer] ) -> [Transfer]
 }

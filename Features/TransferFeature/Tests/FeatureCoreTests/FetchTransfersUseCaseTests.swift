@@ -14,7 +14,7 @@ final class FetchTransfersUseCaseTests: XCTestCase {
     
     func test_mergeTransfers_avoidsDuplicatesById() {
         // Given
-        let dataSource = TransferMockData()
+        let dataSource = TransferMockDataSource()
         let repo = TransferRepositoryImpl(dataSource: dataSource)
         let sut = FetchTransfersUseCase(repository: repo)
 
@@ -32,7 +32,7 @@ final class FetchTransfersUseCaseTests: XCTestCase {
     }
     
     func test_fetchTransfers_returnsRemoteItems() async throws {
-        let dataSource = TransferMockData()
+        let dataSource = TransferMockDataSource()
         let repo = TransferRepositoryImpl(dataSource: dataSource)
 
         let items = try await repo.fetchTransfers(page: 1)

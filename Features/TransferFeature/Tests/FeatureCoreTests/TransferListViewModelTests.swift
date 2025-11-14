@@ -16,7 +16,7 @@ final class TransferListViewModelTests: XCTestCase {
 
     func test_refreshTransfers_loadsFirstPageAndUpdatesList() async {
         // Given
-        let dataSource = TransferMockData()
+        let dataSource = TransferMockDataSource()
         let repoTransfer = TransferRepositoryImpl(dataSource: dataSource)
         let transfersUseCase = FetchTransfersUseCase(repository: repoTransfer)
         let repoFavorite = FavoriteRepositoryImpl(dataSource: FavoriteDataSource())
@@ -34,7 +34,7 @@ final class TransferListViewModelTests: XCTestCase {
     
     func test_loadNextPageIfNeeded_fetchesNextPage_whenNearEndOfList() async {
         
-        let dataSource = TransferMockData()
+        let dataSource = TransferMockDataSource()
         let repoTransfer = TransferRepositoryImpl(dataSource: dataSource)
         let transfersUseCase = FetchTransfersUseCase(repository: repoTransfer)
         let repoFavorite = FavoriteRepositoryImpl(dataSource: FavoriteDataSource())

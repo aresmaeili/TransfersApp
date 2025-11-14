@@ -16,7 +16,7 @@ final class FeatureCoreTests: XCTestCase {
     func test_fetchFavorites_returnsAllFavoritesFromRepository() async {
         // Given
         
-        let dataSource = TransferMockData()
+        let dataSource = TransferMockDataSource()
         let repoTransfer = TransferRepositoryImpl(dataSource: dataSource)
         let transfersUseCase = FetchTransfersUseCase(repository: repoTransfer)
         let repoFavorite = FavoriteRepositoryImpl(dataSource: FavoriteDataSource())

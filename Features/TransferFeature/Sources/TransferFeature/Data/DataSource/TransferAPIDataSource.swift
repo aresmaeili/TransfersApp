@@ -19,7 +19,7 @@ protocol TransferDataSourceProtocol: Sendable {
 // MARK: - TransferAPI
 
 /// Handles network calls for fetching transfer data from a remote API.
-final class TransferAPI: TransferDataSourceProtocol {
+final class TransferAPIDataSource: TransferDataSourceProtocol {
     
     // MARK: - Properties
     

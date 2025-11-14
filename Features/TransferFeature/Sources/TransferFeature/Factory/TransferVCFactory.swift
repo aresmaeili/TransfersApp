@@ -37,7 +37,7 @@ struct TransferVCFactory: TransferFactoryProtocol {
     /// Builds and returns the Transfer List module.
     func makeTransferListModule(coordinator: TransferCoordinator) -> UIViewController {
         
-        let transferDataSource = TransferAPI()
+        let transferDataSource = TransferAPIDataSource()
         let transferRepository = TransferRepositoryImpl(dataSource: transferDataSource)
        
         // 1. Use Case Setup
