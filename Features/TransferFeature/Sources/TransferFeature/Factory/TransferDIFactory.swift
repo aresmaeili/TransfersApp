@@ -22,7 +22,7 @@ protocol TransferFactoryProtocol {
 
 /// Concrete implementation of `TransferFactoryProtocol`.
 /// Handles dependency injection and module assembly for the Transfer feature.
-struct TransferVCFactory: TransferFactoryProtocol {
+struct TransferDIFactory: TransferFactoryProtocol {
     
     // MARK: - Module Builders
     // Share DataSource and Repository Setup
@@ -31,7 +31,6 @@ struct TransferVCFactory: TransferFactoryProtocol {
      init() {
          let favoriteDataSource = FavoriteDataSource()
          self.favoriteRepository = FavoriteRepositoryImpl(dataSource: favoriteDataSource)
-         
      }
     
     /// Builds and returns the Transfer List module.
@@ -41,11 +40,9 @@ struct TransferVCFactory: TransferFactoryProtocol {
         let transferRepository = TransferRepositoryImpl(dataSource: transferDataSource)
        
         // 1. Use Case Setup
-        let fetchTransfersUseCase: FetchTransfersUseCaseProtocol =
-            FetchTransfersUseCase(repository: transferRepository)
+        let fetchTransfersUseCase: FetchTransfersUseCaseProtocol = FetchTransfersUseCase(repository: transferRepository)
         
-        let favoriteUseCase: FavoriteTransferUseCaseProtocol =
-            FavoriteTransferUseCase(repository: favoriteRepository)
+        let favoriteUseCase: FavoriteTransferUseCaseProtocol = FavoriteTransferUseCase(repository: favoriteRepository)
         
         // 2. ViewModel Setup
         let viewModel = TransferListViewModel(
@@ -55,10 +52,7 @@ struct TransferVCFactory: TransferFactoryProtocol {
         )
         
         // 3. ViewController Setup
-        let viewController = TransferListViewController.instantiate(
-            from: "TransferList",
-            bundle: .module
-        )
+        let viewController = TransferListViewController.instantiate(from: "TransferList", bundle: .module)
         viewController.viewModel = viewModel
         
         return viewController
@@ -77,10 +71,7 @@ struct TransferVCFactory: TransferFactoryProtocol {
         )
         
         //  ViewController Setup
-        let viewController = TransferDetailsViewController.instantiate(
-            from: "TransferDetails",
-            bundle: .module
-        )
+        let viewController = TransferDetailsViewController.instantiate(from: "TransferDetails", bundle: .module)
         viewController.viewModel = viewModel
         
         return viewController

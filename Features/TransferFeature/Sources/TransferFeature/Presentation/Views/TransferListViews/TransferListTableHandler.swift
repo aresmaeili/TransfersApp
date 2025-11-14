@@ -103,27 +103,19 @@ extension TransferListTableHandler: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard shouldShowHeader(section), let section = ListSection(rawValue: section), let vm = viewModel else { return nil }
 
-        let view = TransferSectionHeaderView(
-            title: section.title,
-            isFavorites: section == .favorites,
-            isEditing: vm.canEdit,
-            sortName: vm.sortOption.rawValue
-        )
-
-        view.delegate = actionDelegate
+        let view = TransferSectionHeaderView(title: section.title, isFavorites: section == .favorites, isEditing: vm.canEdit, sortName: vm.sortOption.rawValue, delegate: actionDelegate)
         return view
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vm = viewModel, let transfer = vm.getTransferItem(at: indexPath.row) else { return }
-
+        guard let vm = viewModel, let transfer = vm.getTransferItem(at: indexPath.row), let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
         vm.routeToDetails(for: transfer)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
         if editingStyle == .delete {
-            guard let viewModel,
-                  let item = viewModel.getTransferItem(at: indexPath.row) else { return }
+            guard let viewModel, let item = viewModel.getTransferItem(at: indexPath.row) else { return }
             tableView.beginUpdates()
             viewModel.removeItems(item: item)
             tableView.deleteRows(at: [indexPath], with: .automatic)

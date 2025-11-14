@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 // MARK: - TransferDetailsViewController
 
@@ -19,7 +20,8 @@ final class TransferDetailsViewController: UIViewController {
     // MARK: - Dependencies
     
     var viewModel: TransferDetailsViewModel?
-    
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -79,9 +81,12 @@ final class TransferDetailsViewController: UIViewController {
     func bindViewModel() {
         guard let viewModel else { return }
 
-        viewModel.onUpdate = { [weak self] in
-            self?.setupUI()
-        }
+        viewModel.onUpdatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.setupUI()
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Deinitialization

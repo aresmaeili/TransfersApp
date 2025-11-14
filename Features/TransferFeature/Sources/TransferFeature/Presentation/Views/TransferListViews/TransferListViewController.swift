@@ -8,6 +8,7 @@
 
 import UIKit
 import Shared
+import Combine
 
 public final class TransferListViewController: UIViewController {
 
@@ -28,6 +29,7 @@ public final class TransferListViewController: UIViewController {
 
     // MARK: - Handlers
     private var tableHandler: TransferListTableHandler?
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Lifecycle
     public override func viewDidLoad() {
@@ -80,6 +82,8 @@ private extension TransferListViewController {
     }
 
     @objc func handleRefresh() {
+        searchController.searchBar.text = ""
+        viewModel?.changedTextSearch(with: "")
         viewModel?.refreshTransfers()
     }
 
@@ -100,18 +104,32 @@ private extension TransferListViewController {
     func bindViewModel() {
         guard let viewModel else { return }
 
-        viewModel.onUpdate = { [weak self] in
-            self?.refreshControl.endRefreshing()
-            self?.transferTableView.reloadData()
-        }
+        viewModel.onUpdatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                if self?.viewModel?.transfersCount == 0 {
+                    self?.transferTableView.setEmptyMessage("No Transfer Found")
+                } else {
+                    self?.transferTableView.restore()
+                }
+                self?.refreshControl.endRefreshing()
+                self?.transferTableView.reloadData()
+            }
+            .store(in: &cancellables)
 
-        viewModel.onErrorOccurred = { [weak self] message in
-            self?.showErrorAlert(title: "Error", message: message)
-        }
+        viewModel.onErrorPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] message in
+                self?.showErrorAlert(title: "Error", message: message)
+            }
+            .store(in: &cancellables)
 
-        viewModel.onLoadingStateChange = { [weak self] isLoading in
-            self?.setLoading(isLoading)
-        }
+        viewModel.onLoadingStatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                self?.setLoading(isLoading)
+            }
+            .store(in: &cancellables)
     }
 }
 

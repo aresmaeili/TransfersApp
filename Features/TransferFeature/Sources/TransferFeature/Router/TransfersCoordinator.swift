@@ -22,7 +22,7 @@ public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
     // MARK: - Initialization
     public override init(router: Router) {
-        self.factory = TransferVCFactory()
+        self.factory = TransferDIFactory()
         super.init(router: router)
     }
     

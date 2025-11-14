@@ -36,7 +36,7 @@ final class NetworkClientRealTests: XCTestCase {
             self.page = page
         }
         
-        public var baseUrl: String {  "https://3642fee5-406d-487e-9022-65b1a71665b3.mock.pstmn.io" }
+        public var baseUrl: String {  "https://e4253fd8-faab-456a-9f09-a2703d842875.mock.pstmn.io" }
         public var path: String { "/transfer-list" }
         public var method: HTTPMethod { .get }
         public var queryItems: [URLQueryItem]? {

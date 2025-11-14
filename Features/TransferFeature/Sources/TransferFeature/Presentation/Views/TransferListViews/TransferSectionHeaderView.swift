@@ -11,25 +11,14 @@ final class TransferSectionHeaderView: UIView {
 
     weak var delegate: TransferListActionDelegate?
 
-    init(title: String,
-         isFavorites: Bool,
-         isEditing: Bool,
-         sortName: String) {
+    init(title: String, isFavorites: Bool, isEditing: Bool, sortName: String, delegate: TransferListActionDelegate?) {
         super.init(frame: .zero)
-        setupLayout(
-            title: title,
-            isFavorites: isFavorites,
-            isEditing: isEditing,
-            sortName: sortName
-        )
+        setupLayout(title: title, isFavorites: isFavorites, isEditing: isEditing, sortName: sortName)
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
-    private func setupLayout(title: String,
-                             isFavorites: Bool,
-                             isEditing: Bool,
-                             sortName: String) {
+    private func setupLayout(title: String, isFavorites: Bool, isEditing: Bool, sortName: String) {
 
         backgroundColor = .clear
 
