@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import TransferFeature
-import UIKit
 import RouterCore
 
 final class FeatureCoreTests: XCTestCase {
