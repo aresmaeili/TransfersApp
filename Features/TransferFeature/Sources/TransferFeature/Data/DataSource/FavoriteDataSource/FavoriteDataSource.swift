@@ -29,7 +29,7 @@ actor FavoriteDataSource: FavoriteDataSourceProtocol {
     // MARK: - FavoriteTransferRepositoryProtocol
     
     func getFavorites() async -> [Transfer] {
-        storedFavorites
+        return storedFavorites
     }
     
     func save(transfer: Transfer) async {

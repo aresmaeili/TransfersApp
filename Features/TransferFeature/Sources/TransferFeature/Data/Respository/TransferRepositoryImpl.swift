@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class TransferRepositoryImpl: TransferRepositoryProtocol {
+final actor TransferRepositoryImpl: TransferRepositoryProtocol {
     
     private let dataSource: TransferDataSourceProtocol
 
@@ -16,9 +16,12 @@ final class TransferRepositoryImpl: TransferRepositoryProtocol {
     }
 
     func fetchTransfers(page: Int) async throws -> [Transfer] {
-
         let dtos: [Transfer] = try await dataSource.fetchTransfers(page: page)
         return dtos.map { $0 }
+//        TODO: Must convert to Domain Data to loose coupling
     }
+    
+//        TODO: Must have ultra logics on data and make new values to next levels
+
 }
 

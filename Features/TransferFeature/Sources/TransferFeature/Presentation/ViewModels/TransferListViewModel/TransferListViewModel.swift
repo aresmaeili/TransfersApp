@@ -100,9 +100,11 @@ final class TransferListViewModel: TransferListViewModelProtocol {
 
     // MARK: - Favorites Loading
     func loadFavorites() {
-        Task {
-            self.favorites = await favoriteUseCase.fetchFavorites()
-            onUpdate?()
+//        TODO: check this @MainActor
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.favorites = await self.favoriteUseCase.fetchFavorites()
+            self.onUpdate?()
         }
     }
 
@@ -123,7 +125,8 @@ final class TransferListViewModel: TransferListViewModelProtocol {
         guard !isLoading else { return }
         isLoading = true
 
-        Task {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
             do {
                 let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
 

@@ -53,7 +53,12 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCaseProtocol) {
         self.cardViewData = transfer
         self.favoriteUseCase = favoriteUseCase
-        loadFavoriteStatus()
+
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            self.isFavorite = await favoriteUseCase.isFavorite(transfer)
+            self.onUpdate?()
+        }
     }
     
     // MARK: - Outputs
@@ -89,10 +94,12 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     }
     
     func toggleFavorite() {
-        Task {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
             await favoriteUseCase.toggleFavorite(cardViewData)
             self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
-            onUpdate?()
+            self.onUpdate?()
         }
     }
 }
