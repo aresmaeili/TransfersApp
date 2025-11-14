@@ -13,6 +13,7 @@ final class TransferSectionHeaderView: UIView {
 
     init(title: String, isFavorites: Bool, isEditing: Bool, sortName: String, delegate: TransferListActionDelegate?) {
         super.init(frame: .zero)
+        self.delegate = delegate
         setupLayout(title: title, isFavorites: isFavorites, isEditing: isEditing, sortName: sortName)
     }
 

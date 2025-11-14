@@ -17,11 +17,11 @@ protocol TransferListActionDelegate: AnyObject {
 final class TransferListTableHandler: NSObject {
 
     private weak var tableView: UITableView?
-    private weak var viewModel: TransferListViewModelProtocol?
+    private weak var viewModel: TransfersViewModelInputProtocol?
     private weak var actionDelegate: TransferListActionDelegate?
 
     init(tableView: UITableView,
-         viewModel: TransferListViewModelProtocol,
+         viewModel: TransfersViewModelInputProtocol,
          actionDelegate: TransferListActionDelegate) {
         self.tableView = tableView
         self.viewModel = viewModel

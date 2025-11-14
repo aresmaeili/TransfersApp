@@ -10,27 +10,23 @@ import Shared
 import Combine
 
 // MARK: - Input Protocol
-protocol TransferListViewModelProtocol: TransferListViewModelInput, TransferListViewModelOutput, AnyObject {}
-
 @MainActor
-protocol TransferListViewModelInput: AnyObject {
-    var onUpdatePublisher: PassthroughSubject<Void, Never> { get }
-    var onErrorPublisher: PassthroughSubject<String, Never> { get }
-    var onLoadingStatePublisher: PassthroughSubject<Bool, Never> { get }
+protocol FavoritesCellViewModelInput: AnyObject {
     var canEdit: Bool { get }
     var favoriteCounts: Int { get }
     
-    func loadFavorites()
     func getFavoriteTransfer(at index: Int) -> Transfer?
     func getFavorite(at index: Int) -> Transfer?
     func toggleFavoriteStatus(for transfer: Transfer)
-    func removeItems(item: Transfer)
     func routeToDetails(for transfer: Transfer)
 }
 
 // MARK: - Output Protocol
 @MainActor
-protocol TransferListViewModelOutput: AnyObject {
+protocol TransfersViewModelInputProtocol: FavoritesCellViewModelInput, AnyObject {
+    var onUpdatePublisher: PassthroughSubject<Void, Never> { get }
+    var onErrorPublisher: PassthroughSubject<String, Never> { get }
+    var onLoadingStatePublisher: PassthroughSubject<Bool, Never> { get }
     
     var transfersCount: Int { get }
     var hasFavoriteRow: Bool { get }
@@ -38,18 +34,17 @@ protocol TransferListViewModelOutput: AnyObject {
     var textSearch: String { get }
     
     func refreshTransfers()
+    func getTransferItem(at index: Int) -> Transfer?
     func loadNextPageIfNeeded(currentItem: Transfer?)
     func changedTextSearch(with text: String)
-    
-    func toggleFavoriteStatus(for transfer: Transfer)
     func checkIsFavorite(_ transfer: Transfer) -> Bool
-    
-    func getTransferItem(at index: Int) -> Transfer?
+    func loadFavorites()
     func toggleCanEdit()
+    func removeItems(item: Transfer)
 }
 
 // MARK: - ViewModel Implementation
-final class TransferListViewModel: TransferListViewModelProtocol {
+final class TransferListViewModel: TransfersViewModelInputProtocol {
     
     // MARK: - Dependencies
     private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol

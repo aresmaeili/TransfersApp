@@ -13,7 +13,7 @@ import Combine
 public final class TransferListViewController: UIViewController {
 
     // MARK: - Dependencies
-    var viewModel: TransferListViewModelProtocol?
+    var viewModel: TransfersViewModelInputProtocol?
 
     // MARK: - UI
     @IBOutlet private weak var transferTableView: UITableView!

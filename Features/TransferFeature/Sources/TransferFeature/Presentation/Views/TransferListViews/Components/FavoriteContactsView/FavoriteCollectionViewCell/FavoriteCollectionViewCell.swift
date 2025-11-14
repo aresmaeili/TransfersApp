@@ -24,7 +24,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    private var viewModel: TransferListViewModelInput?
+    private var viewModel: FavoritesCellViewModelInput?
     private var avatarTask: Task<Void, Never>?
     private let avatarLoader = UIActivityIndicatorView(style: .medium)
     private(set) var transfer: Transfer?
@@ -42,7 +42,6 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         avatarTask?.cancel()
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
-        avatarLoader.stopAnimating()
         nameLabel.text = nil
         transfer = nil
         viewModel = nil
@@ -85,6 +84,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         avatarImageView.layer.borderWidth = 1
         avatarImageView.layer.borderColor = UIColor.border2.cgColor
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        avatarImageView.tintColor = .lightGray
         avatarLoader.translatesAutoresizingMaskIntoConstraints = false
         circleView.addSubview(avatarLoader)
         NSLayoutConstraint.activate([
@@ -99,11 +99,11 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with transfer: Transfer, viewModel: TransferListViewModelInput) {
+    func configure(with transfer: Transfer, viewModel: FavoritesCellViewModelInput) {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"
-
+        
         UIView.transition(with: removeButton, duration: 0.25, options: .transitionCrossDissolve) { [weak self] in
             guard let self else { return }
             self.removeButton.isHidden = !viewModel.canEdit
@@ -124,14 +124,11 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     // MARK: - Avatar Loading
     
     private func loadAvatar(from urlString: String) {
-        avatarLoader.startAnimating()
         avatarTask?.cancel()
-
-        avatarTask = Task { [weak self] in
+        avatarLoader.startAnimating()
+        
+        avatarTask = Task.detached { [weak self] in
             guard let self else { return }
-
-            self.avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
-
             guard !urlString.isEmpty else {
                 await MainActor.run { self.avatarLoader.stopAnimating() }
                 return

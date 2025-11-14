@@ -37,6 +37,7 @@ final class TransferDetailsViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
+        title = "Transfer Details"
         stackView.removeAllArrangedSubviews()
         backView.backgroundColor = .background1
         applyTheme()

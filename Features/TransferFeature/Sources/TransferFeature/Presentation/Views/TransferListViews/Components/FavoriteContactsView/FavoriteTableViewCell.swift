@@ -11,7 +11,7 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    private var viewModel: TransferListViewModelInput?
+    private var viewModel: FavoritesCellViewModelInput?
     
     // MARK: - Lifecycle
     override func awakeFromNib() {
@@ -37,7 +37,7 @@ class FavoriteTableViewCell: UITableViewCell {
     }
 
     // MARK: - Configuration
-    func configure(with viewModel: TransferListViewModelInput) {
+    func configure(with viewModel: FavoritesCellViewModelInput) {
         self.viewModel = viewModel
         collectionView.reloadData()
     }
