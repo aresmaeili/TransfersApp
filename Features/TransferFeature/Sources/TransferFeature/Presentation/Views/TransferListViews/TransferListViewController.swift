@@ -49,6 +49,7 @@ public final class TransferListViewController: UIViewController {
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateNavigationBarAppearance()
+        transferTableView.reloadData()
     }
 
     deinit {

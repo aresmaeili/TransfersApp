@@ -32,27 +32,27 @@ final class TransferListTableHandler: NSObject {
     }
 }
 
-// MARK: - Sections
-private enum ListSection: Int, CaseIterable {
-    case favorites
-    case transfers
-
-    var height: CGFloat {
-        switch self {
-        case .favorites: return 160
-        case .transfers: return 100
-        }
-    }
-
-    var title: String {
-        switch self {
-        case .favorites: return "Favorites:"
-        case .transfers: return "Transfers:"
-        }
-    }
-}
 
 extension TransferListTableHandler: UITableViewDataSource {
+    // MARK: - Sections
+    private enum ListSection: Int, CaseIterable {
+        case favorites
+        case transfers
+        
+        var height: CGFloat {
+            switch self {
+            case .favorites: return 160
+            case .transfers: return 100
+            }
+        }
+        
+        var title: String {
+            switch self {
+            case .favorites: return "Favorites:"
+            case .transfers: return "Transfers:"
+            }
+        }
+    }
 
     func numberOfSections(in tableView: UITableView) -> Int {
         ListSection.allCases.count
@@ -60,11 +60,13 @@ extension TransferListTableHandler: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let viewModel else { return 0 }
-        switch ListSection(rawValue: section)! {
+        switch ListSection(rawValue: section) {
         case .favorites:
             return viewModel.hasFavoriteRow ? 1 : 0
         case .transfers:
             return viewModel.transfersCount
+        case .none:
+            return 0
         }
     }
 
@@ -93,7 +95,7 @@ extension TransferListTableHandler: UITableViewDataSource {
 extension TransferListTableHandler: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        ListSection(rawValue: indexPath.section)!.height
+        ListSection(rawValue: indexPath.section)?.height ?? 0
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
