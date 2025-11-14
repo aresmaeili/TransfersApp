@@ -39,6 +39,8 @@ public final class TransferListViewController: UIViewController {
     }
 
     public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.loadFavorites()
         transferTableView.reloadData()
     }
     

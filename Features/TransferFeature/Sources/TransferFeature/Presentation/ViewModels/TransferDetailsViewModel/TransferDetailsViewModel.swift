@@ -19,6 +19,7 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
 @MainActor
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
+    var onUpdate: (() -> Void)? { get }
     var cardViewData: Transfer { get }
     func toggleFavorite()
 }
@@ -43,12 +44,16 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     
     private(set) var cardViewData: Transfer
     private(set) var isFavorite: Bool = false
-    
+    var onUpdate: (() -> Void)?
+    var onErrorOccurred: ((String) -> Void)?
+    var onLoadingStateChange: ((Bool) -> Void)?
+
     // MARK: - Initialization
     
     init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCaseProtocol) {
         self.cardViewData = transfer
         self.favoriteUseCase = favoriteUseCase
+        loadFavoriteStatus()
     }
     
     // MARK: - Outputs
@@ -79,6 +84,7 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     func loadFavoriteStatus() {
         Task {
             self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
+            onUpdate?()
         }
     }
     
@@ -86,6 +92,7 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
         Task {
             await favoriteUseCase.toggleFavorite(cardViewData)
             self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
+            onUpdate?()
         }
     }
 }

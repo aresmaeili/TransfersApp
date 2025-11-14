@@ -35,9 +35,11 @@ final class TransferDetailsViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
+        stackView.removeAllArrangedSubviews()
         backView.backgroundColor = .background1
         applyTheme()
         setupContent()
+        bindViewModel() 
     }
 
     private func applyTheme() {
@@ -71,6 +73,14 @@ final class TransferDetailsViewController: UIViewController {
         if let note = viewModel?.noteItem, !note.value.isEmpty {
             let noteView = NoteView(with: note)
             stackView.addArrangedSubview(noteView)
+        }
+    }
+    
+    func bindViewModel() {
+        guard let viewModel else { return }
+
+        viewModel.onUpdate = { [weak self] in
+            self?.setupUI()
         }
     }
     

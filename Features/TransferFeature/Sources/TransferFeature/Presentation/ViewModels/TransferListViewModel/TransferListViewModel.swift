@@ -19,6 +19,7 @@ protocol TransferListViewModelInput: AnyObject {
     var canEdit: Bool { get }
     var favoriteCounts: Int { get }
     
+    func loadFavorites()
     func getFavoriteTransfer(at index: Int) -> Transfer?
     func getFavorite(at index: Int) -> Transfer?
     func toggleFavoriteStatus(for transfer: Transfer)
@@ -72,9 +73,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
 
     // Favorites
-    private var favorites: [Transfer] = [] {
-        didSet { onUpdate?() }
-    }
+    private var favorites: [Transfer] = []
 
     var favoriteCounts: Int { favorites.count }
     
@@ -100,9 +99,10 @@ final class TransferListViewModel: TransferListViewModelProtocol {
     }
 
     // MARK: - Favorites Loading
-    private func loadFavorites() {
+    func loadFavorites() {
         Task {
             self.favorites = await favoriteUseCase.fetchFavorites()
+            onUpdate?()
         }
     }
 
