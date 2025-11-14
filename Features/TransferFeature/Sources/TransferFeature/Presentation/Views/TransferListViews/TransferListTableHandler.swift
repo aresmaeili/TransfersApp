@@ -107,7 +107,7 @@ extension TransferListTableHandler: UITableViewDelegate {
             title: section.title,
             isFavorites: section == .favorites,
             isEditing: vm.canEdit,
-            sortName: vm.sortOption.displayName
+            sortName: vm.sortOption.rawValue
         )
 
         view.delegate = actionDelegate
@@ -126,7 +126,6 @@ extension TransferListTableHandler: UITableViewDelegate {
                   let item = viewModel.getTransferItem(at: indexPath.row) else { return }
             tableView.beginUpdates()
             viewModel.removeItems(item: item)
-            
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }

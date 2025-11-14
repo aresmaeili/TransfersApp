@@ -134,7 +134,7 @@ extension TransferListViewController: @MainActor TransferListActionDelegate {
         )
 
         SortOption.allCases.forEach { sort in
-            alert.addAction(UIAlertAction(title: sort.displayName, style: .default) { [weak self] _ in
+            alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
                 self?.viewModel?.sortOption = sort
             })
         }

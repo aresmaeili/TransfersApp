@@ -37,7 +37,9 @@ final class TransferCell: UITableViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupUI()
+        Task { @MainActor in
+            setupUI()
+        }
     }
 
     override func prepareForReuse() {

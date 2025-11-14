@@ -96,46 +96,52 @@ final class TransferListViewModel: TransferListViewModelProtocol {
 
     var hasFavoriteRow: Bool {
         let hasFavorite: Bool = favoriteUseCase.isFavoriteExist
-        if !hasFavorite {
-            canEdit = false
-        }
+        if !hasFavorite { canEdit = false }
         return hasFavorite
     }
-    
-    var filteredTransfers: [Transfer] { 
-       filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
+
+    var transfersCount: Int {
+        filteredTransfers.count
     }
     
-    var transfersCount: Int { filteredTransfers.count }
-    
-    
-     // MARK: - Data Fetching
-     private func fetchTransfers(page: Int) {
-         guard !isLoading else { return }
-         
-         Task { [weak self] in
-             guard let self else { return }
-             
-             isLoading = true
-             defer {
-                 isLoading = false
-             }
-             do {
-                 let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
-                 guard !newTransfers.isEmpty else {
-                     hasReachedEnd = true
-                     return
-                 }
-                 let totalTransfer = fetchTransfersUseCase.mergeTransfers(current: transfers, new: newTransfers)
-                 self.transfers = totalTransfer
-             } catch {
-                 onErrorOccurred?(error.localizedDescription)
-                 currentPage -= 1
-             }
-         }
-     }
-     
-     // MARK: - Actions
+    // MARK: - Filtering & Sorting
+    private var filteredTransfers: [Transfer] {
+        filterAndSort(transfers, searchText: textSearch, sortOption: sortOption)
+    }
+
+    // MARK: - Data Loading
+    private func fetchTransfers(page: Int) {
+        guard !isLoading else { return }
+        isLoading = true
+
+        Task.detached { [weak self] in
+            guard let self else { return }
+
+            do {
+                let newTransfers = try await self.fetchTransfersUseCase.fetchTransfers(page: page)
+
+                guard !newTransfers.isEmpty else {
+                    await MainActor.run { self.hasReachedEnd = true; self.isLoading = false }
+                    return
+                }
+
+                let merged = await self.fetchTransfersUseCase.mergeTransfers(current: self.transfers, new: newTransfers)
+
+                await MainActor.run {
+                    self.transfers = merged
+                    self.isLoading = false
+                }
+            }
+            catch {
+                await MainActor.run {
+                    self.onErrorOccurred?(error.localizedDescription)
+                    self.currentPage = max(1, self.currentPage - 1)
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+
     func refreshTransfers() {
         currentPage = 1
         transfers = []
@@ -163,6 +169,7 @@ final class TransferListViewModel: TransferListViewModelProtocol {
 
     func removeItems(item: Transfer) {
         transfers.removeAll { $0.id == item.id }
+        onUpdate?()
     }
 
     func routeToDetails(for transfer: Transfer) {

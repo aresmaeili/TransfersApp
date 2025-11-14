@@ -14,7 +14,6 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
     var cardViewData: Transfer { get }
     var detailItems: [TransferDetailsItemProtocol] { get }
     var noteItem: TransferDetailsItemProtocol { get }
-    var isFavorite: Bool { get }
 }
 
 protocol TransferDetailsViewModelInput: AnyObject {

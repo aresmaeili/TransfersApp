@@ -28,7 +28,6 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     private var avatarTask: Task<Void, Never>?
     private let avatarLoader = UIActivityIndicatorView(style: .medium)
     private(set) var transfer: Transfer?
-    var onUpdate: (() -> Void)?
     
     // MARK: - Lifecycle
     
@@ -120,7 +119,6 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     @IBAction private func removeButtonAction(_ sender: UIButton) {
         guard let viewModel, let transfer else { return }
         viewModel.toggleFavoriteStatus(for: transfer)
-        onUpdate?()
     }
     
     // MARK: - Avatar Loading

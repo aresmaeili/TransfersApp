@@ -16,7 +16,10 @@ class FavoriteTableViewCell: UITableViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupCollectionView()
+        
+        Task { @MainActor in
+                setupCollectionView()
+        }
     }
 
     private func setupCollectionView() {
@@ -26,6 +29,7 @@ class FavoriteTableViewCell: UITableViewCell {
         layout.sectionInset = .init(top: 0, left: 16, bottom: 0, right: 16)
 
         collectionView.collectionViewLayout = layout
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
@@ -36,14 +40,6 @@ class FavoriteTableViewCell: UITableViewCell {
     func configure(with viewModel: TransferListViewModelInput) {
         self.viewModel = viewModel
         collectionView.reloadData()
-        bindViewModel()
-    }
-    
-    private func bindViewModel() {
-        viewModel?.onUpdate = { [weak self] in
-            guard let self else { return }
-            self.collectionView.reloadData()
-        }
     }
 }
 

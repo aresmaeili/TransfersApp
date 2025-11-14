@@ -8,25 +8,10 @@
 // MARK: - SortOption
 
 enum SortOption: String, CaseIterable {
-    case none = "None"
-    case nameAscending = "Name Asc"
-    case nameDescending = "Name Desc"
+    case none = "No Sort"
+    case nameAscending = "Name (A–Z)"
+    case nameDescending = "Name (Z–A)"
 
-    case amountAscending = "Amount Asc"
-    case amountDescending = "Amount Desc"
-}
-
-// MARK: - Helpers
-
-extension SortOption {
-    
-    var displayName: String {
-        switch self {
-        case .none: return "No Sort"
-        case .nameAscending: return "Name (A–Z)"
-        case .nameDescending: return "Name (Z–A)"
-        case .amountAscending: return "Amount (Low–High)"
-        case .amountDescending: return "Amount (High–Low)"
-        }
-    }
+    case amountAscending = "Amount (Low–High)"
+    case amountDescending = "Amount (High–Low)"
 }
