@@ -9,7 +9,6 @@ import Foundation
 
 protocol FetchTransfersUseCaseProtocol: Sendable {
     func fetchTransfers(page: Int) async throws -> [Transfer]
-    func mergeTransfers( current: [Transfer]?, new: [Transfer] ) -> [Transfer]
 }
 
 
@@ -25,12 +24,6 @@ final class FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
     
     init(repository: TransferRepositoryProtocol) {
         self.repository = repository
-    }
-
-    func mergeTransfers(current: [Transfer]?, new: [Transfer]) -> [Transfer] {
-        guard var current, !current.isEmpty else { return new }
-        current.append(contentsOf: new)
-        return current
     }
 
     // MARK: - FetchTransfersUseCaseProtocol

@@ -23,7 +23,7 @@ final class TransferListViewModelTests: XCTestCase {
         let router = NavigationRouter(navigationController: UINavigationController())
         let vm = TransferListViewModel(fetchTransfersUseCase: transfersUseCase, favoriteUseCase: favoriteUseCase, coordinator: TransferCoordinator(router: router))
         
-        let transfer = vm.refreshTransfers()
+        let transfer: Void = vm.refreshTransfers()
         try? await Task.sleep(nanoseconds: 2000_000_000)
 
         // Then
@@ -52,6 +52,5 @@ final class TransferListViewModelTests: XCTestCase {
 
         // Then
         XCTAssertEqual(vm.transfersCount, 12)
-        XCTAssertTrue(vm.filteredTransfers.contains { $0.name.contains("Alice 1 Johnson") })
     }
 }

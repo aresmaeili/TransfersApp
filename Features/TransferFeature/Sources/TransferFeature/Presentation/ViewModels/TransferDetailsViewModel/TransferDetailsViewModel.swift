@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ViewModel Protocols
-
+@MainActor
 protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObject {
     var navigationTitle: String { get }
     var cardViewData: Transfer { get }
@@ -16,6 +16,7 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
     var noteItem: TransferDetailsItemProtocol { get }
 }
 
+@MainActor
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
     var cardViewData: Transfer { get }
@@ -41,6 +42,7 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     // MARK: - State
     
     private(set) var cardViewData: Transfer
+    private(set) var isFavorite: Bool = false
     
     // MARK: - Initialization
     
@@ -53,10 +55,6 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     
     var navigationTitle: String {
         "\(cardViewData.name) Details"
-    }
-    
-    var isFavorite: Bool {
-        favoriteUseCase.isFavorite(transfer: cardViewData)
     }
     
     var detailItems: [TransferDetailsItemProtocol] {
@@ -76,9 +74,18 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
         )
     }
     
-    // MARK: - Inputs
+    // MARK: - Methods
+    
+    func loadFavoriteStatus() {
+        Task {
+            self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
+        }
+    }
     
     func toggleFavorite() {
-        favoriteUseCase.toggleFavoriteStatus(transfer: cardViewData)
+        Task {
+            await favoriteUseCase.toggleFavorite(cardViewData)
+            self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
+        }
     }
 }

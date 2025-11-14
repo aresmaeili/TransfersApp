@@ -7,16 +7,16 @@
 
 import Foundation
 
-protocol FavoriteDataSourceProtocol {
-    func getFavorites() -> [Transfer]
-    func save(transfer: Transfer)
-    func remove(transfer: Transfer)
-    func isFavorite(transfer: Transfer) -> Bool
+protocol FavoriteDataSourceProtocol: Sendable {
+    func getFavorites() async -> [Transfer]
+    func save(transfer: Transfer) async
+    func remove(transfer: Transfer) async
+    func isFavorite(transfer: Transfer) async -> Bool
 }
 
-// MARK: - TransferAPI
+// MARK: - FavoriteDataSource (Actor)
 
-final class FavoriteDataSource: FavoriteDataSourceProtocol {
+actor FavoriteDataSource: FavoriteDataSourceProtocol {
     
     // MARK: - Storage
     
@@ -24,20 +24,15 @@ final class FavoriteDataSource: FavoriteDataSourceProtocol {
     
     // MARK: - Initialization
     
-    init() {
-        // Ensures default empty state
-        if storedFavorites.isEmpty {
-            storedFavorites = []
-        }
-    }
+    init() { }
     
     // MARK: - FavoriteTransferRepositoryProtocol
     
-    func getFavorites() -> [Transfer] {
+    func getFavorites() async -> [Transfer] {
         storedFavorites
     }
     
-    func save(transfer: Transfer) {
+    func save(transfer: Transfer) async {
         guard !storedFavorites.contains(where: { $0.id == transfer.id }) else { return }
         
         var updated = storedFavorites
@@ -45,13 +40,13 @@ final class FavoriteDataSource: FavoriteDataSourceProtocol {
         storedFavorites = updated
     }
     
-    func remove(transfer: Transfer) {
+    func remove(transfer: Transfer) async {
         var updated = storedFavorites
         updated.removeAll { $0.id == transfer.id }
         storedFavorites = updated
     }
     
-    func isFavorite(transfer: Transfer) -> Bool {
+    func isFavorite(transfer: Transfer) async -> Bool {
         storedFavorites.contains { $0.id == transfer.id }
     }
 }

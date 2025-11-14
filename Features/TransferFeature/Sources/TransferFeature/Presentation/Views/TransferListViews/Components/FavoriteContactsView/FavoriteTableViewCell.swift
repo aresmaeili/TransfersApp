@@ -45,7 +45,7 @@ class FavoriteTableViewCell: UITableViewCell {
 
 extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel?.favoriteCount ?? 0
+        viewModel?.favoriteCounts ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

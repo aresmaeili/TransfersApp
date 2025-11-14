@@ -10,29 +10,27 @@ import Foundation
 // MARK: - FavoriteRepositoryImpl
 
 /// Repository responsible for persisting and managing favorite transfers.
-final class FavoriteRepositoryImpl: FavoriteTransferRepositoryProtocol {
-    
+ final actor FavoriteRepositoryImpl: FavoriteTransferRepositoryProtocol {
+
     private let dataSource: FavoriteDataSourceProtocol
 
     init(dataSource: FavoriteDataSourceProtocol) {
         self.dataSource = dataSource
     }
-    
-    // MARK: - FavoriteTransferRepositoryProtocol
-    
-    func getFavorites() -> [Transfer] {
-        dataSource.getFavorites()
+
+    func getFavorites() async -> [Transfer] {
+        await dataSource.getFavorites()
     }
-    
-    func save(transfer: Transfer) {
-        dataSource.save(transfer: transfer)
+
+    func save(_ transfer: Transfer) async {
+        await dataSource.save(transfer: transfer)
     }
-    
-    func remove(transfer: Transfer) {
-        dataSource.remove(transfer: transfer)
+
+    func remove(_ transfer: Transfer) async {
+        await dataSource.remove(transfer: transfer)
     }
-    
-    func isFavorite(transfer: Transfer) -> Bool {
-        dataSource.isFavorite(transfer: transfer)
+
+    func contains(_ transfer: Transfer) async -> Bool {
+        await dataSource.isFavorite(transfer: transfer)
     }
 }
