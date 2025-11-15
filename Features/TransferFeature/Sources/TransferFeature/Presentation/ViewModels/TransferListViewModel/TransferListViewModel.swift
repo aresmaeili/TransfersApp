@@ -82,11 +82,7 @@ final class TransferListViewModel: TransfersViewModelInputProtocol {
     }
     
     // MARK: - Init
-    init(
-        fetchTransfersUseCase: FetchTransfersUseCaseProtocol,
-        favoriteUseCase: FavoriteTransferUseCaseProtocol,
-        coordinator: TransferCoordinator
-    ) {
+    init(fetchTransfersUseCase: FetchTransfersUseCaseProtocol, favoriteUseCase: FavoriteTransferUseCaseProtocol, coordinator: TransferCoordinator) {
         self.fetchTransfersUseCase = fetchTransfersUseCase
         self.favoriteUseCase = favoriteUseCase
         self.coordinator = coordinator

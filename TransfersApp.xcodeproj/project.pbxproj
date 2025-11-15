@@ -13,10 +13,21 @@
 		34348FE32EB33AC00007AC16 /* NetworkCore in Frameworks */ = {isa = PBXBuildFile; productRef = 34348FE22EB33AC00007AC16 /* NetworkCore */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		34EA7E952EC864BC0095045D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34348F0E2EB3164C0007AC16 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34348F152EB3164C0007AC16;
+			remoteInfo = TransfersApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		34348F162EB3164C0007AC16 /* BTransfer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTransfer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A8953C2EB8753300534F80 /* TransfersApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TransfersApp.xcodeproj; sourceTree = "<group>"; };
 		34D51DBA2EBB6F5100DB7C39 /* TransfersApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TransfersApp.xcodeproj; sourceTree = "<group>"; };
+		34EA7E8F2EC864BC0095045D /* CoreTransferUITest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTransferUITest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,6 +64,11 @@
 			path = TransfersApp;
 			sourceTree = "<group>";
 		};
+		34EA7E902EC864BC0095045D /* CoreTransferUITest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CoreTransferUITest;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +83,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34EA7E8C2EC864BC0095045D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,6 +100,7 @@
 				342D32602EB3563A00CF12D6 /* Core */,
 				342D32612EB3564000CF12D6 /* Features */,
 				34348F182EB3164C0007AC16 /* TransfersApp */,
+				34EA7E902EC864BC0095045D /* CoreTransferUITest */,
 				34348F632EB31A8D0007AC16 /* Frameworks */,
 				34348F172EB3164C0007AC16 /* Products */,
 			);
@@ -86,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				34348F162EB3164C0007AC16 /* BTransfer.app */,
+				34EA7E8F2EC864BC0095045D /* CoreTransferUITest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -136,6 +161,29 @@
 			productReference = 34348F162EB3164C0007AC16 /* BTransfer.app */;
 			productType = "com.apple.product-type.application";
 		};
+		34EA7E8E2EC864BC0095045D /* CoreTransferUITest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34EA7E992EC864BC0095045D /* Build configuration list for PBXNativeTarget "CoreTransferUITest" */;
+			buildPhases = (
+				34EA7E8B2EC864BC0095045D /* Sources */,
+				34EA7E8C2EC864BC0095045D /* Frameworks */,
+				34EA7E8D2EC864BC0095045D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				34EA7E962EC864BC0095045D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				34EA7E902EC864BC0095045D /* CoreTransferUITest */,
+			);
+			name = CoreTransferUITest;
+			packageProductDependencies = (
+			);
+			productName = CoreTransferUITest;
+			productReference = 34EA7E8F2EC864BC0095045D /* CoreTransferUITest.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -143,11 +191,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					34348F152EB3164C0007AC16 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					34EA7E8E2EC864BC0095045D = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = 34348F152EB3164C0007AC16;
 					};
 				};
 			};
@@ -176,12 +228,20 @@
 			projectRoot = "";
 			targets = (
 				34348F152EB3164C0007AC16 /* TransfersApp */,
+				34EA7E8E2EC864BC0095045D /* CoreTransferUITest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		34348F142EB3164C0007AC16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34EA7E8D2EC864BC0095045D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -198,7 +258,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34EA7E8B2EC864BC0095045D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		34EA7E962EC864BC0095045D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34348F152EB3164C0007AC16 /* TransfersApp */;
+			targetProxy = 34EA7E952EC864BC0095045D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		34348F2A2EB3164D0007AC16 /* Debug */ = {
@@ -388,6 +463,46 @@
 			};
 			name = Release;
 		};
+		34EA7E972EC864BC0095045D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Arem.CoreTransferUITest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TransfersApp;
+			};
+			name = Debug;
+		};
+		34EA7E982EC864BC0095045D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Arem.CoreTransferUITest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TransfersApp;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -405,6 +520,15 @@
 			buildConfigurations = (
 				34348F2A2EB3164D0007AC16 /* Debug */,
 				34348F2B2EB3164D0007AC16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34EA7E992EC864BC0095045D /* Build configuration list for PBXNativeTarget "CoreTransferUITest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34EA7E972EC864BC0095045D /* Debug */,
+				34EA7E982EC864BC0095045D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

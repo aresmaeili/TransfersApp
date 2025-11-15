@@ -143,7 +143,7 @@ extension TransferListViewController: UISearchResultsUpdating {
 }
 
 // MARK: - Header Actions Delegate
-extension TransferListViewController: @MainActor TransferListActionDelegate {
+extension TransferListViewController: TransferListActionDelegate {
 
     func didTapSort() {
 //        guard let viewModel else { return }

@@ -88,7 +88,8 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     // MARK: - Methods
     
     func loadFavoriteStatus() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
             self.onUpdatePublisher.send()
         }

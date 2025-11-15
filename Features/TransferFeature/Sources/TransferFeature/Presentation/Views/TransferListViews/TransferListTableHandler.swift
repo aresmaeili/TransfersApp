@@ -8,6 +8,8 @@
 import UIKit
 import Shared
 
+// MARK: - Action Delegate
+@MainActor
 protocol TransferListActionDelegate: AnyObject {
     func didTapSort()
     func didTapEdit()
@@ -16,10 +18,12 @@ protocol TransferListActionDelegate: AnyObject {
 @MainActor
 final class TransferListTableHandler: NSObject {
 
+    // MARK: - Properties
     private weak var tableView: UITableView?
     private weak var viewModel: TransfersViewModelInputProtocol?
     private weak var actionDelegate: TransferListActionDelegate?
 
+    // MARK: - Initialization
     init(tableView: UITableView,
          viewModel: TransfersViewModelInputProtocol,
          actionDelegate: TransferListActionDelegate) {
@@ -32,9 +36,9 @@ final class TransferListTableHandler: NSObject {
     }
 }
 
-
+// MARK: - DataSource
 extension TransferListTableHandler: UITableViewDataSource {
-    // MARK: - Sections
+    // MARK: - ListSection
     private enum ListSection: Int, CaseIterable {
         case favorites
         case transfers
@@ -92,6 +96,7 @@ extension TransferListTableHandler: UITableViewDataSource {
     }
 }
 
+// MARK: - Delegate
 extension TransferListTableHandler: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -102,6 +107,7 @@ extension TransferListTableHandler: UITableViewDelegate {
         shouldShowHeader(section) ? UITableView.automaticDimension : 0
     }
 
+    // MARK: - Header View
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard shouldShowHeader(section), let section = ListSection(rawValue: section), let vm = viewModel else { return nil }
 
