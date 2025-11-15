@@ -83,9 +83,10 @@ private extension TransferListViewController {
     }
 
     @objc func handleRefresh() {
+        guard let viewModel else { return }
         searchController.searchBar.text = ""
-        viewModel?.changedTextSearch(with: "")
-        viewModel?.refreshTransfers()
+        viewModel.changedTextSearch(with: "")
+        viewModel.refreshTransfers()
     }
 
     func updateNavigationBarAppearance() {
@@ -106,27 +107,25 @@ private extension TransferListViewController {
         guard let viewModel else { return }
 
         viewModel.onUpdatePublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                if self?.viewModel?.transfersCount == 0 {
-                    self?.transferTableView.setEmptyMessage("No Transfer Found")
+                guard let self, let viewModel = self.viewModel else { return }
+                if viewModel.transfersCount == 0 {
+                    self.transferTableView.setEmptyMessage("No Transfer Found")
                 } else {
-                    self?.transferTableView.restore()
+                    self.transferTableView.restore()
                 }
-                self?.refreshControl.endRefreshing()
-                self?.transferTableView.reloadData()
+                self.refreshControl.endRefreshing()
+                self.transferTableView.reloadData()
             }
             .store(in: &cancellables)
 
         viewModel.onErrorPublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] message in
                 self?.showErrorAlert(title: "Error", message: message)
             }
             .store(in: &cancellables)
 
         viewModel.onLoadingStatePublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoading in
                 self?.setLoading(isLoading)
             }
@@ -137,8 +136,9 @@ private extension TransferListViewController {
 // MARK: - Search
 extension TransferListViewController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
+        guard let viewModel else { return }
         let text = searchController.searchBar.text ?? ""
-        viewModel?.changedTextSearch(with: text.trimmingCharacters(in: .whitespacesAndNewlines))
+        viewModel.changedTextSearch(with: text.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 }
 
@@ -146,17 +146,12 @@ extension TransferListViewController: UISearchResultsUpdating {
 extension TransferListViewController: TransferListActionDelegate {
 
     func didTapSort() {
-//        guard let viewModel else { return }
-
-        let alert = UIAlertController(
-            title: "Sort Transfers",
-            message: "Choose a sorting option",
-            preferredStyle: .actionSheet
-        )
+        let alert = UIAlertController(title: "Sort Transfers", message: "Choose a sorting option", preferredStyle: .actionSheet)
 
         SortOption.allCases.forEach { sort in
             alert.addAction(UIAlertAction(title: sort.rawValue, style: .default) { [weak self] _ in
-                self?.viewModel?.sortOption = sort
+                guard let viewModel = self?.viewModel else { return }
+                viewModel.sortOption = sort
             })
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -164,7 +159,8 @@ extension TransferListViewController: TransferListActionDelegate {
     }
 
     func didTapEdit() {
-        viewModel?.toggleCanEdit()
+        guard let viewModel else { return }
+        viewModel.toggleCanEdit()
         transferTableView.reloadData()
     }
 }

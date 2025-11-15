@@ -33,18 +33,11 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        //        TODO: Check This
         Task { @MainActor in
             setupUI()
         }
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        avatarTask?.cancel()
-        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
-        nameLabel.text = nil
-        transfer = nil
-        viewModel = nil
     }
     
     // MARK: - Setup
@@ -103,14 +96,10 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"
-        
-        UIView.transition(with: removeButton, duration: 0.25, options: .transitionCrossDissolve) { [weak self] in
-            guard let self else { return }
-            self.removeButton.isHidden = !viewModel.canEdit
-            nameLabel.text = transfer.person?.fullName ?? "-"
-            if let urlString = transfer.avatar {
-                loadAvatar(from: urlString)
-            }
+        removeButton.isHidden = !viewModel.canEdit
+        nameLabel.text = transfer.person?.fullName ?? "-"
+        if let urlString = transfer.avatar {
+            loadAvatar(from: urlString)
         }
     }
     
@@ -122,30 +111,27 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Avatar Loading
-    
-    private func loadAvatar(from urlString: String) {
+    private func loadAvatar(from urlString: String?) {
+        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
         avatarTask?.cancel()
         avatarLoader.startAnimating()
         
-        avatarTask = Task.detached { [weak self] in
+        guard let urlString, !urlString.isEmpty else {
+            avatarLoader.stopAnimating()
+            return
+        }
+        
+        avatarTask = Task { [weak self] in
             guard let self else { return }
-            guard !urlString.isEmpty else {
-                await MainActor.run { self.avatarLoader.stopAnimating() }
-                return
-            }
-
-            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
-                guard !Task.isCancelled else {
-                    await MainActor.run { self.avatarLoader.stopAnimating() }
-                    return
-                }
-
-                await MainActor.run {
+            
+            let image = try? await ImageDownloader.shared.downloadImage(from: urlString)
+            guard !Task.isCancelled else { return }
+            
+            await MainActor.run {
+                if let image {
                     self.avatarImageView.image = image
-                    self.avatarLoader.stopAnimating()
                 }
-            } else {
-                await MainActor.run { self.avatarLoader.stopAnimating() }
+                self.avatarLoader.stopAnimating()
             }
         }
     }

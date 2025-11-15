@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - FavoriteRepositoryImpl
 
-/// Repository responsible for persisting and managing favorite transfers.
  final actor FavoriteRepositoryImpl: FavoriteTransferRepositoryProtocol {
 
     private let dataSource: FavoriteDataSourceProtocol

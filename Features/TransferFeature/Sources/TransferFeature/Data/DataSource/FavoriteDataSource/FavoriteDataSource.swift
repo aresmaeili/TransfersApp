@@ -21,11 +21,7 @@ actor FavoriteDataSource: FavoriteDataSourceProtocol {
     // MARK: - Storage
     
     @UserDefaultTransfers private var storedFavorites: [Transfer]
-    
-    // MARK: - Initialization
-    
-    init() { }
-    
+
     // MARK: - FavoriteTransferRepositoryProtocol
     
     func getFavorites() async -> [Transfer] {

@@ -9,8 +9,6 @@ import Foundation
 
 // MARK: - TransferMockData
 
-/// A mock data source for simulating paginated transfer responses.
-/// Used for local development and UI previews without calling live APIs.
 final class TransferMockDataSource: TransferDataSourceProtocol {
     
     // MARK: - API Simulation

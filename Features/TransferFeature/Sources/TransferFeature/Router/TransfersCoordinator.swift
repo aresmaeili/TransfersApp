@@ -18,11 +18,11 @@ public protocol TransferRouter: AnyObject {
 public final class TransferCoordinator: BaseCoordinator, TransferRouter {
     
     // MARK: - Dependencies
-    private let factory: TransferFactoryProtocol
+    private let factory: TransferConfiguratorProtocol
     
     // MARK: - Initialization
     public override init(router: Router) {
-        self.factory = TransferDIFactory()
+        self.factory = TransferDIConfigurator()
         super.init(router: router)
     }
     

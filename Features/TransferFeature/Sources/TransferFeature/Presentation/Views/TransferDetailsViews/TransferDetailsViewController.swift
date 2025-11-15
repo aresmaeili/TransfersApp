@@ -58,7 +58,7 @@ final class TransferDetailsViewController: UIViewController {
     
     private func setupContent() {
         
-        if let cardData = viewModel?.cardViewData {
+        if let cardData = viewModel?.transferData {
             let cardView = CardView(with: cardData)
             stackView.addArrangedSubview(cardView)
         }

@@ -79,7 +79,7 @@ class ProfileView: UIView, ViewConnectable {
     }
     
     private func configure(viewModel: TransferDetailsViewModelInput?) {
-        guard let data = viewModel?.cardViewData, let isFavorite = viewModel?.isFavorite else { return }
+        guard let data = viewModel?.transferData, let isFavorite = viewModel?.isFavorite else { return }
         nameLabel.text = data.name
         mailLabel.text = data.mail
         totalLabel.text = data.totalAmount

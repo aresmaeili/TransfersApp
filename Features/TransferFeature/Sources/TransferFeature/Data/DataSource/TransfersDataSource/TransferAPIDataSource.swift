@@ -10,15 +10,12 @@ import NetworkCore
 
 // MARK: - TransferDataSource
 
-/// A protocol defining a common interface for fetching transfer data.
-/// Both live APIs and mock data sources should conform to this.
 protocol TransferDataSourceProtocol: Sendable {
     func fetchTransfers(page: Int) async throws -> [Transfer]
 }
 
 // MARK: - TransferAPI
 
-/// Handles network calls for fetching transfer data from a remote API.
 final class TransferAPIDataSource: TransferDataSourceProtocol {
     
     // MARK: - Properties

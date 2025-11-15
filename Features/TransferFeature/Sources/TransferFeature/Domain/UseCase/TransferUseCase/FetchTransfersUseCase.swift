@@ -11,7 +11,6 @@ protocol FetchTransfersUseCaseProtocol: Sendable {
     func fetchTransfers(page: Int) async throws -> [Transfer]
 }
 
-
 // MARK: - FetchTransfersUseCase
 
 struct FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
@@ -32,5 +31,5 @@ struct FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
         try await repository.fetchTransfers(page: page)
     }
     
-//    TODO: can do validation - empty response logic - caching - Retry rules - Filtering - Sorting - Deduplication
+//    NOTE: can do validation - empty response logic - caching - Retry rules - Filtering - Sorting - Deduplication
 }

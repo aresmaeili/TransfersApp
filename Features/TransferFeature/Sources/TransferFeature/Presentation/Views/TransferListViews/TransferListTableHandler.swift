@@ -24,13 +24,11 @@ final class TransferListTableHandler: NSObject {
     private weak var actionDelegate: TransferListActionDelegate?
 
     // MARK: - Initialization
-    init(tableView: UITableView,
-         viewModel: TransfersViewModelInputProtocol,
-         actionDelegate: TransferListActionDelegate) {
+    init(tableView: UITableView, viewModel: TransfersViewModelInputProtocol, actionDelegate: TransferListActionDelegate) {
+        super.init()
         self.tableView = tableView
         self.viewModel = viewModel
         self.actionDelegate = actionDelegate
-        super.init()
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -76,20 +74,19 @@ extension TransferListTableHandler: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let section = ListSection(rawValue: indexPath.section),
-              let vm = viewModel else { return UITableViewCell() }
+        guard let section = ListSection(rawValue: indexPath.section), let viewModel else { return UITableViewCell() }
 
         switch section {
 
         case .favorites:
             guard let cell: FavoriteTableViewCell = tableView.dequeueCell(FavoriteTableViewCell.self) else { return UITableViewCell()}
-            cell.configure(with: vm)
+            cell.configure(with: viewModel)
             return cell
 
         case .transfers:
             guard let cell: TransferCell = tableView.dequeueCell(TransferCell.self) else { return UITableViewCell()}
-            if let transfer = vm.getTransferItem(at: indexPath.row) {
-                cell.configCell(data: transfer, isFavorite: vm.checkIsFavorite(transfer))
+            if let transfer = viewModel.getTransferItem(at: indexPath.row) {
+                cell.configCell(data: transfer, isFavorite: viewModel.checkIsFavorite(transfer))
             }
             return cell
         }
@@ -109,15 +106,15 @@ extension TransferListTableHandler: UITableViewDelegate {
 
     // MARK: - Header View
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard shouldShowHeader(section), let section = ListSection(rawValue: section), let vm = viewModel else { return nil }
+        guard shouldShowHeader(section), let section = ListSection(rawValue: section), let viewModel else { return nil }
 
-        let view = TransferSectionHeaderView(title: section.title, isFavorites: section == .favorites, isEditing: vm.canEdit, sortName: vm.sortOption.rawValue, delegate: actionDelegate)
+        let view = TransferSectionHeaderView(title: section.title, isFavorites: section == .favorites, isEditing: viewModel.canEdit, sortName: viewModel.sortOption.rawValue, delegate: actionDelegate)
         return view
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let vm = viewModel, let transfer = vm.getTransferItem(at: indexPath.row), let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
-        vm.routeToDetails(for: transfer)
+        guard let viewModel, let transfer = viewModel.getTransferItem(at: indexPath.row), let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
+        viewModel.routeToDetails(for: transfer)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -140,8 +137,8 @@ extension TransferListTableHandler: UITableViewDelegate {
 // MARK: - Helpers
 private extension TransferListTableHandler {
     func shouldShowHeader(_ section: Int) -> Bool {
-        guard let section = ListSection(rawValue: section), let vm = viewModel else { return false }
-        if section == .favorites { return vm.hasFavoriteRow }
+        guard let section = ListSection(rawValue: section), let viewModel else { return false }
+        if section == .favorites { return viewModel.hasFavoriteRow }
         return true
     }
 }

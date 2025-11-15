@@ -17,6 +17,7 @@ class FavoriteTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+//        TODO: Check This
         Task { @MainActor in
                 setupCollectionView()
         }

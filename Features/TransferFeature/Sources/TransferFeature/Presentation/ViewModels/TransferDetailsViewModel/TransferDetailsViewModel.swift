@@ -12,7 +12,7 @@ import Combine
 @MainActor
 protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObject {
     var navigationTitle: String { get }
-    var cardViewData: Transfer { get }
+    var transferData: Transfer { get }
     var detailItems: [TransferDetailsItemProtocol] { get }
     var noteItem: TransferDetailsItemProtocol { get }
 }
@@ -21,7 +21,7 @@ protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObj
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
     var onUpdatePublisher: PassthroughSubject<Void, Never> { get }
-    var cardViewData: Transfer { get }
+    var transferData: Transfer { get }
     func toggleFavorite()
 }
 
@@ -43,7 +43,7 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     
     // MARK: - State
     
-    private(set) var cardViewData: Transfer
+    private(set) var transferData: Transfer
     private(set) var isFavorite: Bool = false
     
     // MARK: - Callbacks
@@ -52,28 +52,23 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     // MARK: - Initialization
     
     init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCaseProtocol) {
-        self.cardViewData = transfer
+        self.transferData = transfer
         self.favoriteUseCase = favoriteUseCase
-
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            self.isFavorite = await favoriteUseCase.isFavorite(transfer)
-            self.onUpdatePublisher.send()
-        }
+        loadFavoriteStatus()
     }
     
     // MARK: - Outputs
     
     var navigationTitle: String {
-        "\(cardViewData.name) Details"
+        "\(transferData.name) Details"
     }
     
     var detailItems: [TransferDetailsItemProtocol] {
         [
-            TransferDetailsItem(icon: "creditcard", title: "Card Number:", value: cardViewData.cardNumberString),
-            TransferDetailsItem(icon: "calendar", title: "Last Transfer Date:", value: cardViewData.lastTransferDate),
-            TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: cardViewData.totalAmount),
-            TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: cardViewData.countOfTransfer)
+            TransferDetailsItem(icon: "creditcard", title: "Card Number:", value: transferData.cardNumberString),
+            TransferDetailsItem(icon: "calendar", title: "Last Transfer Date:", value: transferData.lastTransferDate),
+            TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: transferData.totalAmount),
+            TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: transferData.countOfTransfer)
         ]
     }
     
@@ -81,17 +76,21 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
         TransferDetailsItem(
             icon: "text.bubble",
             title: "Note:",
-            value: cardViewData.note ?? ""
+            value: transferData.note ?? ""
         )
     }
     
     // MARK: - Methods
     
-    func loadFavoriteStatus() {
+    private func loadFavoriteStatus() {
         Task { [weak self] in
             guard let self else { return }
-            self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
-            self.onUpdatePublisher.send()
+            
+            let isFavorite = await favoriteUseCase.isFavorite(self.transferData)
+            if self.isFavorite != isFavorite {
+                self.isFavorite = isFavorite
+                self.onUpdatePublisher.send()
+            }
         }
     }
     
@@ -99,9 +98,8 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
         Task { @MainActor [weak self] in
             guard let self else { return }
 
-            await favoriteUseCase.toggleFavorite(cardViewData)
-            self.isFavorite = await favoriteUseCase.isFavorite(cardViewData)
-            self.onUpdatePublisher.send()
+            await favoriteUseCase.toggleFavorite(transferData)
+            loadFavoriteStatus()
         }
     }
 }

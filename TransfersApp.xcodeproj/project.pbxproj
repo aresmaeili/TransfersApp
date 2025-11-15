@@ -64,11 +64,6 @@
 			path = TransfersApp;
 			sourceTree = "<group>";
 		};
-		34EA7E902EC864BC0095045D /* CoreTransferUITest */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CoreTransferUITest;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +95,6 @@
 				342D32602EB3563A00CF12D6 /* Core */,
 				342D32612EB3564000CF12D6 /* Features */,
 				34348F182EB3164C0007AC16 /* TransfersApp */,
-				34EA7E902EC864BC0095045D /* CoreTransferUITest */,
 				34348F632EB31A8D0007AC16 /* Frameworks */,
 				34348F172EB3164C0007AC16 /* Products */,
 			);
@@ -173,9 +167,6 @@
 			);
 			dependencies = (
 				34EA7E962EC864BC0095045D /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				34EA7E902EC864BC0095045D /* CoreTransferUITest */,
 			);
 			name = CoreTransferUITest;
 			packageProductDependencies = (
