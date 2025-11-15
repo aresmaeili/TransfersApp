@@ -35,7 +35,7 @@ protocol TransfersViewModelInputProtocol: FavoritesCellViewModelInput, AnyObject
     
     func refreshTransfers()
     func getTransferItem(at index: Int) -> Transfer?
-    func loadNextPageIfNeeded(currentItem: Transfer?)
+    func loadNextPageIfNeeded(index: Int?)
     func changedTextSearch(with text: String)
     func checkIsFavorite(_ transfer: Transfer) -> Bool
     func loadFavorites()
@@ -47,7 +47,7 @@ protocol TransfersViewModelInputProtocol: FavoritesCellViewModelInput, AnyObject
 final class TransferListViewModel: TransfersViewModelInputProtocol {
     
     // MARK: - Dependencies
-    private let fetchTransfersUseCase: FetchTransfersUseCaseProtocol
+    private var fetchTransfersUseCase: FetchTransfersUseCaseProtocol
     private let favoriteUseCase: FavoriteTransferUseCaseProtocol
     private let coordinator: TransferCoordinator
     
@@ -58,8 +58,7 @@ final class TransferListViewModel: TransfersViewModelInputProtocol {
     
     // MARK: - State
     private(set) var canEdit = false
-    private var currentPage = 1
-    private var hasReachedEnd = false
+    private var hasReachedEnd: Bool { fetchTransfersUseCase.listEnded }
     private var isLoading = false { didSet { onLoadingStatePublisher.send(isLoading) } }
     private var debouncer = Debouncer(delay: 0.35)
     
@@ -113,50 +112,37 @@ final class TransferListViewModel: TransfersViewModelInputProtocol {
     }
     
     // MARK: - Data Loading
-    private func fetchTransfers(page: Int) {
+    private func fetchTransfers() {
         guard !isLoading else { return }
         isLoading = true
         
         Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                let newTransfers = try await fetchTransfersUseCase.fetchTransfers(page: page)
-                
-                if newTransfers.isEmpty {
-                    hasReachedEnd = true
-                    isLoading = false
-                    return
-                }
+                let newTransfers = try await fetchTransfersUseCase.fetchTransfers()
                 let merged = mergeTransfers(current: transfers, new: newTransfers)
                 transfers = merged
             }
             catch {
                 onErrorPublisher.send(error.localizedDescription)
-                currentPage = max(1, currentPage - 1)
             }
             isLoading = false
         }
     }
     
     func refreshTransfers() {
-        currentPage = 1
         transfers = []
         favorites = []
-        hasReachedEnd = false
         canEdit = false
         loadFavorites()
-        fetchTransfers(page: currentPage)
+        fetchTransfersUseCase.refreshTransfers()
+        fetchTransfers()
     }
     
-    func loadNextPageIfNeeded(currentItem: Transfer?) {
-        guard let currentItem else { return }
-        guard !isLoading, !hasReachedEnd, textSearch.isEmpty else { return }
-        
-        guard let idx = filteredTransfers.firstIndex(where: { $0.id == currentItem.id }) else { return }
-        guard idx > filteredTransfers.count - 3 else { return }
-        
-        currentPage += 1
-        fetchTransfers(page: currentPage)
+    func loadNextPageIfNeeded(index: Int?) {
+        guard let index, !isLoading, !hasReachedEnd, textSearch.isEmpty else { return }
+        guard index > filteredTransfers.count - 3 else { return }
+        fetchTransfers()
     }
     
     func mergeTransfers(current: [Transfer]?, new: [Transfer]) -> [Transfer] {

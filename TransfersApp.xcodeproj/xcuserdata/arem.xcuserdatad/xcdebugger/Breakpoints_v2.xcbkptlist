@@ -464,6 +464,36 @@
             endingLineNumber = "89"
             landmarkName = "loadFavoriteStatus()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "05E1BD5E-29B2-443E-AE3F-61CCE85351C8 - 623a4c034df03098"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 () async -&gt; () in TransferFeature.TransferDetailsViewModel.loadFavoriteStatus() -&gt; ()"
+                  moduleName = "BTransfer.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/Education/TransfersApp/Features/TransferFeature/Sources/TransferFeature/Presentation/ViewModels/TransferDetailsViewModel/TransferDetailsViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89">
+               </Location>
+               <Location
+                  uuid = "05E1BD5E-29B2-443E-AE3F-61CCE85351C8 - bd8c1fd20901b5a8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for closure #1 () async -&gt; () in TransferFeature.TransferDetailsViewModel.loadFavoriteStatus() -&gt; ()"
+                  moduleName = "BTransfer.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/arem/Education/TransfersApp/Features/TransferFeature/Sources/TransferFeature/Presentation/ViewModels/TransferDetailsViewModel/TransferDetailsViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -479,6 +509,22 @@
             startingLineNumber = "90"
             endingLineNumber = "90"
             landmarkName = "loadFavoriteStatus()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EBC880FA-B830-430E-9D0C-FF93D1C29738"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Features/TransferFeature/Sources/TransferFeature/Presentation/ViewModels/TransferListViewModel/TransferListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "loadNextPageIfNeeded(index:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

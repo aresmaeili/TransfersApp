@@ -8,7 +8,9 @@
 import Foundation
 
 protocol FetchTransfersUseCaseProtocol: Sendable {
-    func fetchTransfers(page: Int) async throws -> [Transfer]
+    mutating func fetchTransfers() async throws -> [Transfer]
+    mutating func refreshTransfers()
+    var listEnded: Bool { get }
 }
 
 // MARK: - FetchTransfersUseCase
@@ -18,6 +20,8 @@ struct FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
     // MARK: - Dependencies
     
     private let repository: TransferRepositoryProtocol
+    private(set) var listEnded: Bool = false
+    private var currentPage: Int = 1
     
     // MARK: - Initialization
     
@@ -27,8 +31,22 @@ struct FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
 
     // MARK: - FetchTransfersUseCaseProtocol
     
-    func fetchTransfers(page: Int) async throws -> [Transfer] {
-        try await repository.fetchTransfers(page: page)
+    mutating func fetchTransfers() async throws -> [Transfer] {
+        if listEnded {
+            return []
+        }
+        let transfers = try await repository.fetchTransfers(page: currentPage)
+        if transfers.isEmpty {
+            listEnded = true
+        } else {
+            currentPage += 1
+        }
+        return transfers
+    }
+    
+    mutating func refreshTransfers() {
+        currentPage = 1
+        listEnded = false
     }
     
 //    NOTE: can do validation - empty response logic - caching - Retry rules - Filtering - Sorting - Deduplication

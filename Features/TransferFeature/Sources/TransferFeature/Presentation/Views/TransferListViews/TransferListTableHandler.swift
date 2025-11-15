@@ -130,7 +130,7 @@ extension TransferListTableHandler: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
           guard let section = ListSection(rawValue: indexPath.section), section == .transfers, let currentItem = viewModel?.getTransferItem(at: indexPath.row) else { return }
-          viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
+        viewModel?.loadNextPageIfNeeded(index: indexPath.row)
       }
 }
 
