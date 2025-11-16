@@ -13,7 +13,7 @@ protocol FetchTransfersUseCaseProtocol: Sendable {
 
 // MARK: - FetchTransfersUseCase
 
-struct FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
+final actor FetchTransfersUseCase: FetchTransfersUseCaseProtocol {
       
     // MARK: - Dependencies
     

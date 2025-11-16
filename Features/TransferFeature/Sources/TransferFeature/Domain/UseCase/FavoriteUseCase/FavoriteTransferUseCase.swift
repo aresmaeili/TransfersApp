@@ -19,7 +19,7 @@ protocol FavoriteTransferUseCaseProtocol: Sendable {
 
 // MARK: - FavoriteTransferUseCase
 
-struct FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
+final actor FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
     
     // MARK: - Dependencies
     
