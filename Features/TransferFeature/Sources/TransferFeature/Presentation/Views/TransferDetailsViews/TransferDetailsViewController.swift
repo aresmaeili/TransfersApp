@@ -27,6 +27,7 @@ final class TransferDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        bindViewModel()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -42,7 +43,6 @@ final class TransferDetailsViewController: UIViewController {
         backView.backgroundColor = .background1
         applyTheme()
         setupContent()
-        bindViewModel() 
     }
 
     private func applyTheme() {
