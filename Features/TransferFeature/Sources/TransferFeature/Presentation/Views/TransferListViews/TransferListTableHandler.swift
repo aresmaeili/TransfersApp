@@ -1,0 +1,144 @@
+//
+//  TransferListActionDelegate.swift
+//  TransferFeature
+//
+//  Created by AREM on 11/13/25.
+//
+
+import UIKit
+import Shared
+
+// MARK: - Action Delegate
+@MainActor
+protocol TransferListActionDelegate: AnyObject {
+    func didTapSort()
+    func didTapEdit()
+}
+
+@MainActor
+final class TransferListTableHandler: NSObject {
+
+    // MARK: - Properties
+    private weak var tableView: UITableView?
+    private weak var viewModel: TransfersViewModelInputProtocol?
+    private weak var actionDelegate: TransferListActionDelegate?
+
+    // MARK: - Initialization
+    init(tableView: UITableView, viewModel: TransfersViewModelInputProtocol, actionDelegate: TransferListActionDelegate) {
+        super.init()
+        self.tableView = tableView
+        self.viewModel = viewModel
+        self.actionDelegate = actionDelegate
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+}
+
+// MARK: - DataSource
+extension TransferListTableHandler: UITableViewDataSource {
+    // MARK: - ListSection
+    private enum ListSection: Int, CaseIterable {
+        case favorites
+        case transfers
+        
+        var height: CGFloat {
+            switch self {
+            case .favorites: return 160
+            case .transfers: return 100
+            }
+        }
+        
+        var title: String {
+            switch self {
+            case .favorites: return "Favorites:"
+            case .transfers: return "Transfers:"
+            }
+        }
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        ListSection.allCases.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let viewModel else { return 0 }
+        switch ListSection(rawValue: section) {
+        case .favorites:
+            return viewModel.hasFavoriteRow ? 1 : 0
+        case .transfers:
+            return viewModel.transfersCount
+        case .none:
+            return 0
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        guard let section = ListSection(rawValue: indexPath.section), let viewModel else { return UITableViewCell() }
+
+        switch section {
+
+        case .favorites:
+            guard let cell: FavoriteTableViewCell = tableView.dequeueCell(FavoriteTableViewCell.self) else { return UITableViewCell()}
+            cell.configure(with: viewModel)
+            return cell
+
+        case .transfers:
+            guard let cell: TransferCell = tableView.dequeueCell(TransferCell.self) else { return UITableViewCell()}
+            if let transfer = viewModel.getTransferItem(at: indexPath.row) {
+                cell.configCell(data: transfer, isFavorite: viewModel.checkIsFavorite(transfer))
+            }
+            return cell
+        }
+    }
+}
+
+// MARK: - Delegate
+extension TransferListTableHandler: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        ListSection(rawValue: indexPath.section)?.height ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        shouldShowHeader(section) ? UITableView.automaticDimension : 0
+    }
+
+    // MARK: - Header View
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard shouldShowHeader(section), let section = ListSection(rawValue: section), let viewModel else { return nil }
+
+        let view = TransferSectionHeaderView(title: section.title, isFavorites: section == .favorites, isEditing: viewModel.canEdit, sortName: viewModel.sortOption.rawValue, delegate: actionDelegate)
+        return view
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewModel, let transfer = viewModel.getTransferItem(at: indexPath.row), let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
+        viewModel.routeToDetails(for: transfer)
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let section = ListSection(rawValue: indexPath.section), section == .transfers else { return }
+        if editingStyle == .delete {
+            guard let viewModel, let item = viewModel.getTransferItem(at: indexPath.row) else { return }
+            tableView.beginUpdates()
+            viewModel.removeItems(item: item)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+          guard let section = ListSection(rawValue: indexPath.section), section == .transfers, let currentItem = viewModel?.getTransferItem(at: indexPath.row) else { return }
+          viewModel?.loadNextPageIfNeeded(currentItem: currentItem)
+      }
+}
+
+// MARK: - Helpers
+private extension TransferListTableHandler {
+    func shouldShowHeader(_ section: Int) -> Bool {
+        guard let section = ListSection(rawValue: section), let viewModel else { return false }
+        if section == .favorites { return viewModel.hasFavoriteRow }
+        return true
+    }
+}

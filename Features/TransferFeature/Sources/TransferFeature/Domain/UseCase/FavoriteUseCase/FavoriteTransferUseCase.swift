@@ -9,18 +9,17 @@ import Foundation
 
 // MARK: - FavoriteTransferUseCaseProtocol
 
-protocol FavoriteTransferUseCaseProtocol {
-    var isFavoriteExist: Bool { get }
-    func getFavoriteItem(at index: Int) -> Transfer?
-    var favoritesCount: Int { get }
-    func fetchFavorites() -> [Transfer]
-    func toggleFavoriteStatus(transfer: Transfer)
-    func isFavorite(transfer: Transfer) -> Bool
+protocol FavoriteTransferUseCaseProtocol: Sendable {
+    func fetchFavorites() async -> [Transfer]
+    func favorite(at index: Int) async -> Transfer?
+    func favoritesCount() async -> Int
+    func isFavorite(_ transfer: Transfer) async -> Bool
+    func toggleFavorite(_ transfer: Transfer) async
 }
 
 // MARK: - FavoriteTransferUseCase
 
-final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
+final actor FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
     
     // MARK: - Dependencies
     
@@ -32,35 +31,31 @@ final class FavoriteTransferUseCase: FavoriteTransferUseCaseProtocol {
         self.repository = repository
     }
     
-    
-    private var allFavorites: [Transfer] { fetchFavorites() }
-
-    var favoritesCount: Int { allFavorites.count }
-    
-    
-    var isFavoriteExist: Bool {
-        !allFavorites.isEmpty
-    }
-    
     // MARK: - FavoriteTransferUseCaseProtocol Implementation
     
-    func fetchFavorites() -> [Transfer] {
-        repository.getFavorites()
+    func fetchFavorites() async -> [Transfer] {
+        await repository.getFavorites()
     }
     
-    func getFavoriteItem(at index: Int) -> Transfer? {
-        allFavorites[safe: index]
+    func favorite(at index: Int) async -> Transfer? {
+        let items = await repository.getFavorites()
+        return items[safe: index]
     }
     
-    func toggleFavoriteStatus(transfer: Transfer) {
-        if isFavorite(transfer: transfer) {
-            repository.remove(transfer: transfer)
+    func favoritesCount() async -> Int {
+        let items = await repository.getFavorites()
+        return items.count
+    }
+    
+    func isFavorite(_ transfer: Transfer) async -> Bool {
+        await repository.contains(transfer)
+    }
+    
+    func toggleFavorite(_ transfer: Transfer) async {
+        if await repository.contains(transfer) {
+            await repository.remove(transfer)
         } else {
-            repository.save(transfer: transfer)
+            await repository.save(transfer)
         }
-    }
-    
-    func isFavorite(transfer: Transfer) -> Bool {
-        repository.isFavorite(transfer: transfer)
     }
 }

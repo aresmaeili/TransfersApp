@@ -17,7 +17,6 @@ protocol TransferDetailsCardProtocol {
     var lastTransferDate: String { get }
     var totalAmount: String { get }
     var countOfTransfer: String { get }
-    var isFavorite: Bool { get }
     var name: String { get }
 }
 
@@ -98,6 +97,6 @@ final class CardView: UIView, ViewConnectable {
         countLabel.text = "#\(data.countOfTransfer)"
         logoLabel.text = data.cardTypeString
         nameLabel.text = data.name
-        isFavorite = data.isFavorite
+//        isFavorite = data.isFavorite
     }
 }

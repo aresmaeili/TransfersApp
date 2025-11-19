@@ -9,8 +9,6 @@ import Foundation
 
 // MARK: - UserDefaultTransfers
 
-/// A property wrapper that stores and retrieves `[Transfer]` objects
-/// from `UserDefaults` using JSON encoding.
 @propertyWrapper
 struct UserDefaultTransfers {
     

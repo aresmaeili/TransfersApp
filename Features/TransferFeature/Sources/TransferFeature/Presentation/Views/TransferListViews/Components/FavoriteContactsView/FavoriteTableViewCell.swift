@@ -11,13 +11,13 @@ import UIKit
 class FavoriteTableViewCell: UITableViewCell {
 
     @IBOutlet private weak var collectionView: UICollectionView!
-    weak var viewModel: TransferListViewModelInput?
+    private var viewModel: FavoritesCellViewModelInput?
     
     // MARK: - Lifecycle
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
+//        TODO: Check This
         Task { @MainActor in
                 setupCollectionView()
         }
@@ -36,25 +36,17 @@ class FavoriteTableViewCell: UITableViewCell {
         collectionView.backgroundColor = .clear
         collectionView.register(UINib(nibName: "FavoriteCollectionViewCell", bundle: .module), forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
     }
-    
+
     // MARK: - Configuration
-    
-    func configure(with viewModel: TransferListViewModelInput) {
-            self.viewModel = viewModel
-            collectionView.reloadData()
-    }
-    
-    private func bindViewModel() {
-        viewModel?.onUpdate = { [weak self] in
-            guard let self else { return }
-            self.collectionView.reloadData()
-        }
+    func configure(with viewModel: FavoritesCellViewModelInput) {
+        self.viewModel = viewModel
+        collectionView.reloadData()
     }
 }
 
 extension FavoriteTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel?.favoriteCount ?? 0
+        viewModel?.favoriteCounts ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -7,9 +7,9 @@
 
 import Foundation
 
-public protocol FavoriteTransferRepositoryProtocol {
-    func getFavorites() -> [Transfer]
-    func save(transfer: Transfer)
-    func remove(transfer: Transfer)
-    func isFavorite(transfer: Transfer) -> Bool
-}
+protocol FavoriteTransferRepositoryProtocol: Sendable {
+    func getFavorites() async -> [Transfer]
+    func save(_ transfer: Transfer) async
+    func remove(_ transfer: Transfer) async
+    func contains(_ transfer: Transfer) async -> Bool
+    }

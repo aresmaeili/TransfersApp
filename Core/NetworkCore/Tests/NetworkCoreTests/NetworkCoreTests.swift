@@ -1,38 +1,47 @@
 import XCTest
 @testable import NetworkCore
 
-final class NetworkCoreTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
 
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-    }
+import XCTest
+
+final class NetworkClientRealTests: XCTestCase {
+
     
-    func testFetchTransfersRealRequest() async throws {
-        // Arrange
-        var transfers: Transfers = []
+    // MARK: - GET Test
+    func test_getPost_realAPI() async throws {
 
-        // Act
         do {
-            transfers = try await execute()
-            print("✅ Transfers fetched successfully!")
+            let transfers: [Transfer] = try await execute()
+
+            XCTAssertEqual(transfers.count, 10)
+            XCTAssertEqual(transfers.first?.person?.fullName, "Jemimah Sprott")
+
+            print("✅ GET success:", transfers)
         } catch {
-            print("❌ Request failed:", error)
+            XCTFail("❌ GET failed: \(error)")
+        }
+    }
+
+    func execute() async throws -> [Transfer] {
+        let endpoint = TransferListEndpoint(page: 1)
+        let result: [Transfer] = try await NetworkClient.shared.request(endpoint)
+        return result
+    }
+     
+    struct TransferListEndpoint: Endpoint {
+        
+        public let page: Int
+        
+        public init(page: Int) {
+            self.page = page
         }
         
-        // Assert
-        XCTAssertFalse(transfers.count != 10, "Expected 10 Transfers after fetch but it is false")
-
-        // Optionally verify some data structure
-        print("👤  Transfers count:", transfers.count)
+        public var baseUrl: String {  "https://e4253fd8-faab-456a-9f09-a2703d842875.mock.pstmn.io" }
+        public var path: String { "/transfer-list" }
+        public var method: HTTPMethod { .get }
+        public var queryItems: [URLQueryItem]? {
+            [URLQueryItem(name: "page", value: "\(page)")]
+        }
+        //    public var options: RequestOptions { .init() }
     }
-   
-   func execute() async throws -> Transfers {
-       let endpoint = TransferListEndpoint()
-       let result: Transfers = try await NetworkClient.shared.get(urlString: endpoint.fullPath)
-       return result
-   }
-
 }

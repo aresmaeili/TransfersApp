@@ -24,27 +24,20 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
     
-    weak var viewModel: TransferListViewModelInput?
+    private var viewModel: FavoritesCellViewModelInput?
     private var avatarTask: Task<Void, Never>?
+    private let avatarLoader = UIActivityIndicatorView(style: .medium)
     private(set) var transfer: Transfer?
-    var onUpdate: (() -> Void)?
     
     // MARK: - Lifecycle
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        //        TODO: Check This
         Task { @MainActor in
             setupUI()
         }
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        avatarTask?.cancel()
-        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
-        nameLabel.text = nil
-        transfer = nil
-        viewModel = nil
     }
     
     // MARK: - Setup
@@ -84,6 +77,13 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         avatarImageView.layer.borderWidth = 1
         avatarImageView.layer.borderColor = UIColor.border2.cgColor
         avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
+        avatarImageView.tintColor = .lightGray
+        avatarLoader.translatesAutoresizingMaskIntoConstraints = false
+        circleView.addSubview(avatarLoader)
+        NSLayoutConstraint.activate([
+            avatarLoader.centerXAnchor.constraint(equalTo: circleView.centerXAnchor),
+            avatarLoader.centerYAnchor.constraint(equalTo: circleView.centerYAnchor)
+        ])
     }
     
     private func setupStarImageView() {
@@ -92,18 +92,14 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with transfer: Transfer, viewModel: TransferListViewModelInput) {
+    func configure(with transfer: Transfer, viewModel: FavoritesCellViewModelInput) {
         self.viewModel = viewModel
         self.transfer = transfer
         nameLabel.text = transfer.person?.fullName ?? "-"
-
-        UIView.transition(with: removeButton, duration: 0.25, options: .transitionCrossDissolve) { [weak self] in
-            guard let self else { return }
-            self.removeButton.isHidden = !viewModel.canEdit
-            nameLabel.text = transfer.person?.fullName ?? "-"
-            if let urlString = transfer.avatar {
-                loadAvatar(from: urlString)
-            }
+        removeButton.isHidden = !viewModel.canEdit
+        nameLabel.text = transfer.person?.fullName ?? "-"
+        if let urlString = transfer.avatar {
+            loadAvatar(from: urlString)
         }
     }
     
@@ -112,19 +108,31 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     @IBAction private func removeButtonAction(_ sender: UIButton) {
         guard let viewModel, let transfer else { return }
         viewModel.toggleFavoriteStatus(for: transfer)
-        onUpdate?()
     }
     
     // MARK: - Avatar Loading
-    
-    private func loadAvatar(from urlString: String) {
+    private func loadAvatar(from urlString: String?) {
+        avatarImageView.image = UIImage(systemName: "person.and.background.dotted")
         avatarTask?.cancel()
+        avatarLoader.startAnimating()
         
-        avatarTask = Task {
-            guard let image = try? await ImageDownloader.shared.downloadImage(from: urlString) else { return }
-            self.avatarImageView.image = image
-
-           
+        guard let urlString, !urlString.isEmpty else {
+            avatarLoader.stopAnimating()
+            return
+        }
+        
+        avatarTask = Task { [weak self] in
+            guard let self else { return }
+            
+            let image = try? await ImageDownloader.shared.downloadImage(from: urlString)
+            guard !Task.isCancelled else { return }
+            
+            await MainActor.run {
+                if let image {
+                    self.avatarImageView.image = image
+                }
+                self.avatarLoader.stopAnimating()
+            }
         }
     }
 }

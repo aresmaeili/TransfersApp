@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RouterCore
+import Combine
 
 // MARK: - TransferDetailsViewController
 
@@ -20,34 +20,32 @@ final class TransferDetailsViewController: UIViewController {
     // MARK: - Dependencies
     
     var viewModel: TransferDetailsViewModel?
-    var router: Coordinator?
-    
+    private var cancellables = Set<AnyCancellable>()
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+        bindViewModel()
+    }
 
-    }
-    
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
-            updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
-        }
+        guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else { return }
+        applyTheme()
     }
-    
-    // MARK: - Setup
-    
+
+    // MARK: - UI Setup
     private func setupUI() {
+        title = "Transfer Details"
+        stackView.removeAllArrangedSubviews()
         backView.backgroundColor = .background1
-        updateNavigationBarAppearance(for: traitCollection.userInterfaceStyle)
+        applyTheme()
         setupContent()
     }
-    
-    private func updateNavigationBarAppearance(for style: UIUserInterfaceStyle) {
+
+    private func applyTheme() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .background3
@@ -60,17 +58,14 @@ final class TransferDetailsViewController: UIViewController {
     
     private func setupContent() {
         
-        // Card View
-        if let cardData = viewModel?.cardViewData {
+        if let cardData = viewModel?.transferData {
             let cardView = CardView(with: cardData)
             stackView.addArrangedSubview(cardView)
         }
         
-        // Profile View
         let profileView = ProfileView(viewModel: viewModel)
         stackView.addArrangedSubview(profileView)
         
-        // Item Views
         if let items = viewModel?.detailItems {
             items.forEach { item in
                 let itemView = ItemView(with: item)
@@ -78,11 +73,21 @@ final class TransferDetailsViewController: UIViewController {
             }
         }
         
-        // Note View
         if let note = viewModel?.noteItem, !note.value.isEmpty {
             let noteView = NoteView(with: note)
             stackView.addArrangedSubview(noteView)
         }
+    }
+    
+    func bindViewModel() {
+        guard let viewModel else { return }
+
+        viewModel.onUpdatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.setupUI()
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Deinitialization

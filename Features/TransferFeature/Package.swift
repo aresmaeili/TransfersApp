@@ -26,9 +26,10 @@ let package = Package(
                 "RouterCore",
                 "Shared"
             ],
-            //                path: "Sources/TransferFeature",
-            //                exclude: ["include"],
-            //                resources: [.process(".")]
+        ),
+        .testTarget(
+            name: "FeatureCoreTests",
+            dependencies: ["TransferFeature"]
         )
     ]
 )
