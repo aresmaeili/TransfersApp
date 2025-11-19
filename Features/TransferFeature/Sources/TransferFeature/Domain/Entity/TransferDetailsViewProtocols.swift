@@ -76,10 +76,7 @@ extension Transfer: TransferDetailsCardProtocol {
     var countOfTransfer: String {
         moreInfo?.numberOfTransfers?.asSeperatedString() ?? "-"
     }
-    
-    var isFavorite: Bool {
-        false
-    }
+
 }
 
 // MARK: - Transfer + TransferDetailsProfileProtocol

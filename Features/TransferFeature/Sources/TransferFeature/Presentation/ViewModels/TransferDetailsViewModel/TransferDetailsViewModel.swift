@@ -6,19 +6,22 @@
 //
 
 import Foundation
+import Combine
 
 // MARK: - ViewModel Protocols
-
+@MainActor
 protocol TransferDetailsViewModelProtocol: TransferDetailsViewModelInput, AnyObject {
     var navigationTitle: String { get }
-    var cardViewData: Transfer { get }
+    var transferData: Transfer { get }
     var detailItems: [TransferDetailsItemProtocol] { get }
     var noteItem: TransferDetailsItemProtocol { get }
-    var isFavorite: Bool { get }
 }
 
+@MainActor
 protocol TransferDetailsViewModelInput: AnyObject {
     var isFavorite: Bool { get }
+    var onUpdatePublisher: PassthroughSubject<Void, Never> { get }
+    var transferData: Transfer { get }
     func toggleFavorite()
 }
 
@@ -40,31 +43,32 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
     
     // MARK: - State
     
-    private(set) var cardViewData: Transfer
+    private(set) var transferData: Transfer
+    private(set) var isFavorite: Bool = false
     
+    // MARK: - Callbacks
+    let onUpdatePublisher = PassthroughSubject<Void, Never>()
+
     // MARK: - Initialization
     
     init(transfer: Transfer, favoriteUseCase: FavoriteTransferUseCaseProtocol) {
-        self.cardViewData = transfer
+        self.transferData = transfer
         self.favoriteUseCase = favoriteUseCase
+        loadFavoriteStatus()
     }
     
     // MARK: - Outputs
     
     var navigationTitle: String {
-        "\(cardViewData.name) Details"
-    }
-    
-    var isFavorite: Bool {
-        favoriteUseCase.isFavorite(transfer: cardViewData)
+        "\(transferData.name) Details"
     }
     
     var detailItems: [TransferDetailsItemProtocol] {
         [
-            TransferDetailsItem(icon: "creditcard", title: "Card Number:", value: cardViewData.cardNumberString),
-            TransferDetailsItem(icon: "calendar", title: "Last Transfer Date:", value: cardViewData.lastTransferDate),
-            TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: cardViewData.totalAmount),
-            TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: cardViewData.countOfTransfer)
+            TransferDetailsItem(icon: "creditcard", title: "Card Number:", value: transferData.cardNumberString),
+            TransferDetailsItem(icon: "calendar", title: "Last Transfer Date:", value: transferData.lastTransferDate),
+            TransferDetailsItem(icon: "dollarsign", title: "Total Transfers:", value: transferData.totalAmount),
+            TransferDetailsItem(icon: "number", title: "Number of Transfers:", value: transferData.countOfTransfer)
         ]
     }
     
@@ -72,13 +76,30 @@ final class TransferDetailsViewModel: TransferDetailsViewModelProtocol {
         TransferDetailsItem(
             icon: "text.bubble",
             title: "Note:",
-            value: cardViewData.note ?? ""
+            value: transferData.note ?? ""
         )
     }
     
-    // MARK: - Inputs
+    // MARK: - Methods
+    
+    private func loadFavoriteStatus() {
+        Task { [weak self] in
+            guard let self else { return }
+            
+            let isFavorite = await favoriteUseCase.isFavorite(self.transferData)
+            if self.isFavorite != isFavorite {
+                self.isFavorite = isFavorite
+                self.onUpdatePublisher.send()
+            }
+        }
+    }
     
     func toggleFavorite() {
-        favoriteUseCase.toggleFavoriteStatus(transfer: cardViewData)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            await favoriteUseCase.toggleFavorite(transferData)
+            loadFavoriteStatus()
+        }
     }
 }

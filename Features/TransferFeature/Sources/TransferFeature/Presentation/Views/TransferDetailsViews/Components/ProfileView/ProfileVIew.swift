@@ -32,9 +32,9 @@ class ProfileView: UIView, ViewConnectable {
         starbutton.setImage(image, for: .normal)
     }
     
-    weak var viewModel: TransferDetailsViewModelInput?
+    private var viewModel: TransferDetailsViewModelInput?
     
-    required init(viewModel: TransferDetailsViewModel?) {
+    required init(viewModel: TransferDetailsViewModelInput?) {
         
         super.init(frame: .zero)
         guard let viewModel else { return }
@@ -47,8 +47,7 @@ class ProfileView: UIView, ViewConnectable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initialize(viewModel: TransferDetailsViewModel) {
-        self.viewModel = viewModel
+    private func initialize(viewModel: TransferDetailsViewModelInput) {
         connectView(bundle: .module)
         setupView()
         configure(viewModel: viewModel)
@@ -79,8 +78,8 @@ class ProfileView: UIView, ViewConnectable {
         
     }
     
-    private func configure(viewModel: TransferDetailsViewModel?) {
-        guard let data = viewModel?.cardViewData, let isFavorite = viewModel?.isFavorite else { return }
+    private func configure(viewModel: TransferDetailsViewModelInput?) {
+        guard let data = viewModel?.transferData, let isFavorite = viewModel?.isFavorite else { return }
         nameLabel.text = data.name
         mailLabel.text = data.mail
         totalLabel.text = data.totalAmount
@@ -94,12 +93,16 @@ class ProfileView: UIView, ViewConnectable {
 
     private func loadAvatar(from urlString: String?) {
         avatarTask?.cancel()
-        avatarTask = Task {
-            guard let urlString else { return }
-            if let image = try? await ImageDownloader.shared.downloadImage(from: urlString) {
+        avatarTask = Task { [weak self] in
+            guard let self, let urlString else { return }
+
+            do {
+                let image = try await ImageDownloader.shared.downloadImage(from: urlString)
                 await MainActor.run {
                     self.avatarImageView.image = image
                 }
+            } catch {
+                print("Avatar load error:", error)
             }
         }
     }
